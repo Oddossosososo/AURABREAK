@@ -427,28 +427,36 @@
     const cutscene = $("cutscene"), art = $("cutsceneArt"), content = cutscene.querySelector(".cutscene-content");
     stopDeityCutscene();
     cutscene.dataset.style = "fallen-god";
+    cutscene.dataset.aura = "DIVINE TRUTH";
     cutscene.style.setProperty("--aura-color", "#d7c5ff");
     cutscene.style.setProperty("--movie-color", "#d7c5ff");
-    art.innerHTML = '<div class="fallen-god-universe"></div><div class="fallen-god-eclipse"></div><div class="fallen-god-halo halo-a"></div><div class="fallen-god-halo halo-b"></div><div class="fallen-god-cracks"></div>';
-    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","movie-running","movie-finale","fallen-god-impact");
+    art.innerHTML = '<div class="fallen-god-universe"></div><div class="fallen-god-eclipse"></div><div class="fallen-god-halo halo-a"></div><div class="fallen-god-halo halo-b"></div><div class="fallen-god-cracks"></div><div class="fallen-god-silhouette"><span>✦</span></div><div class="fallen-god-whiteout"></div>';
+    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","movie-running","movie-finale","fallen-god-impact","fallen-god-awakened");
     cutscene.classList.add("fallen-god-running");
-    $("cutsceneEyebrow").textContent = "DIVINE TRUTH • ADMIN OVERRIDE";
-    $("closeCutscene").textContent = "CLOSE REVELATION ↗";
+    $("closeCutscene").textContent = "SKIP REVELATION ↗";
     const title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle"), eyebrow = $("cutsceneEyebrow");
-    const line = (a,b,cls="fallen-god-line") => {
-      title.textContent=a; title.className=cls; subtitle.textContent=b;
+    const line = (a,b,cls="fallen-god-line",color="#f4e8ff") => {
+      title.textContent=a; title.className=cls; title.style.color=color; subtitle.textContent=b;
       content.classList.remove("deity-reveal"); void content.offsetWidth; content.classList.add("deity-reveal");
     };
-    line("THE TRUTH", "FIVE GODS. FIVE CLAIMS OF SUPREMACY.");
     const later=(ms,fn)=>cutsceneTimers.push(setTimeout(fn,ms));
-    later(2200,()=>line("PURE DEITY", "RANK 7 • THE WEAKEST OF THE FIVE."));
-    later(4300,()=>line("CHAOTIC END", "RANK 6 • CHAOS IS NOT THE TOP."));
-    later(6400,()=>line("GLITCHED SCREAMS", "RANK 5 • EVEN REALITY HAS A MASTER."));
-    later(8500,()=>line("LORE CREATIONIST", "RANK 4 • ONE CREATOR STILL STANDS ABOVE."));
-    later(10600,()=>line("THE MAKER", "RANK 3 • THE CREATOR IS NOT THE CREATION."));
-    later(12800,()=>{eyebrow.textContent="THE PLAYER • RANK 2";line("YOU KNEW THE TRUTH.", "KNOWLEDGE THIS DEEP REQUIRES POWER.", "fallen-god-final");});
-    later(15300,()=>{eyebrow.textContent="RANK 1 • THE ONE WHO CONTROLS THE GAME";cutscene.classList.add("fallen-god-impact");line("THE FALLEN GOD", "IT KNEW ALL ALONG. IT CONTROLS AURABREAK.", "fallen-god-final");});
-    later(18800,()=>{cutscene.classList.remove("fallen-god-running");cutscene.classList.remove("fallen-god-impact");$("closeCutscene").textContent="CLOSE REVELATION ↗";});
+    line("THE TRUTH", "FIVE GODS. FIVE CLAIMS OF SUPREMACY.");
+    playDeityTone(110, 2.0, "sine", .06);
+    later(2100,()=>{ eyebrow.textContent="RANK 7 • PURE DEITY"; line("PURE DEITY", "THE WEAKEST OF THE FIVE."); });
+    later(3900,()=>{ line("...IMPOSSIBLE.", "PURE DEITY: I AM THE HIGHEST. I CANNOT BE THE LOWEST.", "fallen-god-line", "#fff4d6"); playDeityTone(330, 1.2, "triangle", .06); });
+    later(5900,()=>{ eyebrow.textContent="RANK 6 • CHAOTIC END"; line("CHAOTIC END", "CHAOS DOES NOT ANSWER TO ANYTHING."); });
+    later(7700,()=>{ line("THEN LET EVERYTHING END!", "CHAOTIC END REFUSES THE RANKING.", "fallen-god-line", "#ff435f"); cutscene.classList.add("fallen-god-impact"); playDeityTone(55, 1.8, "sawtooth", .09); });
+    later(9700,()=>{ cutscene.classList.remove("fallen-god-impact"); eyebrow.textContent="RANK 5 • GLITCHED SCREAMS"; line("GLITCHED SCREAMS", "THE RULES SAY I AM THE TOP."); });
+    later(11500,()=>{ line("ERROR. ERROR. ERROR.", "GLITCHED SCREAMS TRIES TO CORRUPT THE REVEAL.", "fallen-god-line", "#f44dff"); cutscene.classList.add("galactic-break"); playDeityTone(73.42, 1.5, "sawtooth", .08); });
+    later(13300,()=>{ cutscene.classList.remove("galactic-break"); eyebrow.textContent="RANK 4 • LORE CREATIONIST"; line("LORE CREATIONIST", "I WROTE THE HISTORY OF THIS WORLD."); });
+    later(15100,()=>{ line("THEN WHO WROTE MY DEFEAT?", "LORE CREATIONIST FINDS A PAGE IT NEVER CREATED.", "fallen-god-line", "#65caff"); playDeityTone(261.63, 1.5, "triangle", .07); });
+    later(16900,()=>{ eyebrow.textContent="RANK 3 • THE MAKER"; line("THE MAKER", "I CREATED THIS WORLD. NOTHING STANDS ABOVE ME."); });
+    later(18800,()=>{ line("NO. THIS IS A LIE.", "THE MAKER'S OWN CREATION DISOBEYS ITS CERTAINTY.", "fallen-god-line", "#ffcf76"); playDeityTone(196, 2.0, "sawtooth", .08); });
+    later(20900,()=>{ eyebrow.textContent="RANK 2 • THE PLAYER"; line("THE PLAYER", "YOU COULD ONLY UNCOVER THE TRUTH BECAUSE YOU STAND ABOVE THEM.", "fallen-god-final"); });
+    later(23300,()=>{ eyebrow.textContent="RANK 1 • THE FALLEN GOD"; cutscene.classList.add("fallen-god-impact"); line("ENOUGH.", "THE FALLEN GOD HAS BEEN LISTENING THE ENTIRE TIME.", "fallen-god-final"); playDeityTone(41.2, 3.0, "sawtooth", .13); });
+    later(25800,()=>{ cutscene.classList.remove("fallen-god-impact"); cutscene.classList.add("fallen-god-awakened"); line("YOU MAY KNOW THE RANKS.", "BUT I STILL CONTROL THE WORLD WHERE YOU LEARNED THEM.", "fallen-god-final"); eyebrow.textContent="THE FALLEN GOD • CONTROLLER OF AURABREAK"; });
+    later(28900,()=>{ line("THE TRUTH HAS BEEN TOLD.", "THE GODS DO NOT ACCEPT IT. NOT YET.", "fallen-god-final"); });
+    later(32000,()=>{ cutscene.classList.remove("fallen-god-running","fallen-god-awakened","fallen-god-impact"); $("closeCutscene").textContent="CLOSE REVELATION ↗"; });
   }
   function showCutscene(aura) {
     const cutscene = $("cutscene");

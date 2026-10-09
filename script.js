@@ -550,6 +550,17 @@
       cutscene.setAttribute("aria-hidden", "false");
     }
   }
+  function updatePhaseToggle() {
+    const button = $("phaseToggle");
+    if (!button) return;
+    button.hidden = !transcendenceUnlocked;
+    button.textContent = document.body.classList.contains("transcendence-mode")
+      ? "RETURN TO AURABREAK I ↶"
+      : "ENTER AURABREAK II ↗";
+    button.setAttribute("aria-label", document.body.classList.contains("transcendence-mode")
+      ? "Switch back to AURABREAK I"
+      : "Switch to AURABREAK II");
+  }
   function activateTranscendenceMode() {
     transcendenceUnlocked = true;
     try { localStorage.setItem(TRANSCENDENCE_KEY, "yes"); } catch {}
@@ -567,8 +578,36 @@
     if (status) status.innerHTML = '<span class="status-dot"></span> REALITY TRANSCENDED <span class="version">AURABREAK II</span>';
     const stage = $("stageLabel");
     if (stage) stage.textContent = "AURABREAK II // TRANSCENDENCE";
-    showToast("AURABREAK II UNLOCKED — REALITY HAS TRANSCENDED.");
+    updatePhaseToggle();
   }
+  function activateBaseMode() {
+    document.body.classList.remove("transcendence-mode");
+    document.title = "AURABREAK — Roll Beyond Reality";
+    const brand = document.querySelector(".brand");
+    if (brand) brand.innerHTML = '<span class="brand-mark">A</span><span>AURA<span class="brand-light">BREAK</span><small>ROLL BEYOND REALITY</small></span>';
+    const heroTitle = document.querySelector(".hero h1");
+    if (heroTitle) heroTitle.innerHTML = 'ROLL BEYOND<br><span>REALITY.</span>';
+    const heroCopy = document.querySelector(".hero-copy");
+    if (heroCopy) heroCopy.innerHTML = 'Every roll is a new possibility. Find the impossible.<br>Become the anomaly.';
+    const eyebrow = document.querySelector(".hero .eyebrow");
+    if (eyebrow) eyebrow.innerHTML = '<span class="eyebrow-line"></span> THE UNIVERSE IS YOURS TO BREAK';
+    const status = document.querySelector(".top-status");
+    if (status) status.innerHTML = '<span class="status-dot"></span> REALITY STABLE <span class="version">PRE-ALPHA 0.1</span>';
+    const stage = $("stageLabel");
+    if (stage) stage.textContent = "AWAITING YOUR WILL";
+    updatePhaseToggle();
+  }
+  $("phaseToggle").addEventListener("click", () => {
+    if (!transcendenceUnlocked) return;
+    if (document.body.classList.contains("transcendence-mode")) {
+      activateBaseMode();
+      showToast("RETURNED TO AURABREAK I.");
+    } else {
+      activateTranscendenceMode();
+      showToast("AURABREAK II ACTIVATED.");
+    }
+    renderCollection();
+  });
   function startTranscendenceCutscene() {
     const cutscene = $("cutscene"), art = $("cutsceneArt"), content = cutscene.querySelector(".cutscene-content");
     stopDeityCutscene();
@@ -602,6 +641,7 @@
     });
   }
   if (transcendenceUnlocked) activateTranscendenceMode();
+  else updatePhaseToggle();
   function roll() {
     if (rolling) return;
     rolling = true;

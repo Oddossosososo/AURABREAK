@@ -46,6 +46,8 @@
   let toastTimer;
   let runRollCount = 0;
   let pureDeityEncounters = 0;
+  let devAuthorized = false;
+  let devSimplePatternCount = 0;
 
   function loadDiscoveries() {
     try {
@@ -654,6 +656,29 @@
   const shattercoreIntervals = [700, 1700, 700, 2700, 1200, 3200, 700];
   const shattercoreTolerance = 240;
   $("orbCore").addEventListener("click", () => {
+    // The original easy seven-tap pattern is reserved for an authenticated DEV session.
+    if (devAuthorized) {
+      if (!discovered.has("SHATTERCORE") || discovered.has("SHATTERCORE: REBORN") || rolling) return;
+      devSimplePatternCount++;
+      $("orbCore").classList.remove("orb-strike");
+      void $("orbCore").offsetWidth;
+      $("orbCore").classList.add("orb-strike");
+      if (devSimplePatternCount < 7) {
+        showToast("DEV RESONANCE: " + devSimplePatternCount + "/7");
+        return;
+      }
+      devSimplePatternCount = 0;
+      const devEvolution = AURAS.find(a => a.name === "SHATTERCORE: REBORN");
+      discovered.add(devEvolution.name);
+      saveDiscoveries();
+      renderCollection();
+      showToast("DEV OVERRIDE: SHATTERCORE: REBORN GRANTED");
+      pendingAura = devEvolution;
+      showCutscene(devEvolution);
+      $("cutscene").classList.remove("hidden");
+      $("cutscene").setAttribute("aria-hidden", "false");
+      return;
+    }
     if (!discovered.has("SHATTERCORE") || discovered.has("SHATTERCORE: REBORN") || rolling) return;
     const now = performance.now();
     if (!shattercoreRhythm.length) {
@@ -810,7 +835,17 @@
     });
     if (AURAS.some(aura => aura.name === previous)) adminAuraSelect.value = previous;
   }
+  const DEV_DEVICE_ID = "362A7C7B-A416-4592-8EE5-B4511C5617D0";
   function toggleAdmin() {
+    if (!devAuthorized && adminPanel.classList.contains("hidden")) {
+      const entered = window.prompt("DEV ACCESS REQUIRED\\nEnter DEVICE ID:");
+      if (entered !== DEV_DEVICE_ID) {
+        showToast("DEV ACCESS DENIED.");
+        return;
+      }
+      devAuthorized = true;
+      showToast("DEV AUTHORITY ACCEPTED.");
+    }
     adminPanel.classList.toggle("hidden");
     adminPanel.setAttribute("aria-hidden", adminPanel.classList.contains("hidden") ? "true" : "false");
     if (!adminPanel.classList.contains("hidden")) refreshAdminAuraOptions();
@@ -823,11 +858,30 @@
   });
   $("adminClose").addEventListener("click", toggleAdmin);
   adminUnlockAll.addEventListener("click", () => {
-    AURAS.filter(aura => !aura.adminOnly && !aura.god).forEach(aura => discovered.add(aura.name));
+    if (!devAuthorized) return showToast("DEV AUTHORITY REQUIRED.");
+    AURAS.forEach(aura => discovered.add(aura.name));
     saveDiscoveries(); renderCollection();
-    showToast("NON-GOD AURAS UNLOCKED — ALL FIVE GODS REMAIN TO BE DISCOVERED.");
+    showToast("DEV OVERRIDE: EVERY AURA GRANTED.");
+  });
+  function grantAuraDirect(aura) {
+    if (!devAuthorized || !aura) return showToast("DEV AUTHORITY REQUIRED.");
+    discovered.add(aura.name);
+    saveDiscoveries();
+    renderCollection();
+    pendingAura = aura;
+    showCutscene(aura);
+    $("cutscene").classList.remove("hidden");
+    $("cutscene").setAttribute("aria-hidden", "false");
+    showToast("DEV GRANTED: " + aura.name);
+  }
+  $("adminGrantAura").addEventListener("click", () => {
+    grantAuraDirect(AURAS.find(item => item.name === adminAuraSelect.value));
+  });
+  $("adminGrantDeveloper").addEventListener("click", () => {
+    grantAuraDirect(AURAS.find(item => item.name === "DEVELOPER"));
   });
   adminTellTruth.addEventListener("click", () => {
+    if (!devAuthorized) return showToast("DEV AUTHORITY REQUIRED.");
     toggleAdmin();
     pendingAura = null;
     startTruthReveal();
@@ -835,6 +889,7 @@
     $("cutscene").setAttribute("aria-hidden", "false");
   });
   $("adminForceAura").addEventListener("click", () => {
+    if (!devAuthorized) return showToast("DEV AUTHORITY REQUIRED.");
     const aura = AURAS.find(item => item.name === adminAuraSelect.value);
     if (!aura) return;
     forcedAura = aura;
@@ -842,6 +897,7 @@
     showToast("RIGGED: your next manual roll will be " + aura.name);
   });
   adminLuck.addEventListener("input", () => {
+    if (!devAuthorized) return;
     const raw = String(adminLuck.value || "1").trim();
     const parsed = Number(raw);
     luckMultiplier = Math.max(1, Number.isFinite(parsed) ? parsed : Number.MAX_VALUE);
@@ -849,6 +905,7 @@
     $("luckValue").textContent = adminLuckValue.textContent.slice(1);
   });
   $("adminAddAura").addEventListener("click", () => {
+    if (!devAuthorized) return showToast("DEV AUTHORITY REQUIRED.");
     const name = customAuraName.value.trim().toUpperCase();
     const oddsText = String(customAuraOdds.value || "").trim();
     let odds;
@@ -865,22 +922,6 @@
     adminAuraSelect.value = name;
     showToast("Added custom aura: " + name);
   });
-
-  // A local browser identifier helps identify this installation, but is NOT secure authentication.
-  const DEVICE_KEY = "aurabreak-device-id-v1";
-  let deviceId = "";
-  try {
-    deviceId = localStorage.getItem(DEVICE_KEY) || "";
-    if (!deviceId) {
-      deviceId = (crypto.randomUUID ? crypto.randomUUID() : "AB-" + Math.random().toString(36).slice(2) + Date.now().toString(36)).toUpperCase();
-      localStorage.setItem(DEVICE_KEY, deviceId);
-    }
-  } catch { deviceId = "UNAVAILABLE"; }
-  const deviceLabel = document.createElement("small");
-  deviceLabel.className = "admin-device-id";
-  deviceLabel.textContent = "THIS BROWSER DEVICE ID: " + deviceId;
-  const adminNote = document.querySelector(".admin-note");
-  if (adminNote) adminNote.after(deviceLabel);
 
   renderCollection();
 

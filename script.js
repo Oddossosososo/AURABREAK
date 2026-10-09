@@ -216,52 +216,111 @@
     const eyebrow = $("cutsceneEyebrow");
     const button = $("closeCutscene");
     stopDeityCutscene();
-    cutscene.dataset.style = "galactic";
-    cutscene.style.setProperty("--aura-color", "#8be7ff");
-    art.innerHTML = '<div class="galactic-nebula"></div><div class="galactic-orb"><span>✦</span></div><div class="galactic-shards"></div><div class="galactic-rings"></div><div class="galactic-flare"></div>';
-    eyebrow.textContent = "AN IMPOSSIBLE MEMORY HAS AWAKENED";
-    title.textContent = "Wait...";
-    title.className = "galactic-line";
-    title.style.color = "#d9f7ff";
-    subtitle.textContent = "I REMEMBER YOU...";
+
+    // The second encounter deliberately begins as the original PURE DEITY reveal.
+    // The fake-out then smoothly evolves into GALACTIC instead of revealing it immediately.
+    cutscene.dataset.style = "pure-deity";
+    cutscene.style.setProperty("--aura-color", "#fff4d6");
+    cutscene.style.setProperty("--deity-gold", "#ffe9a8");
+    cutscene.style.setProperty("--deity-violet", "#9c78ff");
+    cutscene.style.setProperty("--deity-cyan", "#9cf5ff");
+    art.innerHTML = '<div class="deity-vortex"></div><div class="deity-sigil">✧</div><div class="deity-star">✦</div><div class="deity-halo halo-one"></div><div class="deity-halo halo-two"></div><div class="deity-rays"></div><div class="deity-flash"></div><div class="deity-specks"></div>';
+    eyebrow.textContent = "A SIGNAL FROM BEYOND REALITY";
+    title.textContent = "PURE DEITY";
+    title.className = "deity-line deity-name-flash";
+    title.style.color = "#fff4d6";
+    subtitle.textContent = "THE RNG GODS HAVE BLESSED YOU.";
     button.textContent = "SKIP EVOLUTION ↗";
     content.classList.remove("deity-reveal");
     cutscene.classList.add("deity-running", "galactic-running");
-    const showLine = (line, sub, cls = "galactic-line") => {
-      title.textContent = line; title.className = cls; subtitle.textContent = sub;
-      content.classList.remove("deity-reveal"); void content.offsetWidth; content.classList.add("deity-reveal");
-    };
+    void content.offsetWidth;
+    content.classList.add("deity-reveal");
+
     const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
-    // Original trance-style synth arpeggio generated locally with Web Audio.
+    const showLine = (line, sub, cls = "galactic-line") => {
+      title.textContent = line;
+      title.className = cls;
+      subtitle.textContent = sub;
+      content.classList.remove("deity-reveal");
+      void content.offsetWidth;
+      content.classList.add("deity-reveal");
+    };
+    const smoothFlash = () => {
+      cutscene.classList.add("galactic-break");
+      playDeityTone(70, 2.2, "sawtooth", 0.12);
+      later(850, () => cutscene.classList.remove("galactic-break"));
+    };
+
+    // Gentle, original trance arpeggio made with Web Audio; no external audio assets.
     try {
       if (!deityAudio) deityAudio = new (window.AudioContext || window.webkitAudioContext)();
       if (deityAudio.state === "suspended") deityAudio.resume();
-      const ctx = deityAudio, start = ctx.currentTime + 0.08;
-      const notes = [110,164.81,220,329.63,440,329.63,220,164.81,123.47,185,246.94,370];
-      notes.forEach((hz,i) => {
-        const osc=ctx.createOscillator(), gain=ctx.createGain(), filter=ctx.createBiquadFilter();
-        osc.type="sawtooth"; osc.frequency.value=hz; filter.type="lowpass"; filter.frequency.value=1500;
-        gain.gain.setValueAtTime(0.0001,start+i*0.23);
-        gain.gain.exponentialRampToValueAtTime(0.045,start+i*0.23+0.035);
-        gain.gain.exponentialRampToValueAtTime(0.0001,start+i*0.23+0.21);
+      const ctx = deityAudio, startAt = ctx.currentTime + 0.08;
+      const notes = [110,164.81,220,329.63,440,329.63,220,164.81,123.47,185,246.94,370,493.88,370,246.94,185];
+      notes.forEach((hz, i) => {
+        const at = startAt + i * 0.28;
+        const osc = ctx.createOscillator(), gain = ctx.createGain(), filter = ctx.createBiquadFilter();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(hz, at);
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(1800, at);
+        gain.gain.setValueAtTime(0.0001, at);
+        gain.gain.exponentialRampToValueAtTime(0.035, at + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.26);
         osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
-        osc.start(start+i*0.23); osc.stop(start+i*0.23+0.22);
+        osc.start(at); osc.stop(at + 0.27);
       });
-      [55,55,82.4,110].forEach((hz,i) => {
-        const osc=ctx.createOscillator(), gain=ctx.createGain(); osc.type="sine"; osc.frequency.value=hz;
-        gain.gain.setValueAtTime(0.0001,start+0.5+i*0.8);
-        gain.gain.exponentialRampToValueAtTime(0.12,start+0.58+i*0.8);
-        gain.gain.exponentialRampToValueAtTime(0.0001,start+1.25+i*0.8);
+      [55,55,82.4,110,82.4,123.47].forEach((hz, i) => {
+        const at = startAt + 0.5 + i * 0.72;
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.type = "sine"; osc.frequency.setValueAtTime(hz, at);
+        gain.gain.setValueAtTime(0.0001, at);
+        gain.gain.exponentialRampToValueAtTime(0.075, at + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.68);
         osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(start+0.5+i*0.8); osc.stop(start+1.3+i*0.8);
+        osc.start(at); osc.stop(at + 0.7);
       });
     } catch {}
-    later(4200, () => { showLine("I remember you...", "YOU HAVE RETURNED TO THE SOURCE."); playDeityTone(440,1.4,"triangle",0.08); });
-    later(8500, () => { showLine("THE ORB REMEMBERS", "THE FIRST DIVINITY WAS ONLY THE BEGINNING."); playDeityTone(660,1.8,"sawtooth",0.07); });
-    later(12500, () => { showLine("BREAK THE LIMIT", "REALITY CANNOT CONTAIN THIS FORM."); cutscene.classList.add("galactic-break"); playDeityTone(70,2.2,"sawtooth",0.18); });
-    later(15300, () => { cutscene.classList.remove("galactic-break"); showLine("PURE DEITY", "HAS EVOLVED BEYOND ITSELF."); });
-    later(19000, () => { showLine("PURE DEITY:GALACTIC", "THE STARS ARE ONLY THE BEGINNING.", "galactic-final"); eyebrow.textContent = "GALACTIC EVOLUTION • 1 IN " + BigInt(AURAS.find(a=>a.name==="PURE DEITY:GALACTIC").odds).toLocaleString("en-US"); content.classList.add("deity-reveal"); });
-    later(25000, () => { cutscene.classList.remove("deity-running"); button.textContent = "CLAIM EVOLUTION ↗"; });
+
+    later(2400, () => {
+      showLine("So...", "YOU FOUND IT AGAIN.", "deity-line");
+      playDeityTone(420, 1.1, "sine", 0.045);
+    });
+    later(4700, () => {
+      showLine("PURE DEITY", "THIS WILL NOT HAPPEN TWICE.", "deity-line deity-name-flash");
+      playDeityTone(660, 1.2, "triangle", 0.055);
+    });
+    later(7300, () => {
+      showLine("Wait...", "I REMEMBER YOU...", "galactic-line");
+      eyebrow.textContent = "AN IMPOSSIBLE MEMORY HAS AWAKENED";
+      cutscene.dataset.style = "galactic";
+      cutscene.style.setProperty("--aura-color", "#8be7ff");
+      playDeityTone(440, 1.5, "triangle", 0.065);
+    });
+    later(9800, () => {
+      showLine("I remember you...", "THE FIRST DIVINITY WAS ONLY THE BEGINNING.", "galactic-line");
+      art.innerHTML = '<div class="galactic-nebula"></div><div class="galactic-orb"><span>✦</span></div><div class="galactic-shards"></div><div class="galactic-rings"></div><div class="galactic-flare"></div>';
+      smoothFlash();
+    });
+    later(12600, () => {
+      showLine("THE ORB REMEMBERS", "REALITY CANNOT CONTAIN THIS FORM.", "galactic-line");
+      cutscene.classList.add("galactic-break");
+      playDeityTone(82.4, 1.8, "sawtooth", 0.1);
+    });
+    later(15100, () => {
+      cutscene.classList.remove("galactic-break");
+      showLine("PURE DEITY", "HAS EVOLVED BEYOND ITSELF.", "galactic-line");
+    });
+    later(18100, () => {
+      smoothFlash();
+      showLine("PURE DEITY:GALACTIC", "THE STARS ARE ONLY THE BEGINNING.", "galactic-final");
+      eyebrow.textContent = "GALACTIC EVOLUTION • 1 IN " + BigInt(AURAS.find(a => a.name === "PURE DEITY:GALACTIC").odds).toLocaleString("en-US");
+      content.classList.add("deity-reveal");
+    });
+    later(24500, () => {
+      cutscene.classList.remove("deity-running");
+      button.textContent = "CLAIM EVOLUTION ↗";
+    });
   }
   function showCutscene(aura) {
     const cutscene = $("cutscene");

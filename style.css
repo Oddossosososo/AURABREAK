@@ -218,7 +218,7 @@
 @keyframes developerDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-35px,20px,0) scale(1.08)}}
 @keyframes developerGrid{from{transform:perspective(500px) rotateX(65deg) scale(1.8) translateY(0)}to{transform:perspective(500px) rotateX(65deg) scale(1.8) translateY(25px)}}
 @keyframes developerOrbit{from{transform:translate(-50%,-50%) rotate(0deg) rotateX(62deg)}to{transform:translate(-50%,-50%) rotate(360deg) rotateX(62deg)}}
-@keyframes developerAppear{from{opacity:0;transform:translate(-50%,12%) scale(.2);filter:brightness(4)}to{opacity:1;transform:translate(0,0) scale(1);filter:brightness(1)}}
+@keyframes developerAppear{from{opacity:0;transform:translate(-50%,-35%) scale(.2);filter:brightness(4)}to{opacity:1;transform:translate(-50%,-50%) scale(1);filter:brightness(1)}}
 @keyframes developerCursor{0%,100%{transform:translate(0,0);opacity:.25}50%{transform:translate(16px,22px);opacity:1}}
 @keyframes developerCode{to{opacity:1}}
 @keyframes developerFlash{0%{opacity:0}12%{opacity:.95}100%{opacity:0}}

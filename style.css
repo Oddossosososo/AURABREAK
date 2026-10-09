@@ -158,3 +158,36 @@
 @keyframes movieCoreFinal{0%{transform:translate(-50%,-50%) scale(1)}35%{transform:translate(-50%,-50%) scale(1.35);filter:brightness(3)}100%{transform:translate(-50%,-50%) scale(1.08);filter:brightness(1.3)}}
 @keyframes movieReality{to{filter:hue-rotate(55deg);background-position:70px 20px}}
 @media(prefers-reduced-motion:reduce){.movie-starfield,.movie-horizon,.movie-core,.movie-ring,.movie-fragments,.movie-volumetric{animation-duration:30s!important}}
+
+
+/* THE FALLEN GOD — admin-only, full-screen reality takeover. */
+.cutscene[data-style="fallen-god"]{background:#020106;--aura-color:#e9dcff}
+.cutscene[data-style="fallen-god"] .cutscene-backdrop{opacity:.85;background:radial-gradient(ellipse at 50% 50%,#302044 0%,#10091a 30%,#020106 72%);animation:fallenGodBreath 4s ease-in-out infinite alternate}
+.fallen-god-universe{position:absolute;inset:-30%;background:radial-gradient(circle at 50% 50%,#fff 0 1px,transparent 2px),radial-gradient(circle at 50% 50%,#c8a7ff 0 1px,transparent 2px),conic-gradient(from 0deg at 50% 50%,transparent,#9b70d633,transparent,#fff2,transparent);background-size:83px 91px,137px 121px,100% 100%;animation:fallenGodUniverse 22s linear infinite}
+.fallen-god-eclipse{position:absolute;left:50%;top:48%;width:min(72vw,620px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 50% 50%,#030107 0 37%,#160d23 39%,#8d66c8 40%,#f4e8ff 40.4%,#9d6ae8 41%,transparent 43%);filter:drop-shadow(0 0 40px #b88cff88);animation:fallenGodEclipse 9s ease-in-out infinite}
+.fallen-god-halo{position:absolute;left:50%;top:48%;width:min(100vw,950px);aspect-ratio:1;border:1px solid #e7d7ff99;border-radius:50%;transform:translate(-50%,-50%) rotateX(68deg);box-shadow:0 0 45px #ad7bff44,inset 0 0 40px #a978ff22}
+.fallen-god-halo.halo-a{animation:fallenGodOrbit 16s linear infinite}
+.fallen-god-halo.halo-b{width:min(120vw,1150px);border-style:dashed;transform:translate(-50%,-50%) rotateX(64deg) rotate(50deg);animation:fallenGodOrbit 23s linear infinite reverse;opacity:.55}
+.fallen-god-cracks{position:absolute;inset:0;background:repeating-conic-gradient(from 7deg at 50% 48%,transparent 0 15deg,#e9dcff55 15.2deg 15.4deg,transparent 15.6deg 30deg);mask-image:radial-gradient(circle,black 0%,transparent 65%);opacity:0;transition:opacity .6s}
+.fallen-god-silhouette{position:absolute;left:50%;top:48%;width:min(44vw,350px);aspect-ratio:.72;transform:translate(-50%,-50%);border-radius:48% 48% 18% 18%;background:linear-gradient(180deg,#f3e7ff 0%,#bfa1ef 8%,#3b2655 22%,#0a0611 70%);clip-path:polygon(50% 0,65% 12%,75% 25%,100% 8%,87% 43%,81% 70%,100% 100%,0 100%,19% 70%,13% 43%,0 8%,25% 25%,35% 12%);filter:drop-shadow(0 0 45px #d6b5ff88);opacity:0;animation:fallenGodRise 3s cubic-bezier(.12,.8,.2,1) 2s both}
+.fallen-god-silhouette span{position:absolute;left:50%;top:24%;transform:translate(-50%,-50%);font-size:clamp(55px,11vw,120px);color:#fff;text-shadow:0 0 18px #fff,0 0 65px #d3aaff}
+.fallen-god-whiteout{position:absolute;inset:0;background:#f8efff;opacity:0;pointer-events:none}
+.fallen-god-line{font-size:clamp(28px,6.8vw,78px)!important;line-height:1.02!important;letter-spacing:.035em!important;color:#fff!important;text-shadow:0 0 12px #fff,0 0 40px #c6a1ff,0 0 100px #a56aff!important;animation:fallenGodText .9s ease both}
+.fallen-god-final{font-size:clamp(38px,8.5vw,100px)!important;letter-spacing:-.045em!important;color:#fff!important;text-shadow:0 0 15px #fff,0 0 55px #d8b7ff,0 0 130px #8b52ff!important;animation:deityFinal 1.5s cubic-bezier(.1,.8,.2,1) both}
+.cutscene.fallen-god-running .cutscene-content{z-index:9}
+.cutscene.fallen-god-running .cutscene-button{opacity:.55}
+.cutscene.fallen-god-awakened .fallen-god-silhouette{opacity:1;animation:fallenGodRise 1.5s cubic-bezier(.12,.8,.2,1) both}
+.cutscene.fallen-god-awakened .fallen-god-cracks{opacity:1}
+.cutscene.fallen-god-impact .fallen-god-whiteout{animation:fallenGodFlash 1.3s ease-out both}
+.cutscene.fallen-god-impact .fallen-god-eclipse{animation:fallenGodCollapse 1.2s ease-in both}
+.cutscene.fallen-god-impact .cutscene-content{animation:fallenGodShock .45s ease both}
+@keyframes fallenGodBreath{from{filter:brightness(.65)}to{filter:brightness(1.3)}}
+@keyframes fallenGodUniverse{to{background-position:0 -700px,70px -900px,0 0;transform:rotate(360deg) scale(1.05)}}
+@keyframes fallenGodEclipse{0%,100%{filter:drop-shadow(0 0 28px #b88cff66);transform:translate(-50%,-50%) scale(.94)}50%{filter:drop-shadow(0 0 75px #e9dcffcc);transform:translate(-50%,-50%) scale(1.04)}}
+@keyframes fallenGodOrbit{to{transform:translate(-50%,-50%) rotateX(68deg) rotate(360deg)}}
+@keyframes fallenGodRise{from{opacity:0;transform:translate(-50%,-38%) scale(.7);filter:brightness(0)}to{opacity:1;transform:translate(-50%,-50%) scale(1);filter:brightness(1)}}
+@keyframes fallenGodText{from{opacity:0;transform:translateY(24px);filter:blur(12px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes fallenGodFlash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
+@keyframes fallenGodCollapse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(.01);opacity:0}}
+@keyframes fallenGodShock{0%{transform:scale(1)}40%{transform:scale(1.08);filter:brightness(3)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.fallen-god-universe,.fallen-god-eclipse,.fallen-god-halo{animation-duration:40s!important}}

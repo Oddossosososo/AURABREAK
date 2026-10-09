@@ -19,7 +19,12 @@
     {name:"THE UNIMAGINABLE", odds:1000000, rarity:"TRANSCENDENT", tier:"divine", color:"#b8ffff", symbol:"∞", description:"Your mind reaches for a shape it cannot hold.", style:"unimaginable"},
     {name:"FALLEN ANGEL", odds:7777777, rarity:"DIVINE", tier:"divine", color:"#e3c4ff", symbol:"♱", description:"A celestial presence, cast out of forever.", style:"fallen"},
     {name:"DIVINITY", odds:100000000, rarity:"DIVINE", tier:"divine", color:"#fff0a0", symbol:"✹", description:"For one impossible moment, everything kneels.", style:"divinity"},
-    {name:"PURE DEITY", odds:1000000000000000000000000000000000000n, rarity:"ABSOLUTE", tier:"secret", color:"#fff4d6", symbol:"✧", description:"So... you found it. The RNG gods have blessed you.", style:"pure-deity", secret:true},
+    {name:"PURE DEITY", odds:1000000000000000000000000000000000000n, rarity:"GOD • RANK 7", tier:"secret", color:"#fff4d6", symbol:"✧", description:"The weakest of the five original gods. It still believes it is the strongest.", style:"pure-deity", secret:true, god:true},
+    {name:"CHAOTIC END", odds:10n ** 42n, rarity:"GOD • RANK 6", tier:"secret", color:"#ff435f", symbol:"⟁", description:"The god of chaos. It believes no power can stand above it.", style:"chaotic-end", secret:true, god:true},
+    {name:"GLITCHED SCREAMS", odds:10n ** 48n, rarity:"GOD • RANK 5", tier:"secret", color:"#f44dff", symbol:"⌁", description:"A god whose existence corrupts the rules of reality.", style:"glitched-screams", secret:true, god:true},
+    {name:"LORE CREATIONIST", odds:10n ** 54n, rarity:"GOD • RANK 4", tier:"secret", color:"#65caff", symbol:"✥", description:"The god who shaped the stories and history of the universe.", style:"lore-creationist", secret:true, god:true},
+    {name:"THE MAKER", odds:10n ** 60n, rarity:"GOD • RANK 3", tier:"secret", color:"#ffcf76", symbol:"✹", description:"Creator of the world. It believes nothing exists above it.", style:"the-maker", secret:true, god:true},
+    {name:"THE FALLEN GOD", odds:10n ** 72n, rarity:"THE TRUE SOVEREIGN", tier:"secret", color:"#f4e8ff", symbol:"✦", description:"The one who knows the truth and controls AURABREAK itself.", style:"fallen-god", secret:true, adminOnly:true, god:true},
     {name:"PURE DEITY:GALACTIC", odds:2n * (10n ** 68n), rarity:"GALACTIC EVOLUTION", tier:"secret", color:"#9be7ff", symbol:"✦", description:"Wait... I remember you. The deity has shattered its own limits.", style:"galactic", secret:true},
     {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true}
   ];
@@ -57,7 +62,7 @@
     // Test each aura from rarest to most common. Luck scales its one-in-X chance.
     // If luck meets/exceeds an aura's base odds, that aura is guaranteed to pass;
     // because we test rarest first, the rarest eligible aura wins.
-    const pool = [...AURAS].sort((a, b) => {
+    const pool = AURAS.filter(a => !a.adminOnly).sort((a, b) => {
       const ao = Number(a.odds), bo = Number(b.odds);
       return bo - ao;
     });
@@ -386,6 +391,65 @@
       button.textContent = "CLAIM DISCOVERY ↗";
     });
   }
+  function startFallenGodCutscene() {
+    const cutscene = $("cutscene"), art = $("cutsceneArt");
+    const content = cutscene.querySelector(".cutscene-content");
+    const eyebrow = $("cutsceneEyebrow"), title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle"), button = $("closeCutscene");
+    stopDeityCutscene();
+    cutscene.dataset.style = "fallen-god";
+    cutscene.dataset.aura = "THE FALLEN GOD";
+    cutscene.style.setProperty("--aura-color", "#f4e8ff");
+    cutscene.style.setProperty("--movie-color", "#d8b6ff");
+    art.innerHTML = '<div class="fallen-god-universe"></div><div class="fallen-god-eclipse"></div><div class="fallen-god-halo halo-a"></div><div class="fallen-god-halo halo-b"></div><div class="fallen-god-cracks"></div><div class="fallen-god-silhouette"><span>✦</span></div><div class="fallen-god-whiteout"></div>';
+    eyebrow.textContent = "ADMIN OVERRIDE ACCEPTED • REALITY CONTROL TRANSFERRED";
+    title.textContent = "";
+    title.className = "fallen-god-line";
+    subtitle.textContent = "";
+    button.textContent = "SKIP THE REVELATION ↗";
+    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","movie-running","movie-finale");
+    cutscene.classList.add("fallen-god-running");
+    const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
+    const line = (a,b,cls="fallen-god-line") => {
+      title.textContent = a; title.className = cls; subtitle.textContent = b;
+      content.classList.remove("deity-reveal"); void content.offsetWidth; content.classList.add("deity-reveal");
+    };
+    line("ADMIN ACCESS DETECTED", "THE GAME HAS STOPPED PRETENDING.");
+    playDeityTone(55, 3.2, "sawtooth", .11);
+    later(2300, () => { line("WHO GAVE YOU PERMISSION?", "A VOICE FROM OUTSIDE THE WORLD."); playDeityTone(82.4, 2.4, "triangle", .08); });
+    later(4900, () => { line("I MADE THE RULES.", "THE ODDS. THE ROLLS. THE REVEALS."); playDeityTone(110, 2.8, "sawtooth", .07); });
+    later(7600, () => { cutscene.classList.add("fallen-god-awakened"); line("I LET YOU FIND THEM.", "EVERY GOD THINKS IT IS THE STRONGEST."); playDeityTone(164.81, 2.6, "triangle", .09); });
+    later(10400, () => { line("BUT YOU KNOW BETTER.", "THE PLAYER STANDS SECOND ONLY TO ME."); playDeityTone(220, 2.8, "sine", .1); });
+    later(13300, () => { cutscene.classList.add("fallen-god-impact"); line("THE FALLEN GOD", "THE STRONGEST. THE WATCHER. THE GAME ITSELF.", "fallen-god-final"); playDeityTone(41.2, 4.2, "sawtooth", .13); });
+    later(16800, () => { eyebrow.textContent = "SECRET AURA • ADMIN-ONLY"; line("YOU WERE NEVER OUTSIDE MY WORLD.", "YOU WERE PLAYING INSIDE MY HAND.", "fallen-god-final"); });
+    later(20500, () => { cutscene.classList.remove("fallen-god-running"); button.textContent = "CLAIM THE FALLEN GOD ↗"; });
+  }
+  function startTruthReveal() {
+    const cutscene = $("cutscene"), art = $("cutsceneArt"), content = cutscene.querySelector(".cutscene-content");
+    stopDeityCutscene();
+    cutscene.dataset.style = "fallen-god";
+    cutscene.style.setProperty("--aura-color", "#d7c5ff");
+    cutscene.style.setProperty("--movie-color", "#d7c5ff");
+    art.innerHTML = '<div class="fallen-god-universe"></div><div class="fallen-god-eclipse"></div><div class="fallen-god-halo halo-a"></div><div class="fallen-god-halo halo-b"></div><div class="fallen-god-cracks"></div>';
+    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","movie-running","movie-finale","fallen-god-impact");
+    cutscene.classList.add("fallen-god-running");
+    $("cutsceneEyebrow").textContent = "DIVINE TRUTH • ADMIN OVERRIDE";
+    $("closeCutscene").textContent = "CLOSE REVELATION ↗";
+    const title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle"), eyebrow = $("cutsceneEyebrow");
+    const line = (a,b,cls="fallen-god-line") => {
+      title.textContent=a; title.className=cls; subtitle.textContent=b;
+      content.classList.remove("deity-reveal"); void content.offsetWidth; content.classList.add("deity-reveal");
+    };
+    line("THE TRUTH", "FIVE GODS. FIVE CLAIMS OF SUPREMACY.");
+    const later=(ms,fn)=>cutsceneTimers.push(setTimeout(fn,ms));
+    later(2200,()=>line("PURE DEITY", "RANK 7 • THE WEAKEST OF THE FIVE."));
+    later(4300,()=>line("CHAOTIC END", "RANK 6 • CHAOS IS NOT THE TOP."));
+    later(6400,()=>line("GLITCHED SCREAMS", "RANK 5 • EVEN REALITY HAS A MASTER."));
+    later(8500,()=>line("LORE CREATIONIST", "RANK 4 • ONE CREATOR STILL STANDS ABOVE."));
+    later(10600,()=>line("THE MAKER", "RANK 3 • THE CREATOR IS NOT THE CREATION."));
+    later(12800,()=>{eyebrow.textContent="THE PLAYER • RANK 2";line("YOU KNEW THE TRUTH.", "KNOWLEDGE THIS DEEP REQUIRES POWER.", "fallen-god-final");});
+    later(15300,()=>{eyebrow.textContent="RANK 1 • THE ONE WHO CONTROLS THE GAME";cutscene.classList.add("fallen-god-impact");line("THE FALLEN GOD", "IT KNEW ALL ALONG. IT CONTROLS AURABREAK.", "fallen-god-final");});
+    later(18800,()=>{cutscene.classList.remove("fallen-god-running");cutscene.classList.remove("fallen-god-impact");$("closeCutscene").textContent="CLOSE REVELATION ↗";});
+  }
   function showCutscene(aura) {
     const cutscene = $("cutscene");
     cutscene.dataset.style = aura.style || "cosmic";
@@ -399,6 +463,7 @@
     cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale");
     if (aura.name === "PURE DEITY") startPureDeityCutscene();
     else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
+    else if (aura.name === "THE FALLEN GOD") startFallenGodCutscene();
     else startAuraMovie(aura);
     cutscene.classList.remove("hidden");
     cutscene.setAttribute("aria-hidden", "false");
@@ -460,6 +525,8 @@
   // Admin tools: Shift+A toggles the panel. These are client-side prototype controls.
   const adminPanel = $("adminPanel");
   const adminAuraSelect = $("adminAuraSelect");
+  const adminUnlockAll = $("adminUnlockAll");
+  const adminTellTruth = $("adminTellTruth");
   const adminLuck = $("adminLuck");
   const adminLuckValue = $("adminLuckValue");
   const customAuraName = $("customAuraName");
@@ -489,6 +556,18 @@
     }
   });
   $("adminClose").addEventListener("click", toggleAdmin);
+  adminUnlockAll.addEventListener("click", () => {
+    AURAS.filter(aura => !aura.adminOnly).forEach(aura => discovered.add(aura.name));
+    saveDiscoveries(); renderCollection();
+    showToast("ALL AURAS UNLOCKED — THE FALLEN GOD REMAINS ADMIN-ONLY.");
+  });
+  adminTellTruth.addEventListener("click", () => {
+    toggleAdmin();
+    pendingAura = null;
+    startTruthReveal();
+    $("cutscene").classList.remove("hidden");
+    $("cutscene").setAttribute("aria-hidden", "false");
+  });
   $("adminForceAura").addEventListener("click", () => {
     const aura = AURAS.find(item => item.name === adminAuraSelect.value);
     if (!aura) return;

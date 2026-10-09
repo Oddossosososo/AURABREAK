@@ -626,7 +626,7 @@
       saveDiscoveries();
       renderCollection();
       renderResult(aura, isNew);
-      if (!isNoAura && (aura.secret || aura.odds >= 1000000)) {
+      if (!isNoAura && (transcendenceUnlocked || aura.secret || aura.odds >= 1000000)) {
         pendingAura = aura;
         showCutscene(aura);
       } else if (isNoAura) {

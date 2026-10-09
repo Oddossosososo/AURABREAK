@@ -260,3 +260,6 @@ body.transcendence-mode .status-dot{background:#8dfff4;box-shadow:0 0 12px #8dff
 @keyframes transPlayer{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(-25deg);filter:blur(30px)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.12) rotate(0);filter:blur(0)}100%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:blur(0)}}
 @keyframes transFlash{0%{opacity:0}12%{opacity:.98}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.transcendence-space,.transcendence-rings,.transcendence-fracture{animation-duration:40s!important}}
+
+/* Phase switch */
+.phase-toggle{border:1px solid #7fe9e0;background:linear-gradient(110deg,#152f3b,#18203a);color:#bffff8;border-radius:7px;padding:10px 12px;font:9px var(--mono);letter-spacing:.04em;cursor:pointer;white-space:nowrap;box-shadow:0 0 18px #54e9df12;transition:filter .18s,transform .18s}.phase-toggle:hover{filter:brightness(1.2);transform:translateY(-1px)}.phase-toggle[hidden]{display:none}@media(max-width:760px){.topbar{height:auto;min-height:82px;flex-wrap:wrap;padding-top:14px;padding-bottom:14px}.nav{gap:14px;align-items:center}.nav-link{padding:10px 0}.phase-toggle{font-size:8px;padding:9px 8px}.top-status{font-size:8px}}

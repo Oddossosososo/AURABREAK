@@ -31,10 +31,14 @@
     {name:"SHATTERCORE", odds:10n ** 80n, rarity:"ORB FRACTURE", tier:"secret", color:"#ff684f", symbol:"◇", description:"The orb was never meant to survive what sleeps inside. Its evolution is hidden in the silence between strikes. The broken core remembers a rhythm no living thing should know.", style:"shattercore", secret:true},
     {name:"SHATTERCORE: REBORN", odds:10n ** 72n, rarity:"FRACTURE EVOLUTION", tier:"secret", color:"#fff0b3", symbol:"✧", description:"Not a second encounter. Not a lucky roll. Seven deliberate strikes taught the broken core how to become something new.", style:"shattercore", secret:true, evolutionOnly:true},
   ];
+  // Remove the temporary test aura if it ever existed in an older build.
+  for (let i = AURAS.length - 1; i >= 0; i--) if (AURAS[i].name === "HI") AURAS.splice(i, 1);
   const STORAGE_KEY = "aurabreak-discoveries-v1";
   const TRANSCENDENCE_KEY = "aurabreak-transcendence-unlocked-v1";
   const ORIGINAL_GODS = ["PURE DEITY", "CHAOTIC END", "GLITCHED SCREAMS", "LORE CREATIONIST", "THE MAKER"];
   let transcendenceUnlocked = localStorage.getItem(TRANSCENDENCE_KEY) === "yes";
+  // Phase II can be unlocked permanently while the player still switches between phases.
+  let phaseTwoActive = transcendenceUnlocked;
   let transcendencePending = false;
   let discovered = loadDiscoveries();
   let rolling = false;
@@ -66,7 +70,7 @@
   const PHASE_TWO_ODDS_FLOOR = 10n ** 60n;
   function auraOdds(aura) {
     const base = BigInt(aura.odds);
-    return transcendenceUnlocked ? base + PHASE_TWO_ODDS_FLOOR : base;
+    return phaseTwoActive ? base + PHASE_TWO_ODDS_FLOOR : base;
   }
   function noAuraResult() {
     return {
@@ -98,7 +102,7 @@
       const chance = Math.min(1, luck / odds);
       if (Math.random() < chance) return aura;
     }
-    return transcendenceUnlocked ? noAuraResult() : AURAS[0];
+    return phaseTwoActive ? noAuraResult() : AURAS[0];
   }
   function showToast(message) {
     const toast = $("toast");
@@ -616,6 +620,7 @@
   }
   function activateTranscendenceMode() {
     transcendenceUnlocked = true;
+    phaseTwoActive = true;
     try { localStorage.setItem(TRANSCENDENCE_KEY, "yes"); } catch {}
     document.body.classList.add("transcendence-mode");
     document.title = "AURABREAK II: TRANSCENDENCE";
@@ -634,6 +639,7 @@
     updatePhaseToggle();
   }
   function activateBaseMode() {
+    phaseTwoActive = false;
     document.body.classList.remove("transcendence-mode");
     document.title = "AURABREAK — Roll Beyond Reality";
     const brand = document.querySelector(".brand");
@@ -791,7 +797,8 @@
       saveDiscoveries();
       renderCollection();
       renderResult(aura, isNew);
-      if (!isNoAura && transcendenceUnlocked) {
+      // Only Phase II gives every aura a cutscene. Phase I uses the old roll flow.
+      if (!isNoAura && phaseTwoActive) {
         // AURABREAK II keeps the full cinematic roll experience.
         pendingAura = aura;
         showCutscene(aura);
@@ -916,6 +923,7 @@
   $("adminAddAura").addEventListener("click", () => {
     if (!devAuthorized) return showToast("DEV AUTHORITY REQUIRED.");
     const name = customAuraName.value.trim().toUpperCase();
+    if (name === "HI") return showToast("The temporary HI test aura has been removed.");
     const oddsText = String(customAuraOdds.value || "").trim();
     let odds;
     try { odds = BigInt(oddsText); } catch { odds = 0n; }

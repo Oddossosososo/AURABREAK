@@ -1,1 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080811">
+  <meta name="description" content="AURABREAK — Roll Beyond Reality. Discover auras beyond imagination.">
+  <title>AURABREAK — Roll Beyond Reality</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="AURABREAK home"><span class="brand-mark">A</span><span>AURA<span class="brand-light">BREAK</span><small>ROLL BEYOND REALITY</small></span></a>
+    <nav class="nav"><a class="nav-link active" href="#roll">Roll</a><a class="nav-link" href="#collection">Collection</a></nav>
+    <div class="top-status"><span class="status-dot"></span> REALITY STABLE <span class="version">PRE-ALPHA 0.1</span></div>
+  </header>
 
+  <main>
+    <section class="hero" id="roll">
+      <div class="eyebrow"><span class="eyebrow-line"></span> THE UNIVERSE IS YOURS TO BREAK</div>
+      <h1>ROLL BEYOND<br><span>REALITY.</span></h1>
+      <p class="hero-copy">Every roll is a new possibility. Find the impossible.<br>Become the anomaly.</p>
+    </section>
+
+    <section class="roll-layout" aria-label="Aura rolling">
+      <div class="roll-card">
+        <div class="card-top"><span>01 / SUMMON</span><span class="tiny-tag">INFINITE POTENTIAL</span></div>
+        <div class="orb-stage" id="orbStage">
+          <div class="orb-ring ring-a"></div><div class="orb-ring ring-b"></div><div class="orb-ring ring-c"></div>
+          <div class="orb-core" id="orbCore"><span class="orb-glyph">✦</span></div>
+          <div class="orb-particle p1"></div><div class="orb-particle p2"></div><div class="orb-particle p3"></div><div class="orb-particle p4"></div>
+          <div class="stage-label" id="stageLabel">AWAITING YOUR WILL</div>
+        </div>
+        <div class="roll-controls">
+          <button id="rollButton" class="roll-button"><span class="button-spark">✧</span><span>ROLL AURA</span><span class="button-arrow">↗</span></button>
+          <div class="roll-hint"><span class="keycap">SPACE</span> OR CLICK TO ROLL <span class="hint-divider">/</span> NO COST · JUST VIBES</div>
+        </div>
+      </div>
+
+      <aside class="result-card" id="resultCard">
+        <div class="card-top"><span>02 / DISCOVERY</span><span class="live-label"><span class="status-dot"></span> LIVE</span></div>
+        <div class="result-content" id="resultContent">
+          <div class="empty-symbol">?</div>
+          <p class="result-overline">YOUR NEXT DESTINY</p>
+          <h2>UNKNOWN</h2>
+          <p class="result-description">Your story hasn't been written yet.</p>
+          <div class="result-divider"></div>
+          <div class="stat-row"><span>RARITY</span><strong>—</strong></div>
+          <div class="stat-row"><span>ODDS</span><strong>—</strong></div>
+          <div class="stat-row"><span>STATUS</span><strong class="muted-stat">UNDISCOVERED</strong></div>
+        </div>
+        <div class="result-footer"><span>YOUR LUCK</span><strong>×<span id="luckValue">1.00</span></strong><span class="footer-note">BASE RATE</span></div>
+      </aside>
+    </section>
+
+    <section class="collection-section" id="collection">
+      <div class="section-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> 03 / YOUR LEGACY</div><h2>THE <span>COLLECTION.</span></h2></div><div class="collection-count"><strong id="collectionCount">0</strong><span> / 100 DISCOVERED</span></div></div>
+      <div class="collection-progress"><span id="progressFill"></span></div>
+      <div class="aura-grid" id="auraGrid">
+        <div class="collection-empty" id="collectionEmpty"><span>◇</span><p>No auras discovered yet.</p><small>YOUR FIRST DISCOVERY IS ONE ROLL AWAY.</small></div>
+      </div>
+    </section>
+    <footer><span class="footer-brand">AURABREAK <span>©</span></span><span>AN UNOFFICIAL FAN-MADE CONCEPT · PROGRESS SAVES IN THIS BROWSER</span><span>BUILD 0001</span></footer>
+  </main>
+
+  <div class="cutscene hidden" id="cutscene" aria-hidden="true">
+    <div class="cutscene-backdrop"></div><div class="cutscene-art" id="cutsceneArt"></div>
+    <div class="cutscene-content"><p id="cutsceneEyebrow">REALITY DISTORTION DETECTED</p><h2 id="cutsceneTitle">UNKNOWN</h2><p id="cutsceneSubtitle">THE WORLD WILL REMEMBER.</p><button id="closeCutscene" class="cutscene-button">CLAIM DISCOVERY ↗</button></div>
+    <div class="cutscene-corner">AURABREAK / ANOMALY EVENT</div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>

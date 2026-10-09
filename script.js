@@ -791,7 +791,8 @@
       saveDiscoveries();
       renderCollection();
       renderResult(aura, isNew);
-      if (!isNoAura && (transcendenceUnlocked || aura.secret || aura.odds >= 1000000)) {
+      if (!isNoAura && transcendenceUnlocked) {
+        // AURABREAK II keeps the full cinematic roll experience.
         pendingAura = aura;
         showCutscene(aura);
       } else if (isNoAura) {
@@ -800,6 +801,14 @@
         showToast("NEW DISCOVERY: " + aura.name);
       } else {
         showToast(aura.name + " — already in your collection.");
+      }
+      if (transcendencePending && !transcendenceUnlocked && $("cutscene").classList.contains("hidden")) {
+        setTimeout(() => {
+          if (!transcendencePending || transcendenceUnlocked) return;
+          startTranscendenceCutscene();
+          $("cutscene").classList.remove("hidden");
+          $("cutscene").setAttribute("aria-hidden", "false");
+        }, 350);
       }
     }, 950);
   }

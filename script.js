@@ -51,16 +51,20 @@
       forcedAura = null;
       return selected;
     }
-    // Luck boosts rare auras for testing; the displayed odds remain the aura's base odds.
-    const pool = AURAS;
-    const weight = aura => 1 / Math.pow(Math.max(1, Number(aura.odds)), 1 / Math.max(1, luckMultiplier));
-    const total = pool.reduce((sum, aura) => sum + weight(aura), 0);
-    let cursor = Math.random() * total;
+    // Test each aura from rarest to most common. Luck scales its one-in-X chance.
+    // If luck meets/exceeds an aura's base odds, that aura is guaranteed to pass;
+    // because we test rarest first, the rarest eligible aura wins.
+    const pool = [...AURAS].sort((a, b) => {
+      const ao = Number(a.odds), bo = Number(b.odds);
+      return bo - ao;
+    });
+    const luck = Math.max(1, Number.isFinite(luckMultiplier) ? luckMultiplier : Number.MAX_VALUE);
     for (const aura of pool) {
-      cursor -= weight(aura);
-      if (cursor <= 0) return aura;
+      const odds = Number(aura.odds);
+      const chance = Math.min(1, luck / odds);
+      if (Math.random() < chance) return aura;
     }
-    return pool[0];
+    return AURAS[0];
   }
   function showToast(message) {
     const toast = $("toast");

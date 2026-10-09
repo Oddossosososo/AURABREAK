@@ -28,7 +28,8 @@
     {name:"DEVELOPER", odds:10n ** 100n, rarity:"RANK 0 • THE REAL CREATOR", tier:"secret", color:"#ffffff", symbol:"⟡", description:"The true strongest. The author beyond the Fallen God, who can rewrite the rules of AURABREAK.", style:"developer", secret:true, adminOnly:true, god:true},
     {name:"PURE DEITY:GALACTIC", odds:2n * (10n ** 68n), rarity:"GALACTIC EVOLUTION", tier:"secret", color:"#9be7ff", symbol:"✦", description:"Wait... I remember you. The deity has shattered its own limits.", style:"galactic", secret:true},
     {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true},
-    {name:"PAST ORBS", odds:250000, rarity:"ORBITAL MEMORY", tier:"cosmic", color:"#7cecff", symbol:"◌", description:"Echoes of every orb that came before still drift around you.", style:"cosmic"}
+    {name:"SHATTERCORE", odds:777777777, rarity:"ORB FRACTURE", tier:"secret", color:"#ff684f", symbol:"◇", description:"The orb was never meant to survive what sleeps inside. Tap the central orb seven times after discovering this aura to awaken its evolution.", style:"shattercore", secret:true},
+    {name:"SHATTERCORE: REBORN", odds:10n ** 72n, rarity:"FRACTURE EVOLUTION", tier:"secret", color:"#fff0b3", symbol:"✧", description:"Not a second encounter. Not a lucky roll. Seven deliberate strikes taught the broken core how to become something new.", style:"shattercore", secret:true, evolutionOnly:true},
   ];
   const STORAGE_KEY = "aurabreak-discoveries-v1";
   const TRANSCENDENCE_KEY = "aurabreak-transcendence-unlocked-v1";
@@ -49,7 +50,7 @@
   function loadDiscoveries() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      return new Set(saved.filter(name => AURAS.some(a => a.name === name)));
+      return new Set(saved.filter(name => name !== "PAST ORBS" && AURAS.some(a => a.name === name)));
     } catch { return new Set(); }
   }
   function saveDiscoveries() {
@@ -85,7 +86,7 @@
       return selected;
     }
     // Test rarest first. Phase II raises every aura above THE MAKER's original odds.
-    const pool = AURAS.filter(a => !a.adminOnly).sort((a, b) => {
+    const pool = AURAS.filter(a => !a.adminOnly && !a.evolutionOnly).sort((a, b) => {
       const ao = auraOdds(a), bo = auraOdds(b);
       return ao > bo ? -1 : ao < bo ? 1 : 0;
     });
@@ -362,6 +363,54 @@
     "PURE DEITY": {slug:"pure", eyebrow:"ABSOLUTE PRESENCE DETECTED", lines:["THE WORLD FORGETS TO BREATHE.","A LIGHT OLDER THAN CREATION.","YOU HAVE REACHED THE UNREACHABLE.","PURE DEITY"], subtitles:["NO RECORDS FOUND.","EVERY POSSIBILITY FALLS AWAY.","THE RNG GODS HAVE BEEN WATCHING.","THIS WILL NOT HAPPEN TWICE."], notes:[329.63,440,659.25,880]},
     "UNSINFUL": {slug:"unsinful", eyebrow:"ANOMALY WITHOUT A SHAPE", lines:["THE IMAGE REFUSES TO SETTLE.","THOUGHT BECOMES COLOUR.","THE RULES ERASE THEMSELVES.","UNSINFUL"], subtitles:["FORM: INFINITE.","CAUSALITY: UNDEFINED.","REALITY CANNOT CLASSIFY THIS.","THE UNWRITTEN HAS ARRIVED"], notes:[311.13,466.16,622.25,932.33]}
   };
+  function startShattercoreCutscene(aura) {
+    const cutscene = $("cutscene"), art = $("cutsceneArt");
+    const content = cutscene.querySelector(".cutscene-content");
+    const eyebrow = $("cutsceneEyebrow"), title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle");
+    const button = $("closeCutscene");
+    stopDeityCutscene();
+    const evolved = aura.name === "SHATTERCORE: REBORN";
+    cutscene.dataset.aura = aura.name;
+    cutscene.dataset.style = "shattercore";
+    cutscene.style.setProperty("--aura-color", aura.color);
+    cutscene.style.setProperty("--movie-color", aura.color);
+    art.innerHTML = '<div class="orb-break-space"></div><div class="orb-break-stars"></div><div class="orb-break-ring"></div><div class="orb-break-orb"><span>◇</span></div><div class="orb-break-cracks"></div><div class="orb-break-shards"></div><div class="orb-break-flash"></div>';
+    eyebrow.textContent = evolved ? "THE FRACTURE HAS LEARNED TO LIVE" : "UNKNOWN CORE SIGNATURE • CONTAINMENT FAILING";
+    title.className = "movie-title";
+    title.textContent = "";
+    title.style.color = aura.color;
+    subtitle.className = "movie-subtitle";
+    subtitle.textContent = "";
+    button.textContent = "SKIP CUTSCENE ↗";
+    content.classList.remove("deity-reveal");
+    cutscene.classList.remove("movie-running","orb-break-cracking","orb-break-shatter","orb-break-reform","movie-finale");
+    cutscene.classList.add("movie-running","orb-break-running");
+    const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
+    const line = (main, sub, cls = "movie-title") => {
+      title.textContent = main;
+      subtitle.textContent = sub;
+      title.className = cls;
+      content.classList.remove("movie-reveal");
+      void content.offsetWidth;
+      content.classList.add("movie-reveal");
+    };
+    const tone = (hz, duration, type = "sine", volume = 0.06) => playDeityTone(hz, duration, type, volume);
+
+    line("DON'T TOUCH THE ORB.", "A HAIRLINE FRACTURE APPEARS.");
+    later(4500, () => { line("...it heard you.", "SIGNAL ORIGIN: INSIDE THE CORE"); tone(196, 1.5, "triangle"); });
+    later(9000, () => { line("SOMETHING IS KNOCKING.", "THREE TIMES. FROM THE WRONG SIDE."); tone(110, 2, "sine", 0.08); });
+    later(14000, () => { line("THE SHELL IS LYING.", "THE ORB WAS BUILT TO KEEP SOMETHING IN."); cutscene.classList.add("orb-break-cracking"); tone(82, 2.4, "sawtooth", 0.08); });
+    later(19500, () => { line("IT ISN'T POWER.", "IT'S THE THING THAT POWER WAS AFRAID OF."); tone(55, 2.8, "sawtooth", 0.1); });
+    later(25000, () => { line("CONTAINMENT: 1%", "YOU SHOULD HAVE STOPPED ROLLING."); cutscene.classList.remove("orb-break-cracking"); cutscene.classList.add("orb-break-shatter"); tone(48, 3.2, "sawtooth", 0.12); });
+    later(30500, () => { line("", "NO ORB. NO LIGHT. NO SOUND.", "movie-title movie-title-final"); });
+    later(34500, () => { line("...YOU'RE STILL HERE.", "THE SHARDS ARE MOVING WITHOUT A CORE."); cutscene.classList.add("orb-break-reform"); tone(220, 2.4, "triangle", 0.07); });
+    later(38500, () => { line("SHATTERCORE", "THE ORB BROKE. THE WORLD DIDN'T.", "movie-title movie-title-final"); eyebrow.textContent = "FRACTURE EVENT • 1 IN " + BigInt(AURAS.find(a => a.name === "SHATTERCORE").odds).toLocaleString("en-US"); });
+    later(42000, () => { line("IT CAN BREAK AGAIN.", evolved ? "SEVEN STRIKES. A DIFFERENT KIND OF EVOLUTION." : "THE SEVENTH STRIKE WILL NOT BE AN ACCIDENT.", "movie-title movie-title-final"); });
+    later(45000, () => {
+      cutscene.classList.remove("movie-running","orb-break-running","orb-break-cracking","orb-break-shatter","orb-break-reform");
+      button.textContent = evolved ? "CLAIM EVOLUTION ↗" : "CLAIM DISCOVERY ↗";
+    });
+  }
   function startAuraMovie(aura) {
     const cutscene = $("cutscene"), art = $("cutsceneArt");
     const content = cutscene.querySelector(".cutscene-content");
@@ -524,7 +573,8 @@
     $("cutsceneSubtitle").textContent = aura.secret ? "THE RULES NO LONGER APPLY." : aura.description.toUpperCase();
     $("cutsceneArt").textContent = "";
     cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact");
-    if (aura.name === "PURE DEITY") startPureDeityCutscene();
+    if (aura.name === "SHATTERCORE" || aura.name === "SHATTERCORE: REBORN") startShattercoreCutscene(aura);
+    else if (aura.name === "PURE DEITY") startPureDeityCutscene();
     else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
     else if (aura.name === "THE FALLEN GOD") startFallenGodCutscene();
     else if (aura.name === "DEVELOPER") startDeveloperCutscene();
@@ -537,7 +587,7 @@
     const cutscene = $("cutscene");
     if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();
     cutscene.classList.add("hidden");
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
     if (pendingAura) {
@@ -598,6 +648,27 @@
     if (stage) stage.textContent = "AWAITING YOUR WILL";
     updatePhaseToggle();
   }
+  let shattercoreTaps = 0;
+  $("orbCore").addEventListener("click", () => {
+    if (!discovered.has("SHATTERCORE") || discovered.has("SHATTERCORE: REBORN") || rolling) return;
+    shattercoreTaps++;
+    if (shattercoreTaps < 7) {
+      showToast("SHATTERCORE RESONANCE: " + shattercoreTaps + "/7 STRIKES");
+      $("orbCore").classList.remove("orb-strike");
+      void $("orbCore").offsetWidth;
+      $("orbCore").classList.add("orb-strike");
+      return;
+    }
+    const evolution = AURAS.find(a => a.name === "SHATTERCORE: REBORN");
+    discovered.add(evolution.name);
+    saveDiscoveries();
+    renderCollection();
+    showToast("EVOLUTION UNLOCKED: SHATTERCORE: REBORN");
+    pendingAura = evolution;
+    showCutscene(evolution);
+    $("cutscene").classList.remove("hidden");
+    $("cutscene").setAttribute("aria-hidden", "false");
+  });
   $("phaseToggle").addEventListener("click", () => {
     if (!transcendenceUnlocked) return;
     if (document.body.classList.contains("transcendence-mode")) {

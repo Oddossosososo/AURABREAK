@@ -322,19 +322,84 @@
       button.textContent = "CLAIM EVOLUTION ↗";
     });
   }
+  const MOVIE_SCENES = {
+    "LOTTERY": {slug:"lottery", eyebrow:"PROBABILITY HAS LOST ITS MEANING", lines:["A TICKET WAS NEVER SUPPOSED TO EXIST.","ONE CHANCE. ONE IMPOSSIBLE MOMENT.","THE UNIVERSE DREW YOUR NUMBER.","LOTTERY"], subtitles:["A SINGLE GOLDEN SIGNAL.","THE ODDS WERE NEVER ON YOUR SIDE.","AND YET... HERE YOU ARE.","1 IN 292,201,338 • THE JACKPOT OF REALITY"], notes:[392,523.25,659.25,783.99]},
+    "SOLAR FLARE": {slug:"solar", eyebrow:"STELLAR CORE BREACH", lines:["THE SUN GOES QUIET.","A THOUSAND SUNRISES COLLAPSE INTO ONE.","THE CORE REMEMBERS YOUR NAME.","SOLAR FLARE"], subtitles:["LIGHT IS GATHERING.","THE HORIZON IS BURNING.","DO NOT LOOK AWAY.","A STAR HAS CHOSEN YOU"], notes:[220,330,440,660]},
+    "VOID WALKER": {slug:"void", eyebrow:"OUTSIDE THE KNOWN UNIVERSE", lines:["THE STARS HAVE STOPPED.","THERE IS NO FLOOR HERE.","SOMETHING CROSSES THE EMPTY.","VOID WALKER"], subtitles:["SIGNAL LOST.","REALITY HAS AN EDGE.","YOU CROSSED IT ANYWAY.","THE VOID KNOWS YOUR FOOTSTEPS"], notes:[196,146.83,110,73.42]},
+    "STARFORGED": {slug:"starforged", eyebrow:"FORGE OF THE FIRST STAR", lines:["A STAR IS DYING.","ITS LAST LIGHT BECOMES A HAMMER.","THE COSMOS FORGES A NEW LEGEND.","STARFORGED"], subtitles:["MATTER BENDS.","THE ANVIL OF CREATION.","EVERY SPARK IS A GALAXY.","BORN FROM A SUPERNOVA"], notes:[261.63,329.63,392,523.25]},
+    "COSMIC": {slug:"cosmic", eyebrow:"DEEP-SPACE SYNCHRONIZATION", lines:["A SIGNAL BETWEEN GALAXIES.","THE NEBULA OPENS LIKE AN EYE.","THE UNIVERSE ANSWERS BACK.","COSMIC"], subtitles:["DISTANCE: MEANINGLESS.","STARDUST IN PERFECT ORBIT.","A NEW CONSTELLATION FORMS.","THE COSMOS HAS NOTICED YOU"], notes:[174.61,261.63,349.23,523.25]},
+    "THE UNIMAGINABLE": {slug:"unimaginable", eyebrow:"COGNITIVE HORIZON EXCEEDED", lines:["DO NOT TRY TO NAME IT.","THE SHAPE CHANGES WHEN YOU BLINK.","YOUR MIND CAN ONLY SEE THE SHADOW.","THE UNIMAGINABLE"], subtitles:["FORM: UNRESOLVED.","DIMENSIONS ARE UNFOLDING.","MEANING IS BREAKING APART.","THERE WAS NEVER A WORD FOR THIS"], notes:[207.65,311.13,466.16,622.25]},
+    "FALLEN ANGEL": {slug:"fallen", eyebrow:"CELESTIAL EXILE DETECTED", lines:["THE HEAVENS CLOSE THEIR GATES.","ONE WING FALLS THROUGH THE DARK.","THE EXILE TURNS TO FACE YOU.","FALLEN ANGEL"], subtitles:["A HALO, CRACKED.","GRACE BECOMES GRAVITY.","THE LAST CHOIR FALLS SILENT.","BANISHED FROM ETERNITY"], notes:[293.66,220,164.81,246.94]},
+    "DIVINITY": {slug:"divinity", eyebrow:"A LAW OF REALITY HAS BENT", lines:["EVERYTHING STANDS STILL.","THE LIGHT ARRIVES BEFORE THE SOUND.","FOR ONE MOMENT, ALL THINGS KNEEL.","DIVINITY"], subtitles:["TIME: SUSPENDED.","THE SKY IS OPENING.","YOU ARE WITNESS TO THE IMPOSSIBLE.","A PRESENCE BEYOND WORSHIP"], notes:[261.63,392,523.25,783.99]},
+    "PURE DEITY": {slug:"pure", eyebrow:"ABSOLUTE PRESENCE DETECTED", lines:["THE WORLD FORGETS TO BREATHE.","A LIGHT OLDER THAN CREATION.","YOU HAVE REACHED THE UNREACHABLE.","PURE DEITY"], subtitles:["NO RECORDS FOUND.","EVERY POSSIBILITY FALLS AWAY.","THE RNG GODS HAVE BEEN WATCHING.","THIS WILL NOT HAPPEN TWICE."], notes:[329.63,440,659.25,880]},
+    "UNSINFUL": {slug:"unsinful", eyebrow:"ANOMALY WITHOUT A SHAPE", lines:["THE IMAGE REFUSES TO SETTLE.","THOUGHT BECOMES COLOUR.","THE RULES ERASE THEMSELVES.","UNSINFUL"], subtitles:["FORM: INFINITE.","CAUSALITY: UNDEFINED.","REALITY CANNOT CLASSIFY THIS.","THE UNWRITTEN HAS ARRIVED"], notes:[311.13,466.16,622.25,932.33]}
+  };
+  function startAuraMovie(aura) {
+    const cutscene = $("cutscene"), art = $("cutsceneArt");
+    const content = cutscene.querySelector(".cutscene-content");
+    const eyebrow = $("cutsceneEyebrow"), title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle");
+    const button = $("closeCutscene");
+    stopDeityCutscene();
+    const scene = MOVIE_SCENES[aura.name] || {
+      slug:"cosmic", eyebrow:"REALITY DISTORTION DETECTED",
+      lines:["THE AIR STARTS TO HUM.","LIGHT GATHERS AROUND THE ORB.","THE WORLD MAKES ROOM FOR SOMETHING NEW.",aura.name],
+      subtitles:["AN UNKNOWN SIGNAL.","ENERGY LEVELS RISING.","A NEW FORCE HAS AWAKENED.",aura.description.toUpperCase()],
+      notes:[220,329.63,440,587.33]
+    };
+    cutscene.dataset.aura = aura.name;
+    cutscene.dataset.style = aura.style || "cosmic";
+    cutscene.style.setProperty("--aura-color", aura.color);
+    cutscene.style.setProperty("--movie-color", aura.color);
+    art.innerHTML = '<div class="movie-scene movie-' + scene.slug + '"><div class="movie-starfield"></div><div class="movie-horizon"></div><div class="movie-core"><span>' + aura.symbol + '</span></div><div class="movie-ring movie-ring-a"></div><div class="movie-ring movie-ring-b"></div><div class="movie-fragments"></div><div class="movie-volumetric"></div><div class="movie-impact"></div></div>';
+    eyebrow.textContent = scene.eyebrow;
+    title.className = "movie-title";
+    title.textContent = "";
+    title.style.color = aura.color;
+    subtitle.className = "movie-subtitle";
+    subtitle.textContent = "";
+    button.textContent = "SKIP CUTSCENE ↗";
+    content.classList.remove("deity-reveal");
+    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break");
+    cutscene.classList.add("movie-running");
+    const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
+    const reveal = (index) => {
+      title.textContent = scene.lines[index];
+      subtitle.textContent = scene.subtitles[index];
+      title.className = index === 3 ? "movie-title movie-title-final" : "movie-title";
+      content.classList.remove("movie-reveal");
+      void content.offsetWidth;
+      content.classList.add("movie-reveal");
+      playDeityTone(scene.notes[index], index === 3 ? 2.4 : 1.35, index === 3 ? "triangle" : "sine", index === 3 ? 0.075 : 0.045);
+      if (index === 3) {
+        cutscene.classList.add("movie-finale");
+        later(900, () => cutscene.classList.remove("movie-finale"));
+        eyebrow.textContent = "AURABREAK ORIGINAL • " + aura.rarity;
+      }
+    };
+    // A short, four-act mini-movie: establishing shot, escalation, reveal, hero frame.
+    reveal(0);
+    later(1900, () => reveal(1));
+    later(3900, () => reveal(2));
+    later(6100, () => reveal(3));
+    later(8500, () => {
+      cutscene.classList.remove("movie-running");
+      button.textContent = "CLAIM DISCOVERY ↗";
+    });
+  }
   function showCutscene(aura) {
     const cutscene = $("cutscene");
     cutscene.dataset.style = aura.style || "cosmic";
+    cutscene.dataset.aura = aura.name;
     cutscene.style.setProperty("--aura-color", aura.color);
     $("cutsceneEyebrow").textContent = aura.secret ? "UNCLASSIFIED REALITY FAILURE" : aura.odds >= 1000000 ? "ANOMALY EVENT DETECTED" : "A NEW FORCE HAS AWAKENED";
     $("cutsceneTitle").textContent = aura.name;
     $("cutsceneTitle").style.color = aura.color;
     $("cutsceneSubtitle").textContent = aura.secret ? "THE RULES NO LONGER APPLY." : aura.description.toUpperCase();
     $("cutsceneArt").textContent = "";
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale");
     if (aura.name === "PURE DEITY") startPureDeityCutscene();
     else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
-    else $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
+    else startAuraMovie(aura);
     cutscene.classList.remove("hidden");
     cutscene.setAttribute("aria-hidden", "false");
   }
@@ -342,7 +407,7 @@
     stopDeityCutscene();
     const cutscene = $("cutscene");
     cutscene.classList.add("hidden");
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale");
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
     if (pendingAura) {

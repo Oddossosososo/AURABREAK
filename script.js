@@ -25,6 +25,7 @@
     {name:"LORE CREATIONIST", odds:10n ** 54n, rarity:"GOD • RANK 4", tier:"secret", color:"#65caff", symbol:"✥", description:"The god who shaped the stories and history of the universe.", style:"lore-creationist", secret:true, god:true},
     {name:"THE MAKER", odds:10n ** 60n, rarity:"GOD • RANK 3", tier:"secret", color:"#ffcf76", symbol:"✹", description:"Creator of the world. It believes nothing exists above it.", style:"the-maker", secret:true, god:true},
     {name:"THE FALLEN GOD", odds:10n ** 72n, rarity:"THE TRUE SOVEREIGN", tier:"secret", color:"#f4e8ff", symbol:"✦", description:"The one who knows the truth and controls AURABREAK itself.", style:"fallen-god", secret:true, adminOnly:true, god:true},
+    {name:"DEVELOPER", odds:10n ** 100n, rarity:"RANK 0 • THE REAL CREATOR", tier:"secret", color:"#ffffff", symbol:"⟡", description:"The true strongest. The author beyond the Fallen God, who can rewrite the rules of AURABREAK.", style:"developer", secret:true, adminOnly:true, god:true},
     {name:"PURE DEITY:GALACTIC", odds:2n * (10n ** 68n), rarity:"GALACTIC EVOLUTION", tier:"secret", color:"#9be7ff", symbol:"✦", description:"Wait... I remember you. The deity has shattered its own limits.", style:"galactic", secret:true},
     {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true}
   ];
@@ -458,6 +459,38 @@
     later(28900,()=>{ line("THE TRUTH HAS BEEN TOLD.", "THE GODS DO NOT ACCEPT IT. NOT YET.", "fallen-god-final"); });
     later(32000,()=>{ cutscene.classList.remove("fallen-god-running","fallen-god-awakened","fallen-god-impact"); $("closeCutscene").textContent="CLOSE REVELATION ↗"; });
   }
+  function startDeveloperCutscene() {
+    const cutscene = $("cutscene"), art = $("cutsceneArt");
+    const content = cutscene.querySelector(".cutscene-content");
+    const eyebrow = $("cutsceneEyebrow"), title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle"), button = $("closeCutscene");
+    stopDeityCutscene();
+    cutscene.dataset.style = "developer";
+    cutscene.dataset.aura = "DEVELOPER";
+    cutscene.style.setProperty("--aura-color", "#ffffff");
+    cutscene.style.setProperty("--movie-color", "#ffffff");
+    art.innerHTML = '<div class="developer-void"></div><div class="developer-grid"></div><div class="developer-rings developer-ring-a"></div><div class="developer-rings developer-ring-b"></div><div class="developer-cursor">↖</div><div class="developer-avatar"><span>✧</span></div><div class="developer-code">REALITY: EDITABLE<br>AUTHORITY: ABSOLUTE<br>FALLEN GOD: OVERRIDDEN</div><div class="developer-flash"></div>';
+    eyebrow.textContent = "ROOT ACCESS • OUTSIDE THE SIMULATION";
+    title.textContent = "";
+    title.className = "developer-line";
+    subtitle.textContent = "";
+    button.textContent = "SKIP DEVELOPER REVEAL ↗";
+    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","movie-running","movie-finale","fallen-god-running","fallen-god-awakened","fallen-god-impact","developer-running","developer-overwrite");
+    cutscene.classList.add("developer-running");
+    const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
+    const line = (a,b,cls="developer-line") => {
+      title.textContent = a; title.className = cls; subtitle.textContent = b;
+      content.classList.remove("deity-reveal"); void content.offsetWidth; content.classList.add("deity-reveal");
+    };
+    line("UNKNOWN AUTHORITY", "A PRESENCE HAS ENTERED FROM OUTSIDE THE GAME.");
+    playDeityTone(110, 2.5, "sine", .07);
+    later(2200, () => { line("THE FALLEN GOD IS NOT THE TOP.", "ITS CONTROL HAS A SOURCE."); playDeityTone(82.4, 2.5, "triangle", .08); });
+    later(4800, () => { cutscene.classList.add("developer-overwrite"); line("ROOT ACCESS GRANTED.", "EVERY RULE. EVERY ROLL. EVERY GOD."); playDeityTone(55, 3, "sawtooth", .07); });
+    later(7600, () => { line("THE FALLEN GOD", "CONTROL SIGNAL LOST."); eyebrow.textContent = "SYSTEM MESSAGE • ADMINISTRATOR OVERRIDE"; });
+    later(9800, () => { cutscene.classList.add("developer-impact"); line("DEVELOPER", "THE TRUE STRONGEST BEING IN AURABREAK.", "developer-final"); playDeityTone(27.5, 4.5, "sawtooth", .12); });
+    later(13000, () => { eyebrow.textContent = "RANK 0 • ABOVE THE FALLEN GOD"; line("I WROTE THE RULES.", "THE FALLEN GOD CONTROLS THE GAME. I CONTROL WHAT THE GAME IS.", "developer-final"); });
+    later(16400, () => { line("YOU FOUND THE SECRET.", "ADMIN-ONLY AURA • NEVER AVAILABLE FROM NORMAL ROLLS", "developer-final"); });
+    later(19500, () => { cutscene.classList.remove("developer-running"); button.textContent = "CLAIM DEVELOPER AURA ↗"; });
+  }
   function showCutscene(aura) {
     const cutscene = $("cutscene");
     cutscene.dataset.style = aura.style || "cosmic";
@@ -468,10 +501,11 @@
     $("cutsceneTitle").style.color = aura.color;
     $("cutsceneSubtitle").textContent = aura.secret ? "THE RULES NO LONGER APPLY." : aura.description.toUpperCase();
     $("cutsceneArt").textContent = "";
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact");
     if (aura.name === "PURE DEITY") startPureDeityCutscene();
     else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
     else if (aura.name === "THE FALLEN GOD") startFallenGodCutscene();
+    else if (aura.name === "DEVELOPER") startDeveloperCutscene();
     else startAuraMovie(aura);
     cutscene.classList.remove("hidden");
     cutscene.setAttribute("aria-hidden", "false");
@@ -480,7 +514,7 @@
     stopDeityCutscene();
     const cutscene = $("cutscene");
     cutscene.classList.add("hidden");
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact");
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
     if (pendingAura) {

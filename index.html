@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script src="script.js?v=2" defer></script>
+  <script src="script.js?v=3" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
@@ -77,13 +77,13 @@
   <section class="admin-panel hidden" id="adminPanel" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
     <div class="admin-window">
       <div class="admin-header"><div><p class="admin-eyebrow">AURABREAK / DEVELOPER TOOLS</p><h2 id="adminTitle">ADMIN PANEL</h2></div><button id="adminClose" class="admin-close" aria-label="Close admin panel">×</button></div>
-      <p class="admin-note">Client-side testing tools. Press <kbd>SHIFT</kbd> + <kbd>A</kbd> to toggle.</p>
+      <p class="admin-note">Prototype tools. Press <kbd>SHIFT</kbd> + <kbd>A</kbd> to toggle. Device ID label is informational only; secure admin access requires server-side authentication.</p>
       <div class="admin-field"><label for="adminAuraSelect">Force an aura</label><select id="adminAuraSelect"></select><button id="adminForceAura" class="admin-action">FORCE NEXT ROLL ↗</button></div>
-      <div class="admin-field"><label for="adminLuck">Luck multiplier <strong id="adminLuckValue">×1</strong></label><input id="adminLuck" type="number" min="1" step="1" value="1"><small>Higher luck increases the chance of rare auras. No preset maximum.</small></div>
+      <div class="admin-field"><label for="adminLuck">Luck multiplier <strong id="adminLuckValue">×1</strong></label><input id="adminLuck" type="text" inputmode="numeric" autocomplete="off" value="1"><small>Higher luck increases the chance of rare auras. No preset maximum.</small></div>
       <div class="admin-divider"></div>
       <p class="admin-eyebrow">CUSTOM AURA</p>
       <div class="admin-field"><label for="customAuraName">Aura name</label><input id="customAuraName" maxlength="50" placeholder="E.G. STAR EATER"></div>
-      <div class="admin-field"><label for="customAuraOdds">Odds (1 in X)</label><input id="customAuraOdds" type="number" min="1" step="1" value="1000000"></div>
+      <div class="admin-field"><label for="customAuraOdds">Odds (1 in X)</label><input id="customAuraOdds" type="text" inputmode="numeric" autocomplete="off" value="1000000"></div>
       <div class="admin-field"><label for="customAuraRarity">Rarity label</label><input id="customAuraRarity" maxlength="30" placeholder="CUSTOM / DIVINE"></div>
       <div class="admin-field"><label for="customAuraColor">Aura colour</label><input id="customAuraColor" type="color" value="#b8a9ff"></div>
       <button id="adminAddAura" class="admin-action secondary-action">ADD CUSTOM AURA +</button>

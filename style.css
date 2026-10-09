@@ -82,7 +82,6 @@
 .cutscene[data-style="fallen"] .cutscene-backdrop{opacity:.42;filter:hue-rotate(18deg)}
 .cutscene[data-style="unimaginable"] .cutscene-backdrop{opacity:.4;animation:warp 2.5s ease-in-out infinite alternate}
 .cutscene[data-style="unsinful"] .cutscene:before{border-style:dashed;animation:spin 18s linear infinite}
-.admin-device-id{display:block;margin:0 0 18px;padding:10px 12px;border:1px solid #9b7cff40;border-radius:8px;color:#b8a9ff;font:10px var(--mono);overflow-wrap:anywhere}
 .admin-note{margin-bottom:8px}
 .cutscene[data-style="galactic"]{background:#02020b;--aura-color:#8be7ff}
 .cutscene[data-style="galactic"] .cutscene-backdrop{opacity:.5;background:radial-gradient(ellipse at center,#42c8ff55 0%,#6a40ff22 32%,transparent 68%),#02020b;animation:deityBreath 2.5s ease-in-out infinite alternate}

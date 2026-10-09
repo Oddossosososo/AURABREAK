@@ -517,6 +517,7 @@
   function closeCutscene() {
     stopDeityCutscene();
     const cutscene = $("cutscene");
+    if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();
     cutscene.classList.add("hidden");
     cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact");
     cutscene.setAttribute("aria-hidden", "true");

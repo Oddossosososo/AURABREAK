@@ -49,3 +49,24 @@
 @keyframes deityReveal{0%{opacity:0;transform:scale(.7);filter:blur(20px)}65%{opacity:1;transform:scale(1.06);filter:blur(0)}100%{opacity:1;transform:scale(1);filter:blur(0)}}
 @keyframes deityFinal{from{opacity:0;transform:scale(1.5);filter:blur(22px)}to{opacity:1;transform:scale(1);filter:blur(0)}}
 @media(prefers-reduced-motion:reduce){.deity-vortex,.deity-sigil,.deity-star,.deity-halo,.deity-rays,.deity-specks{animation-duration:30s!important}}
+
+/* Admin panel */
+.admin-panel{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:18px;background:#03020bd9;backdrop-filter:blur(12px)}
+.admin-panel.hidden{display:none}
+.admin-window{width:min(100%,520px);max-height:min(90vh,850px);overflow:auto;padding:24px;border:1px solid #9b7cff66;border-radius:16px;background:linear-gradient(145deg,#17152a,#090912);box-shadow:0 25px 100px #000b,0 0 55px #9473fa16}
+.admin-header{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}
+.admin-eyebrow{font:9px var(--mono);letter-spacing:.17em;color:#a994ff;margin:0 0 8px}
+.admin-header h2{margin:0;font-size:27px;letter-spacing:-.04em}
+.admin-close{border:1px solid var(--line);background:#ffffff08;color:#fff;font-size:25px;width:38px;height:38px;border-radius:8px;cursor:pointer}
+.admin-note,.admin-field small{color:#8985a3;font-size:11px;line-height:1.6}
+.admin-note{margin:12px 0 23px}
+.admin-field{display:grid;gap:8px;margin:16px 0}
+.admin-field label{display:flex;justify-content:space-between;gap:12px;font:10px var(--mono);letter-spacing:.07em;color:#c8c2e2}
+.admin-field input,.admin-field select{width:100%;min-width:0;min-height:42px;border:1px solid #39324f;border-radius:7px;background:#0b0a15;color:#f7f3ff;padding:10px 12px;font:12px var(--font)}
+.admin-field input[type=color]{height:44px;padding:5px}
+.admin-field input:focus,.admin-field select:focus{outline:1px solid #a48aff;border-color:#a48aff}
+.admin-action{width:100%;min-height:43px;border:1px solid #a48aff;border-radius:7px;background:linear-gradient(100deg,#9b7aff,#7660d7);color:white;font:700 10px var(--mono);letter-spacing:.1em;cursor:pointer;margin-top:4px}
+.secondary-action{background:#ffffff08;border-color:#51456f}
+.admin-divider{height:1px;background:var(--line);margin:24px 0}
+.admin-field kbd,.admin-note kbd{border:1px solid #50466e;border-radius:4px;padding:2px 5px}
+@media(max-width:520px){.admin-window{padding:18px}.admin-header h2{font-size:23px}}

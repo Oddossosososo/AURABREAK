@@ -50,7 +50,7 @@
   function loadDiscoveries() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      return new Set(saved.filter(name => name !== "PAST ORBS" && AURAS.some(a => a.name === name)));
+      return new Set(saved.filter(name => AURAS.some(a => a.name === name)));
     } catch { return new Set(); }
   }
   function saveDiscoveries() {
@@ -404,7 +404,7 @@
     later(25000, () => { line("CONTAINMENT: 1%", "YOU SHOULD HAVE STOPPED ROLLING."); cutscene.classList.remove("orb-break-cracking"); cutscene.classList.add("orb-break-shatter"); tone(48, 3.2, "sawtooth", 0.12); });
     later(30500, () => { line("", "NO ORB. NO LIGHT. NO SOUND.", "movie-title movie-title-final"); });
     later(34500, () => { line("...YOU'RE STILL HERE.", "THE SHARDS ARE MOVING WITHOUT A CORE."); cutscene.classList.add("orb-break-reform"); tone(220, 2.4, "triangle", 0.07); });
-    later(38500, () => { line("SHATTERCORE", "THE ORB BROKE. THE WORLD DIDN'T.", "movie-title movie-title-final"); eyebrow.textContent = "FRACTURE EVENT • 1 IN " + BigInt(AURAS.find(a => a.name === "SHATTERCORE").odds).toLocaleString("en-US"); });
+    later(38500, () => { line(aura.name, evolved ? "THE FRACTURE HAS BECOME ITS OWN BEGINNING." : "THE ORB BROKE. THE WORLD DIDN'T.", "movie-title movie-title-final"); eyebrow.textContent = (evolved ? "FRACTURE EVOLUTION" : "FRACTURE EVENT") + " • 1 IN " + BigInt(aura.odds).toLocaleString("en-US"); });
     later(42000, () => { line("IT CAN BREAK AGAIN.", evolved ? "SEVEN STRIKES. A DIFFERENT KIND OF EVOLUTION." : "THE SEVENTH STRIKE WILL NOT BE AN ACCIDENT.", "movie-title movie-title-final"); });
     later(45000, () => {
       cutscene.classList.remove("movie-running","orb-break-running","orb-break-cracking","orb-break-shatter","orb-break-reform");
@@ -591,7 +591,7 @@
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
     if (pendingAura) {
-      renderResult(pendingAura, !discovered.has(pendingAura.name));
+      renderResult(pendingAura, pendingAura.name === "SHATTERCORE: REBORN" || !discovered.has(pendingAura.name));
       pendingAura = null;
     }
     if (transcendencePending && !transcendenceUnlocked) {

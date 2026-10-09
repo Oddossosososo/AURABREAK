@@ -20,6 +20,7 @@
     {name:"FALLEN ANGEL", odds:7777777, rarity:"DIVINE", tier:"divine", color:"#e3c4ff", symbol:"♱", description:"A celestial presence, cast out of forever.", style:"fallen"},
     {name:"DIVINITY", odds:100000000, rarity:"DIVINE", tier:"divine", color:"#fff0a0", symbol:"✹", description:"For one impossible moment, everything kneels.", style:"divinity"},
     {name:"PURE DEITY", odds:1000000000000000000000000000000000000n, rarity:"ABSOLUTE", tier:"secret", color:"#fff4d6", symbol:"✧", description:"So... you found it. The RNG gods have blessed you.", style:"pure-deity", secret:true},
+    {name:"PURE DEITY:GALACTIC", odds:2n * (10n ** 68n), rarity:"GALACTIC EVOLUTION", tier:"secret", color:"#9be7ff", symbol:"✦", description:"Wait... I remember you. The deity has shattered its own limits.", style:"galactic", secret:true},
     {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true}
   ];
   const STORAGE_KEY = "aurabreak-discoveries-v1";
@@ -31,6 +32,8 @@
   let cutsceneTimers = [];
   let deityAudio = null;
   let toastTimer;
+  let runRollCount = 0;
+  let pureDeityEncounters = 0;
 
   function loadDiscoveries() {
     try {
@@ -190,19 +193,75 @@
       content.classList.add("deity-reveal");
     };
     const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
-    // 45-second original sequence: quiet omen, flashing text, rising sigils, rapid beats, then a radiant reveal.
+    // 45-second celestial sequence: no "DOOF" text or beat-word effects.
     showLine("So...", "deity-line");
     subtitle.textContent = "SOMETHING HAS ANSWERED.";
     later(4500, () => { showLine("You found it.", "deity-line"); subtitle.textContent = "AGAINST EVERY EXPECTATION."; playDeityTone(420, 1.2); });
     later(10000, () => { showLine("PURE DEITY", "deity-line deity-name-flash"); subtitle.textContent = "THE RAREST AURA IN AURABREAK"; playDeityTone(660, 1.1, "triangle"); });
     later(15500, () => { showLine("The RNG gods", "deity-line"); subtitle.textContent = "HAVE BEEN WATCHING."; playDeityTone(520, 1.4); });
-    later(20000, () => { showLine("have blessed you..", "deity-line deity-blessed"); subtitle.textContent = "THIS MOMENT WILL NOT COME TWICE."; playDeityTone(880, 1.8, "sine", 0.08); });
-    later(27000, () => { showLine("DOOF", "deity-beat"); subtitle.textContent = " "; playDeityTone(110, 0.22, "sine", 0.15); });
-    later(31000, () => { showLine("DOOF", "deity-beat"); playDeityTone(95, 0.2, "sine", 0.16); });
-    later(33700, () => { showLine("DOOF", "deity-beat deity-fast"); playDeityTone(130, 0.15, "sine", 0.18); });
+    later(20000, () => { showLine("have blessed you..", "deity-line deity-blessed"); subtitle.textContent = "THIS WILL NOT HAPPEN TWICE."; playDeityTone(880, 1.8, "sine", 0.08); });
+    later(27000, () => { showLine("", "deity-beat"); subtitle.textContent = "THE SILENCE BEFORE CREATION."; playDeityTone(220, 1.4, "sine", 0.09); });
+    later(31000, () => { showLine("", "deity-beat"); playDeityTone(330, 1.2, "triangle", 0.1); });
+    later(33700, () => { showLine("", "deity-beat deity-fast"); playDeityTone(440, 0.9, "sine", 0.12); });
     later(35500, () => { showLine("", "deity-boom"); subtitle.textContent = ""; cutscene.classList.add("deity-impact"); playDeityTone(55, 2.6, "sawtooth", 0.2); });
     later(38000, () => { cutscene.classList.remove("deity-impact"); showLine("PURE DEITY", "deity-final-title"); subtitle.textContent = "THE RNG GODS HAVE BLESSED YOU."; eyebrow.textContent = "ABSOLUTE RARITY • 1 IN " + BigInt(AURAS.find(a => a.name === "PURE DEITY").odds).toLocaleString("en-US"); content.classList.add("deity-reveal"); });
     later(45000, () => { cutscene.classList.remove("deity-running"); button.textContent = "CLAIM DISCOVERY ↗"; });
+  }
+  function startGalacticCutscene() {
+    const cutscene = $("cutscene");
+    const art = $("cutsceneArt");
+    const content = cutscene.querySelector(".cutscene-content");
+    const title = $("cutsceneTitle");
+    const subtitle = $("cutsceneSubtitle");
+    const eyebrow = $("cutsceneEyebrow");
+    const button = $("closeCutscene");
+    stopDeityCutscene();
+    cutscene.dataset.style = "galactic";
+    cutscene.style.setProperty("--aura-color", "#8be7ff");
+    art.innerHTML = '<div class="galactic-nebula"></div><div class="galactic-orb"><span>✦</span></div><div class="galactic-shards"></div><div class="galactic-rings"></div><div class="galactic-flare"></div>';
+    eyebrow.textContent = "AN IMPOSSIBLE MEMORY HAS AWAKENED";
+    title.textContent = "Wait...";
+    title.className = "galactic-line";
+    title.style.color = "#d9f7ff";
+    subtitle.textContent = "I REMEMBER YOU...";
+    button.textContent = "SKIP EVOLUTION ↗";
+    content.classList.remove("deity-reveal");
+    cutscene.classList.add("deity-running", "galactic-running");
+    const showLine = (line, sub, cls = "galactic-line") => {
+      title.textContent = line; title.className = cls; subtitle.textContent = sub;
+      content.classList.remove("deity-reveal"); void content.offsetWidth; content.classList.add("deity-reveal");
+    };
+    const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
+    // Original trance-style synth arpeggio generated locally with Web Audio.
+    try {
+      if (!deityAudio) deityAudio = new (window.AudioContext || window.webkitAudioContext)();
+      if (deityAudio.state === "suspended") deityAudio.resume();
+      const ctx = deityAudio, start = ctx.currentTime + 0.08;
+      const notes = [110,164.81,220,329.63,440,329.63,220,164.81,123.47,185,246.94,370];
+      notes.forEach((hz,i) => {
+        const osc=ctx.createOscillator(), gain=ctx.createGain(), filter=ctx.createBiquadFilter();
+        osc.type="sawtooth"; osc.frequency.value=hz; filter.type="lowpass"; filter.frequency.value=1500;
+        gain.gain.setValueAtTime(0.0001,start+i*0.23);
+        gain.gain.exponentialRampToValueAtTime(0.045,start+i*0.23+0.035);
+        gain.gain.exponentialRampToValueAtTime(0.0001,start+i*0.23+0.21);
+        osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+        osc.start(start+i*0.23); osc.stop(start+i*0.23+0.22);
+      });
+      [55,55,82.4,110].forEach((hz,i) => {
+        const osc=ctx.createOscillator(), gain=ctx.createGain(); osc.type="sine"; osc.frequency.value=hz;
+        gain.gain.setValueAtTime(0.0001,start+0.5+i*0.8);
+        gain.gain.exponentialRampToValueAtTime(0.12,start+0.58+i*0.8);
+        gain.gain.exponentialRampToValueAtTime(0.0001,start+1.25+i*0.8);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(start+0.5+i*0.8); osc.stop(start+1.3+i*0.8);
+      });
+    } catch {}
+    later(4200, () => { showLine("I remember you...", "YOU HAVE RETURNED TO THE SOURCE."); playDeityTone(440,1.4,"triangle",0.08); });
+    later(8500, () => { showLine("THE ORB REMEMBERS", "THE FIRST DIVINITY WAS ONLY THE BEGINNING."); playDeityTone(660,1.8,"sawtooth",0.07); });
+    later(12500, () => { showLine("BREAK THE LIMIT", "REALITY CANNOT CONTAIN THIS FORM."); cutscene.classList.add("galactic-break"); playDeityTone(70,2.2,"sawtooth",0.18); });
+    later(15300, () => { cutscene.classList.remove("galactic-break"); showLine("PURE DEITY", "HAS EVOLVED BEYOND ITSELF."); });
+    later(19000, () => { showLine("PURE DEITY:GALACTIC", "THE STARS ARE ONLY THE BEGINNING.", "galactic-final"); eyebrow.textContent = "GALACTIC EVOLUTION • 1 IN " + BigInt(AURAS.find(a=>a.name==="PURE DEITY:GALACTIC").odds).toLocaleString("en-US"); content.classList.add("deity-reveal"); });
+    later(25000, () => { cutscene.classList.remove("deity-running"); button.textContent = "CLAIM EVOLUTION ↗"; });
   }
   function showCutscene(aura) {
     const cutscene = $("cutscene");
@@ -213,8 +272,9 @@
     $("cutsceneTitle").style.color = aura.color;
     $("cutsceneSubtitle").textContent = aura.secret ? "THE RULES NO LONGER APPLY." : aura.description.toUpperCase();
     $("cutsceneArt").textContent = "";
-    cutscene.classList.remove("deity-running", "deity-impact");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break");
     if (aura.name === "PURE DEITY") startPureDeityCutscene();
+    else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
     else $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
     cutscene.classList.remove("hidden");
     cutscene.setAttribute("aria-hidden", "false");
@@ -223,7 +283,7 @@
     stopDeityCutscene();
     const cutscene = $("cutscene");
     cutscene.classList.add("hidden");
-    cutscene.classList.remove("deity-running", "deity-impact");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break");
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
     if (pendingAura) {
@@ -237,7 +297,13 @@
     $("rollButton").disabled = true;
     document.body.classList.add("rolling");
     $("stageLabel").textContent = "REALITY IS REARRANGING...";
-    const aura = chooseAura();
+    let aura = chooseAura();
+    runRollCount++;
+    if (runRollCount > 5000) { runRollCount = 1; pureDeityEncounters = 0; }
+    if (aura.name === "PURE DEITY") {
+      pureDeityEncounters++;
+      if (pureDeityEncounters === 2) aura = AURAS.find(a => a.name === "PURE DEITY:GALACTIC");
+    }
     setTimeout(() => {
       rolling = false;
       $("rollButton").disabled = false;
@@ -303,31 +369,49 @@
     const aura = AURAS.find(item => item.name === adminAuraSelect.value);
     if (!aura) return;
     forcedAura = aura;
-    if (!rolling) roll();
-    adminPanel.classList.add("hidden");
-    adminPanel.setAttribute("aria-hidden", "true");
-    showToast("ADMIN: next roll forced to " + aura.name);
+    $("adminForceAura").textContent = "NEXT ROLL: " + aura.name;
+    showToast("RIGGED: your next manual roll will be " + aura.name);
   });
   adminLuck.addEventListener("input", () => {
-    luckMultiplier = Math.max(1, Number(adminLuck.value) || 1);
-    adminLuckValue.textContent = "×" + luckMultiplier.toLocaleString("en-US");
-    $("luckValue").textContent = luckMultiplier.toLocaleString("en-US", {maximumFractionDigits: 2});
+    const raw = String(adminLuck.value || "1").trim();
+    const parsed = Number(raw);
+    luckMultiplier = Math.max(1, Number.isFinite(parsed) ? parsed : Number.MAX_VALUE);
+    adminLuckValue.textContent = "×" + (Number.isFinite(parsed) ? parsed.toLocaleString("en-US") : "MAX");
+    $("luckValue").textContent = adminLuckValue.textContent.slice(1);
   });
   $("adminAddAura").addEventListener("click", () => {
     const name = customAuraName.value.trim().toUpperCase();
-    const odds = Number(customAuraOdds.value);
+    const oddsText = String(customAuraOdds.value || "").trim();
+    let odds;
+    try { odds = BigInt(oddsText); } catch { odds = 0n; }
     const rarity = customAuraRarity.value.trim().toUpperCase() || "CUSTOM";
     const color = customAuraColor.value || "#b8a9ff";
     if (!name) return showToast("Enter an aura name first.");
     if (AURAS.some(aura => aura.name === name)) return showToast("That aura already exists.");
-    if (!Number.isFinite(odds) || odds < 1) return showToast("Odds must be a number of 1 or higher.");
-    const tier = odds >= 1000000 ? "secret" : odds >= 100000 ? "cosmic" : odds >= 10000 ? "mythic" : odds >= 1000 ? "legendary" : odds >= 100 ? "rare" : odds >= 10 ? "uncommon" : "common";
-    const aura = {name, odds: Math.floor(odds), rarity, tier, color, symbol:"✧", description:"A custom aura added from the AURABREAK admin panel.", style:"cosmic"};
+    if (odds < 1n) return showToast("Odds must be a whole number of 1 or higher.");
+    const tier = odds >= 1000000n ? "secret" : odds >= 100000n ? "cosmic" : odds >= 10000n ? "mythic" : odds >= 1000n ? "legendary" : odds >= 100n ? "rare" : odds >= 10n ? "uncommon" : "common";
+    const aura = {name, odds, rarity, tier, color, symbol:"✧", description:"A custom aura added from the AURABREAK admin panel.", style:"cosmic"};
     AURAS.push(aura);
     refreshAdminAuraOptions();
     adminAuraSelect.value = name;
     showToast("Added custom aura: " + name);
   });
+
+  // A local browser identifier helps identify this installation, but is NOT secure authentication.
+  const DEVICE_KEY = "aurabreak-device-id-v1";
+  let deviceId = "";
+  try {
+    deviceId = localStorage.getItem(DEVICE_KEY) || "";
+    if (!deviceId) {
+      deviceId = (crypto.randomUUID ? crypto.randomUUID() : "AB-" + Math.random().toString(36).slice(2) + Date.now().toString(36)).toUpperCase();
+      localStorage.setItem(DEVICE_KEY, deviceId);
+    }
+  } catch { deviceId = "UNAVAILABLE"; }
+  const deviceLabel = document.createElement("small");
+  deviceLabel.className = "admin-device-id";
+  deviceLabel.textContent = "THIS BROWSER DEVICE ID: " + deviceId;
+  const adminNote = document.querySelector(".admin-note");
+  if (adminNote) adminNote.after(deviceLabel);
 
   renderCollection();
 })();

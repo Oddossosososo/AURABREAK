@@ -70,3 +70,34 @@
 .admin-divider{height:1px;background:var(--line);margin:24px 0}
 .admin-field kbd,.admin-note kbd{border:1px solid #50466e;border-radius:4px;padding:2px 5px}
 @media(max-width:520px){.admin-window{padding:18px}.admin-header h2{font-size:23px}}
+
+
+/* Global cutscene polish: every aura gets a layered glow, starfield, and cinematic entrance. */
+.cutscene:before{content:"";position:absolute;inset:16px;border:1px solid color-mix(in srgb,var(--aura-color,#9a7cff) 40%,transparent);pointer-events:none;z-index:2;opacity:.55;box-shadow:inset 0 0 70px color-mix(in srgb,var(--aura-color,#9a7cff) 9%,transparent),0 0 50px color-mix(in srgb,var(--aura-color,#9a7cff) 12%,transparent)}
+.cutscene:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(circle at 50% 50%,transparent 25%,#020208aa 100%),linear-gradient(120deg,transparent 35%,color-mix(in srgb,var(--aura-color,#9a7cff) 8%,transparent),transparent 70%);mix-blend-mode:screen}
+.cutscene-content{z-index:3;filter:drop-shadow(0 0 20px color-mix(in srgb,var(--aura-color,#9a7cff) 22%,transparent))}
+.cutscene-content h2{animation:reveal .9s cubic-bezier(.16,1,.3,1) both}
+.cutscene[data-style="cosmic"] .cutscene-backdrop{opacity:.38;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--aura-color) 75%,transparent),transparent 52%),#030208}
+.cutscene[data-style="divinity"] .cutscene-backdrop{opacity:.5}
+.cutscene[data-style="fallen"] .cutscene-backdrop{opacity:.42;filter:hue-rotate(18deg)}
+.cutscene[data-style="unimaginable"] .cutscene-backdrop{opacity:.4;animation:warp 2.5s ease-in-out infinite alternate}
+.cutscene[data-style="unsinful"] .cutscene:before{border-style:dashed;animation:spin 18s linear infinite}
+.admin-device-id{display:block;margin:0 0 18px;padding:10px 12px;border:1px solid #9b7cff40;border-radius:8px;color:#b8a9ff;font:10px var(--mono);overflow-wrap:anywhere}
+.admin-note{margin-bottom:8px}
+.cutscene[data-style="galactic"]{background:#02020b;--aura-color:#8be7ff}
+.cutscene[data-style="galactic"] .cutscene-backdrop{opacity:.5;background:radial-gradient(ellipse at center,#42c8ff55 0%,#6a40ff22 32%,transparent 68%),#02020b;animation:deityBreath 2.5s ease-in-out infinite alternate}
+.cutscene[data-style="galactic"] .cutscene-content h2{color:#e7fbff;text-shadow:0 0 10px #fff,0 0 32px #67dfff,0 0 85px #7a5bff}
+.galactic-nebula{position:absolute;inset:-30%;background:repeating-radial-gradient(ellipse at center,transparent 0 24px,#5fdfff22 25px 27px,transparent 28px 50px),conic-gradient(from 0deg,#4bdcff0a,#9360ff30,#f8faff18,#4bdcff0a);filter:blur(1px);animation:deityVortex 12s linear infinite}
+.galactic-orb{position:absolute;left:50%;top:50%;width:min(36vw,290px);aspect-ratio:1;display:grid;place-items:center;transform:translate(-50%,-50%);border-radius:50%;border:1px solid #a8f1ffb0;background:radial-gradient(circle at 35% 28%,#fff 0%,#9ceeff 8%,#6574ff 30%,#170e42 68%,#02020b 78%);box-shadow:0 0 35px #83eaffaa,0 0 100px #805dff70,inset 0 0 35px #fff9;animation:galacticOrb 4s ease-in-out infinite}
+.galactic-orb span{font-size:clamp(70px,13vw,145px);color:#fff;text-shadow:0 0 25px white,0 0 70px #6ce6ff}
+.galactic-rings{position:absolute;left:50%;top:50%;width:min(75vw,720px);aspect-ratio:1;border:2px solid #80eaff55;border-radius:50%;transform:translate(-50%,-50%) rotateX(68deg);box-shadow:0 0 30px #64e5ff44;animation:deityHalo 5s linear infinite}
+.galactic-shards{position:absolute;inset:0;background-image:linear-gradient(135deg,transparent 48%,#d9fbff 49%,#70dfffaa 50%,transparent 51%);background-size:90px 130px;opacity:.3;mask-image:radial-gradient(circle,#000 0%,transparent 65%);animation:float 4s ease-in-out infinite alternate}
+.galactic-flare{position:absolute;inset:0;background:#e9fbff;opacity:0;pointer-events:none}
+.galactic-line{font-size:clamp(30px,7vw,78px)!important;letter-spacing:.03em!important;text-transform:none!important;animation:deityTextFlash 1s ease both}
+.galactic-final{font-size:clamp(38px,8.8vw,100px)!important;letter-spacing:-.045em!important;color:#fff!important;text-shadow:0 0 15px white,0 0 48px #5eeaff,0 0 110px #9a62ff!important;animation:deityFinal 2s cubic-bezier(.1,.8,.2,1) both}
+.cutscene.galactic-break .galactic-orb{animation:galacticShatter .9s cubic-bezier(.1,.7,.2,1) both}
+.cutscene.galactic-break .galactic-flare{opacity:1;animation:deityWhiteout 1.3s ease-out both}
+.cutscene.galactic-break .cutscene-content{opacity:0;transform:scale(1.2)}
+@keyframes galacticOrb{0%,100%{filter:hue-rotate(0);transform:translate(-50%,-50%) scale(1)}50%{filter:hue-rotate(35deg);transform:translate(-50%,-50%) scale(1.07)}}
+@keyframes galacticShatter{0%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}35%{transform:translate(-50%,-50%) scale(1.3);filter:brightness(4)}100%{transform:translate(-50%,-50%) scale(.05) rotate(70deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){.galactic-nebula,.galactic-orb,.galactic-rings,.galactic-shards{animation-duration:30s!important}}

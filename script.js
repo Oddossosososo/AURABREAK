@@ -18,12 +18,14 @@
     {name:"THE UNIMAGINABLE", odds:1000000, rarity:"TRANSCENDENT", tier:"divine", color:"#b8ffff", symbol:"∞", description:"Your mind reaches for a shape it cannot hold.", style:"unimaginable"},
     {name:"FALLEN ANGEL", odds:7777777, rarity:"DIVINE", tier:"divine", color:"#e3c4ff", symbol:"♱", description:"A celestial presence, cast out of forever.", style:"fallen"},
     {name:"DIVINITY", odds:100000000, rarity:"DIVINE", tier:"divine", color:"#fff0a0", symbol:"✹", description:"For one impossible moment, everything kneels.", style:"divinity"},
-    {name:"PURE DEITY", odds:1000000000000000000000000000000000000n, rarity:"ABSOLUTE", tier:"secret", color:"#fff4d6", symbol:"✧", description:"So... you found it. The RNG gods have blessed you.", style:"pure-deity", secret:true}
+    {name:"PURE DEITY", odds:1000000000000000000000000000000000000n, rarity:"ABSOLUTE", tier:"secret", color:"#fff4d6", symbol:"✧", description:"So... you found it. The RNG gods have blessed you.", style:"pure-deity", secret:true},
     {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true}
   ];
   const STORAGE_KEY = "aurabreak-discoveries-v1";
   let discovered = loadDiscoveries();
   let rolling = false;
+  let forcedAura = null;
+  let luckMultiplier = 1;
   let pendingAura = null;
   let cutsceneTimers = [];
   let deityAudio = null;
@@ -43,13 +45,18 @@
     return "1 in " + BigInt(odds).toLocaleString("en-US");
   }
   function chooseAura() {
-    // The prototype uses weighted random selection; UNSINFUL retains the requested exact odds display.
-    const roll = Math.random();
-    const pool = AURAS.filter(a => !a.secret || a.name === "PURE DEITY");
-    const total = pool.reduce((sum, aura) => sum + 1 / Number(aura.odds), 0);
-    let cursor = roll * total;
+    if (forcedAura) {
+      const selected = forcedAura;
+      forcedAura = null;
+      return selected;
+    }
+    // Luck boosts rare auras for testing; the displayed odds remain the aura's base odds.
+    const pool = AURAS;
+    const weight = aura => 1 / Math.pow(Math.max(1, Number(aura.odds)), 1 / Math.max(1, luckMultiplier));
+    const total = pool.reduce((sum, aura) => sum + weight(aura), 0);
+    let cursor = Math.random() * total;
     for (const aura of pool) {
-      cursor -= 1 / Number(aura.odds);
+      cursor -= weight(aura);
       if (cursor <= 0) return aura;
     }
     return pool[0];
@@ -254,5 +261,68 @@
     }
     if (event.code === "Escape" && !$("cutscene").classList.contains("hidden")) closeCutscene();
   });
+
+  // Admin tools: Shift+A toggles the panel. These are client-side prototype controls.
+  const adminPanel = $("adminPanel");
+  const adminAuraSelect = $("adminAuraSelect");
+  const adminLuck = $("adminLuck");
+  const adminLuckValue = $("adminLuckValue");
+  const customAuraName = $("customAuraName");
+  const customAuraOdds = $("customAuraOdds");
+  const customAuraRarity = $("customAuraRarity");
+  const customAuraColor = $("customAuraColor");
+  function refreshAdminAuraOptions() {
+    const previous = adminAuraSelect.value;
+    adminAuraSelect.innerHTML = "";
+    AURAS.forEach(aura => {
+      const option = document.createElement("option");
+      option.value = aura.name;
+      option.textContent = aura.name + " — " + formatOdds(aura.odds);
+      adminAuraSelect.append(option);
+    });
+    if (AURAS.some(aura => aura.name === previous)) adminAuraSelect.value = previous;
+  }
+  function toggleAdmin() {
+    adminPanel.classList.toggle("hidden");
+    adminPanel.setAttribute("aria-hidden", adminPanel.classList.contains("hidden") ? "true" : "false");
+    if (!adminPanel.classList.contains("hidden")) refreshAdminAuraOptions();
+  }
+  document.addEventListener("keydown", event => {
+    if (event.shiftKey && event.code === "KeyA" && !event.repeat) {
+      event.preventDefault();
+      toggleAdmin();
+    }
+  });
+  $("adminClose").addEventListener("click", toggleAdmin);
+  $("adminForceAura").addEventListener("click", () => {
+    const aura = AURAS.find(item => item.name === adminAuraSelect.value);
+    if (!aura) return;
+    forcedAura = aura;
+    if (!rolling) roll();
+    adminPanel.classList.add("hidden");
+    adminPanel.setAttribute("aria-hidden", "true");
+    showToast("ADMIN: next roll forced to " + aura.name);
+  });
+  adminLuck.addEventListener("input", () => {
+    luckMultiplier = Math.max(1, Number(adminLuck.value) || 1);
+    adminLuckValue.textContent = "×" + luckMultiplier.toLocaleString("en-US");
+    $("luckValue").textContent = luckMultiplier.toLocaleString("en-US", {maximumFractionDigits: 2});
+  });
+  $("adminAddAura").addEventListener("click", () => {
+    const name = customAuraName.value.trim().toUpperCase();
+    const odds = Number(customAuraOdds.value);
+    const rarity = customAuraRarity.value.trim().toUpperCase() || "CUSTOM";
+    const color = customAuraColor.value || "#b8a9ff";
+    if (!name) return showToast("Enter an aura name first.");
+    if (AURAS.some(aura => aura.name === name)) return showToast("That aura already exists.");
+    if (!Number.isFinite(odds) || odds < 1) return showToast("Odds must be a number of 1 or higher.");
+    const tier = odds >= 1000000 ? "secret" : odds >= 100000 ? "cosmic" : odds >= 10000 ? "mythic" : odds >= 1000 ? "legendary" : odds >= 100 ? "rare" : odds >= 10 ? "uncommon" : "common";
+    const aura = {name, odds: Math.floor(odds), rarity, tier, color, symbol:"✧", description:"A custom aura added from the AURABREAK admin panel.", style:"cosmic"};
+    AURAS.push(aura);
+    refreshAdminAuraOptions();
+    adminAuraSelect.value = name;
+    showToast("Added custom aura: " + name);
+  });
+
   renderCollection();
 })();

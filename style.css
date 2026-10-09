@@ -224,3 +224,39 @@
 @keyframes developerFlash{0%{opacity:0}12%{opacity:.95}100%{opacity:0}}
 @keyframes developerImpact{0%{transform:scale(.65);filter:brightness(4)}65%{transform:scale(1.08);filter:brightness(1.7)}100%{transform:scale(1);filter:brightness(1)}}
 @media(prefers-reduced-motion:reduce){.developer-void,.developer-rings,.developer-grid{animation-duration:40s!important}}
+
+
+/* AURABREAK II: TRANSCENDENCE — the world changes after all five original gods are found */
+body.transcendence-mode{--bg:#03080d;--panel:rgba(8,24,34,.82);--line:rgba(157,255,247,.22);--purple:#8dfff4;--cyan:#d9ffff;background:#03080d}
+body.transcendence-mode::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 15%,#163d4b66,transparent 52%),linear-gradient(120deg,transparent 30%,#7bfff508 50%,transparent 70%);animation:transModePulse 8s ease-in-out infinite alternate}
+body.transcendence-mode .brand-mark{background:linear-gradient(135deg,#efffff,#65e9e3);color:#031014;box-shadow:0 0 28px #8dfff455}
+body.transcendence-mode .hero h1 span{color:#b7fffb;text-shadow:0 0 22px #65fff755,0 0 70px #65fff722}
+body.transcendence-mode .orb-stage{border-color:#83fff433;box-shadow:inset 0 0 65px #39fff70a,0 0 40px #65fff70c}
+body.transcendence-mode .orb-ring{border-color:#9bfff744;filter:drop-shadow(0 0 8px #72fff733)}
+body.transcendence-mode .roll-button{background:linear-gradient(110deg,#e8ffff,#8dfff4 48%,#b4e7ff);color:#061316;box-shadow:0 0 35px #70fff733}
+body.transcendence-mode .status-dot{background:#8dfff4;box-shadow:0 0 12px #8dfff4}
+@keyframes transModePulse{from{opacity:.45;transform:scale(1)}to{opacity:1;transform:scale(1.04)}}
+.cutscene[data-style="transcendence"]{background:#02070a;color:#eaffff;--aura-color:#a9fff7}
+.cutscene[data-style="transcendence"] .cutscene-backdrop{opacity:1;background:radial-gradient(ellipse at 50% 50%,#164451 0%,#07151d 35%,#010305 78%)}
+.transcendence-space{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#fff 0 1px,transparent 2px),radial-gradient(circle at 20% 70%,#89fff9 0 1px,transparent 2px),radial-gradient(circle at 75% 25%,#b5d9ff 0 1px,transparent 2px);background-size:49px 59px,83px 97px,113px 127px;animation:transSpace 16s linear infinite}
+.transcendence-fracture{position:absolute;inset:-20%;opacity:0;background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg 9deg,#9dfff722 9.3deg 9.6deg,transparent 10deg 20deg);mask-image:radial-gradient(ellipse,#000,transparent 69%);animation:transFracture 9s ease-in-out infinite alternate}
+.transcendence-rings{position:absolute;left:50%;top:48%;width:min(88vw,760px);aspect-ratio:1;border:1px solid #c8ffff88;border-radius:50%;box-shadow:0 0 42px #65fff733,inset 0 0 45px #65fff722;transform:translate(-50%,-50%)}
+.trans-ring-one{animation:transOrbit 14s linear infinite}
+.trans-ring-two{width:min(110vw,940px);border-style:dashed;transform:translate(-50%,-50%) rotateX(68deg);animation:transOrbit 21s linear infinite reverse;opacity:.5}
+.transcendence-god-silhouettes{position:absolute;left:50%;top:48%;width:min(66vw,580px);aspect-ratio:1;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:space-around;opacity:0;animation:transGods 2s ease 1.5s forwards}
+.transcendence-god-silhouettes i{font-style:normal;font-size:clamp(25px,5vw,54px);color:#c9fffb;text-shadow:0 0 28px #8dfff4;animation:transGodPulse 3s ease-in-out infinite alternate}
+.transcendence-player{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%) scale(.1);font-size:clamp(150px,30vw,360px);font-weight:700;letter-spacing:-.1em;color:#fff;text-shadow:0 0 18px #fff,0 0 65px #8dfff4,0 0 140px #5ad4ff;opacity:0;animation:transPlayer 2s cubic-bezier(.12,.8,.2,1) 5s forwards}
+.transcendence-flash{position:absolute;inset:0;background:#eaffff;opacity:0;pointer-events:none}
+.cutscene.transcendence-running .cutscene-content{z-index:9}
+.cutscene.transcendence-break .transcendence-flash{animation:transFlash 1.7s ease-out both}
+.cutscene.transcendence-break .transcendence-fracture{opacity:1;animation:transFracture .5s ease-in-out infinite alternate}
+.transcendence-line{font-size:clamp(28px,6.8vw,78px)!important;line-height:1.02!important;letter-spacing:.025em!important;color:#eaffff!important;text-shadow:0 0 15px #fff,0 0 55px #8dfff4aa,0 0 120px #5ad4ff55!important;animation:fallenGodText .9s ease both}
+.transcendence-final{font-size:clamp(40px,8.8vw,104px)!important;line-height:.98!important;letter-spacing:-.045em!important;color:#fff!important;text-shadow:0 0 18px #fff,0 0 65px #8dfff4,0 0 150px #5ad4ff99!important;animation:deityFinal 1.5s cubic-bezier(.1,.8,.2,1) both}
+@keyframes transSpace{to{background-position:0 -700px,70px -900px,-40px 400px;transform:rotate(360deg) scale(1.04)}}
+@keyframes transFracture{from{transform:rotate(0deg) scale(.85);filter:brightness(.5)}to{transform:rotate(20deg) scale(1.2);filter:brightness(1.8)}}
+@keyframes transOrbit{from{transform:translate(-50%,-50%) rotate(0deg) rotateX(62deg)}to{transform:translate(-50%,-50%) rotate(360deg) rotateX(62deg)}}
+@keyframes transGods{from{opacity:0;filter:blur(18px) brightness(4)}to{opacity:.72;filter:blur(0) brightness(1)}}
+@keyframes transGodPulse{from{transform:scale(.7);opacity:.5}to{transform:scale(1.25);opacity:1}}
+@keyframes transPlayer{0%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(-25deg);filter:blur(30px)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.12) rotate(0);filter:blur(0)}100%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:blur(0)}}
+@keyframes transFlash{0%{opacity:0}12%{opacity:.98}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.transcendence-space,.transcendence-rings,.transcendence-fracture{animation-duration:40s!important}}

@@ -723,4 +723,16 @@
   if (adminNote) adminNote.after(deviceLabel);
 
   renderCollection();
+
+  // Backfill progression for players who discovered all five gods before Phase II existed.
+  if (!transcendenceUnlocked && ORIGINAL_GODS.every(name => discovered.has(name))) {
+    transcendencePending = true;
+    setTimeout(() => {
+      if (transcendenceUnlocked || !transcendencePending) return;
+      transcendencePending = false;
+      startTranscendenceCutscene();
+      $("cutscene").classList.remove("hidden");
+      $("cutscene").setAttribute("aria-hidden", "false");
+    }, 900);
+  }
 })();

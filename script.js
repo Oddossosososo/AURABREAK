@@ -58,26 +58,43 @@
   function formatOdds(odds) {
     return "1 in " + BigInt(odds).toLocaleString("en-US");
   }
+  // In AURABREAK II, even the most common aura sits beyond THE MAKER's original odds.
+  const PHASE_TWO_ODDS_FLOOR = 10n ** 60n;
+  function auraOdds(aura) {
+    const base = BigInt(aura.odds);
+    return transcendenceUnlocked ? base + PHASE_TWO_ODDS_FLOOR : base;
+  }
+  function noAuraResult() {
+    return {
+      name: "NO AURA",
+      odds: 0n,
+      rarity: "EMPTY",
+      tier: "common",
+      color: "#aab3c7",
+      symbol: "∅",
+      description: "You try to wave your hands, but nothing comes out.",
+      style: "cosmic",
+      noAura: true
+    };
+  }
   function chooseAura() {
     if (forcedAura) {
       const selected = forcedAura;
       forcedAura = null;
       return selected;
     }
-    // Test each aura from rarest to most common. Luck scales its one-in-X chance.
-    // If luck meets/exceeds an aura's base odds, that aura is guaranteed to pass;
-    // because we test rarest first, the rarest eligible aura wins.
+    // Test rarest first. Phase II raises every aura above THE MAKER's original odds.
     const pool = AURAS.filter(a => !a.adminOnly).sort((a, b) => {
-      const ao = Number(a.odds), bo = Number(b.odds);
-      return bo - ao;
+      const ao = auraOdds(a), bo = auraOdds(b);
+      return ao > bo ? -1 : ao < bo ? 1 : 0;
     });
     const luck = Math.max(1, Number.isFinite(luckMultiplier) ? luckMultiplier : Number.MAX_VALUE);
     for (const aura of pool) {
-      const odds = Number(aura.odds);
+      const odds = Number(auraOdds(aura));
       const chance = Math.min(1, luck / odds);
       if (Math.random() < chance) return aura;
     }
-    return AURAS[0];
+    return transcendenceUnlocked ? noAuraResult() : AURAS[0];
   }
   function showToast(message) {
     const toast = $("toast");
@@ -109,7 +126,7 @@
     content.append(symbol, overline, title, description, divider);
     [
       ["RARITY", aura.rarity],
-      ["ODDS", formatOdds(aura.odds)],
+      ["ODDS", aura.noAura ? "NO CHANCE — NOTHING MANIFESTED" : formatOdds(auraOdds(aura))],
       ["STATUS", isNew ? "DISCOVERED" : "IN COLLECTION"]
     ].forEach(([label, value]) => {
       const row = document.createElement("div");
@@ -145,7 +162,7 @@
       const rarity = document.createElement("span"); rarity.className = "tile-rarity"; rarity.textContent = aura.rarity;
       const symbol = document.createElement("div"); symbol.className = "tile-symbol"; symbol.textContent = aura.symbol;
       const name = document.createElement("div"); name.className = "tile-name"; name.textContent = aura.name;
-      const odds = document.createElement("div"); odds.className = "tile-odds"; odds.textContent = formatOdds(aura.odds);
+      const odds = document.createElement("div"); odds.className = "tile-odds"; odds.textContent = formatOdds(auraOdds(aura));
       tile.append(rarity, symbol, name, odds); grid.append(tile);
     });
   }
@@ -602,15 +619,18 @@
       rolling = false;
       $("rollButton").disabled = false;
       document.body.classList.remove("rolling");
-      const isNew = !discovered.has(aura.name);
-      discovered.add(aura.name);
+      const isNoAura = !!aura.noAura;
+      const isNew = !isNoAura && !discovered.has(aura.name);
+      if (!isNoAura) discovered.add(aura.name);
       if (!transcendenceUnlocked && ORIGINAL_GODS.every(name => discovered.has(name))) transcendencePending = true;
       saveDiscoveries();
       renderCollection();
       renderResult(aura, isNew);
-      if (aura.secret || aura.odds >= 1000000) {
+      if (!isNoAura && (aura.secret || aura.odds >= 1000000)) {
         pendingAura = aura;
         showCutscene(aura);
+      } else if (isNoAura) {
+        showToast("NOTHING MANIFESTED.");
       } else if (isNew) {
         showToast("NEW DISCOVERY: " + aura.name);
       } else {

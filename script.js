@@ -28,7 +28,7 @@
     {name:"DEVELOPER", odds:10n ** 100n, rarity:"RANK 0 • THE REAL CREATOR", tier:"secret", color:"#ffffff", symbol:"⟡", description:"The true strongest. The author beyond the Fallen God, who can rewrite the rules of AURABREAK.", style:"developer", secret:true, adminOnly:true, god:true},
     {name:"PURE DEITY:GALACTIC", odds:2n * (10n ** 68n), rarity:"GALACTIC EVOLUTION", tier:"secret", color:"#9be7ff", symbol:"✦", description:"Wait... I remember you. The deity has shattered its own limits.", style:"galactic", secret:true},
     {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true},
-    {name:"SHATTERCORE", odds:10n ** 80n, rarity:"ORB FRACTURE", tier:"secret", color:"#ff684f", symbol:"◇", description:"The orb was never meant to survive what sleeps inside. Tap the central orb seven times after discovering this aura to awaken its evolution.", style:"shattercore", secret:true},
+    {name:"SHATTERCORE", odds:10n ** 80n, rarity:"ORB FRACTURE", tier:"secret", color:"#ff684f", symbol:"◇", description:"The orb was never meant to survive what sleeps inside. Its evolution is hidden in the silence between strikes. The broken core remembers a rhythm no living thing should know.", style:"shattercore", secret:true},
     {name:"SHATTERCORE: REBORN", odds:10n ** 72n, rarity:"FRACTURE EVOLUTION", tier:"secret", color:"#fff0b3", symbol:"✧", description:"Not a second encounter. Not a lucky roll. Seven deliberate strikes taught the broken core how to become something new.", style:"shattercore", secret:true, evolutionOnly:true},
   ];
   const STORAGE_KEY = "aurabreak-discoveries-v1";
@@ -648,17 +648,45 @@
     if (stage) stage.textContent = "AWAITING YOUR WILL";
     updatePhaseToggle();
   }
-  let shattercoreTaps = 0;
+  // Hidden rhythm puzzle: the orb only responds to a precise pattern of silence.
+  let shattercoreRhythm = [];
+  let shattercoreLastTap = 0;
+  const shattercoreIntervals = [700, 1700, 700, 2700, 1200, 3200, 700];
+  const shattercoreTolerance = 240;
   $("orbCore").addEventListener("click", () => {
     if (!discovered.has("SHATTERCORE") || discovered.has("SHATTERCORE: REBORN") || rolling) return;
-    shattercoreTaps++;
-    if (shattercoreTaps < 7) {
-      showToast("SHATTERCORE RESONANCE: " + shattercoreTaps + "/7 STRIKES");
+    const now = performance.now();
+    if (!shattercoreRhythm.length) {
+      shattercoreRhythm = [now];
+      shattercoreLastTap = now;
+      showToast("THE BROKEN CORE LISTENS...");
       $("orbCore").classList.remove("orb-strike");
       void $("orbCore").offsetWidth;
       $("orbCore").classList.add("orb-strike");
       return;
     }
+    const interval = now - shattercoreLastTap;
+    const expected = shattercoreIntervals[shattercoreRhythm.length - 1];
+    if (expected === undefined || Math.abs(interval - expected) > shattercoreTolerance) {
+      shattercoreRhythm = [];
+      shattercoreLastTap = 0;
+      $("orbCore").classList.remove("orb-strike");
+      void $("orbCore").offsetWidth;
+      $("orbCore").classList.add("orb-strike");
+      showToast("THE RESONANCE COLLAPSED. THE SILENCE WAS WRONG.");
+      return;
+    }
+    shattercoreRhythm.push(now);
+    shattercoreLastTap = now;
+    $("orbCore").classList.remove("orb-strike");
+    void $("orbCore").offsetWidth;
+    $("orbCore").classList.add("orb-strike");
+    if (shattercoreRhythm.length < 8) {
+      showToast("A FAINT RESONANCE ANSWERS...");
+      return;
+    }
+    shattercoreRhythm = [];
+    shattercoreLastTap = 0;
     const evolution = AURAS.find(a => a.name === "SHATTERCORE: REBORN");
     discovered.add(evolution.name);
     saveDiscoveries();

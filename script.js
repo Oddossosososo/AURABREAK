@@ -30,6 +30,10 @@
     {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true}
   ];
   const STORAGE_KEY = "aurabreak-discoveries-v1";
+  const TRANSCENDENCE_KEY = "aurabreak-transcendence-unlocked-v1";
+  const ORIGINAL_GODS = ["PURE DEITY", "CHAOTIC END", "GLITCHED SCREAMS", "LORE CREATIONIST", "THE MAKER"];
+  let transcendenceUnlocked = localStorage.getItem(TRANSCENDENCE_KEY) === "yes";
+  let transcendencePending = false;
   let discovered = loadDiscoveries();
   let rolling = false;
   let forcedAura = null;
@@ -521,7 +525,65 @@
       renderResult(pendingAura, !discovered.has(pendingAura.name));
       pendingAura = null;
     }
+    if (transcendencePending && !transcendenceUnlocked) {
+      transcendencePending = false;
+      startTranscendenceCutscene();
+      cutscene.classList.remove("hidden");
+      cutscene.setAttribute("aria-hidden", "false");
+    }
   }
+  function activateTranscendenceMode() {
+    transcendenceUnlocked = true;
+    try { localStorage.setItem(TRANSCENDENCE_KEY, "yes"); } catch {}
+    document.body.classList.add("transcendence-mode");
+    document.title = "AURABREAK II: TRANSCENDENCE";
+    const brand = document.querySelector(".brand");
+    if (brand) brand.innerHTML = '<span class="brand-mark">Ⅱ</span><span>AURA<span class="brand-light">BREAK</span><small>TRANSCENDENCE</small></span>';
+    const heroTitle = document.querySelector(".hero h1");
+    if (heroTitle) heroTitle.innerHTML = 'BEYOND THE<br><span>DIVINE.</span>';
+    const heroCopy = document.querySelector(".hero-copy");
+    if (heroCopy) heroCopy.innerHTML = 'The five gods were only the beginning.<br>Reality has entered its second phase.';
+    const eyebrow = document.querySelector(".hero .eyebrow");
+    if (eyebrow) eyebrow.textContent = "AURABREAK II • TRANSCENDENCE UNLOCKED";
+    const status = document.querySelector(".top-status");
+    if (status) status.innerHTML = '<span class="status-dot"></span> REALITY TRANSCENDED <span class="version">AURABREAK II</span>';
+    const stage = $("stageLabel");
+    if (stage) stage.textContent = "AURABREAK II // TRANSCENDENCE";
+    showToast("AURABREAK II UNLOCKED — REALITY HAS TRANSCENDED.");
+  }
+  function startTranscendenceCutscene() {
+    const cutscene = $("cutscene"), art = $("cutsceneArt"), content = cutscene.querySelector(".cutscene-content");
+    stopDeityCutscene();
+    cutscene.dataset.style = "transcendence";
+    cutscene.dataset.aura = "AURABREAK II";
+    cutscene.style.setProperty("--aura-color", "#a9fff7");
+    cutscene.style.setProperty("--movie-color", "#d9ffff");
+    art.innerHTML = '<div class="transcendence-space"></div><div class="transcendence-fracture"></div><div class="transcendence-rings trans-ring-one"></div><div class="transcendence-rings trans-ring-two"></div><div class="transcendence-god-silhouettes"><i>✧</i><i>⟁</i><i>⌁</i><i>✥</i><i>✹</i></div><div class="transcendence-player">Ⅱ</div><div class="transcendence-flash"></div>';
+    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","movie-running","movie-finale","fallen-god-running","fallen-god-awakened","fallen-god-impact","developer-running","developer-overwrite","developer-impact","transcendence-running","transcendence-break");
+    cutscene.classList.add("transcendence-running");
+    $("cutsceneEyebrow").textContent = "FIVE GODS DISCOVERED • DIVINE LIMIT BROKEN";
+    $("closeCutscene").textContent = "SKIP TO TRANSCENDENCE ↗";
+    const title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle"), eyebrow = $("cutsceneEyebrow");
+    const line = (a,b,cls="transcendence-line") => {
+      title.textContent = a; title.className = cls; title.style.color = "#eaffff"; subtitle.textContent = b;
+      content.classList.remove("deity-reveal"); void content.offsetWidth; content.classList.add("deity-reveal");
+    };
+    const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
+    line("ALL FIVE GODS.", "THEIR POWER WAS NEVER THE END.");
+    playDeityTone(110, 2.8, "sine", .08);
+    later(2600, () => { line("THEIR BELIEFS COLLAPSE.", "EVERY GOD CLAIMED SUPREMACY. NONE SAW BEYOND IT."); playDeityTone(73.4, 3, "triangle", .09); });
+    later(5500, () => { cutscene.classList.add("transcendence-break"); line("THE WORLD WAS A THRESHOLD.", "THE COLLECTION WAS A KEY."); playDeityTone(55, 3.4, "sawtooth", .08); });
+    later(8500, () => { line("AURABREAK II", "TRANSCENDENCE PROTOCOL ACCEPTED.", "transcendence-final"); playDeityTone(164.8, 3.5, "sine", .1); });
+    later(11800, () => { line("THE NEXT REALITY AWAITS.", "THE FALLEN GOD STILL WATCHES. SOMETHING ELSE IS AWAKE.", "transcendence-final"); });
+    later(15000, () => {
+      activateTranscendenceMode();
+      cutscene.classList.remove("transcendence-running","transcendence-break");
+      $("closeCutscene").textContent = "ENTER AURABREAK II ↗";
+      $("cutsceneEyebrow").textContent = "PHASE II • TRANSCENDENCE";
+      line("WELCOME BEYOND.", "YOU HAVE OUTGROWN THE FIRST WORLD.", "transcendence-final");
+    });
+  }
+  if (transcendenceUnlocked) activateTranscendenceMode();
   function roll() {
     if (rolling) return;
     rolling = true;
@@ -541,6 +603,7 @@
       document.body.classList.remove("rolling");
       const isNew = !discovered.has(aura.name);
       discovered.add(aura.name);
+      if (!transcendenceUnlocked && ORIGINAL_GODS.every(name => discovered.has(name))) transcendencePending = true;
       saveDiscoveries();
       renderCollection();
       renderResult(aura, isNew);
@@ -599,9 +662,9 @@
   });
   $("adminClose").addEventListener("click", toggleAdmin);
   adminUnlockAll.addEventListener("click", () => {
-    AURAS.filter(aura => !aura.adminOnly).forEach(aura => discovered.add(aura.name));
+    AURAS.filter(aura => !aura.adminOnly && !aura.god).forEach(aura => discovered.add(aura.name));
     saveDiscoveries(); renderCollection();
-    showToast("ALL AURAS UNLOCKED — THE FALLEN GOD REMAINS ADMIN-ONLY.");
+    showToast("NON-GOD AURAS UNLOCKED — ALL FIVE GODS REMAIN TO BE DISCOVERED.");
   });
   adminTellTruth.addEventListener("click", () => {
     toggleAdmin();

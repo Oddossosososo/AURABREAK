@@ -27,7 +27,8 @@
     {name:"THE FALLEN GOD", odds:10n ** 72n, rarity:"THE TRUE SOVEREIGN", tier:"secret", color:"#f4e8ff", symbol:"✦", description:"The one who knows the truth and controls AURABREAK itself.", style:"fallen-god", secret:true, adminOnly:true, god:true},
     {name:"DEVELOPER", odds:10n ** 100n, rarity:"RANK 0 • THE REAL CREATOR", tier:"secret", color:"#ffffff", symbol:"⟡", description:"The true strongest. The author beyond the Fallen God, who can rewrite the rules of AURABREAK.", style:"developer", secret:true, adminOnly:true, god:true},
     {name:"PURE DEITY:GALACTIC", odds:2n * (10n ** 68n), rarity:"GALACTIC EVOLUTION", tier:"secret", color:"#9be7ff", symbol:"✦", description:"Wait... I remember you. The deity has shattered its own limits.", style:"galactic", secret:true},
-    {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true}
+    {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true},
+    {name:"PAST ORBS", odds:250000, rarity:"ORBITAL MEMORY", tier:"cosmic", color:"#7cecff", symbol:"◌", description:"Echoes of every orb that came before still drift around you.", style:"cosmic"}
   ];
   const STORAGE_KEY = "aurabreak-discoveries-v1";
   const TRANSCENDENCE_KEY = "aurabreak-transcendence-unlocked-v1";

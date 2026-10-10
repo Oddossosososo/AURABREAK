@@ -1109,7 +1109,6 @@
     later(snapAt,()=>{
       cutscene.classList.remove("jackpot-terminal-blur");
       cutscene.classList.add("jackpot-world-snap");
-      ringStage.classList.add("jackpot-singularity");
       worldName.textContent="WORLD 100 — THE 100TH WORLD";
       worldCount.textContent="100 / 100";
       eyebrow.textContent="WORLD 100 SINGULARITY • ZERO DISTANCE";

@@ -14,13 +14,13 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
   <script src="null-absolute.js?v=3" defer></script>
   <script src="aura-language.js?v=2" defer></script>
-  <script src="script.js?v=16" defer></script>
+  <script src="script.js?v=17" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
   <header class="topbar">
     <a class="brand" href="#" aria-label="AURABREAK home"><span class="brand-mark">A</span><span>AURA<span class="brand-light">BREAK</span><small>ROLL BEYOND REALITY</small></span></a>
-    <nav class="nav"><a class="nav-link active" href="#roll">Roll</a><a class="nav-link" href="#collection">Collection</a><button id="phaseToggle" class="phase-toggle" type="button" hidden>ENTER AURABREAK II ↗</button></nav>
+    <nav class="nav"><a class="nav-link active" href="#roll">Roll</a><a class="nav-link" href="#collection">Collection</a><a class="nav-link" href="#potions">Potions</a><button id="phaseToggle" class="phase-toggle" type="button" hidden>ENTER AURABREAK II ↗</button></nav>
     <div class="top-status"><span class="status-dot"></span> REALITY STABLE <span class="version">PRE-ALPHA 0.1</span></div>
   </header>
 
@@ -60,6 +60,16 @@
         </div>
         <div class="result-footer"><span>YOUR LUCK</span><strong>×<span id="luckValue">1.00</span></strong><span class="footer-note">BASE RATE</span></div>
       </aside>
+    </section>
+
+    <section class="potion-section" id="potions">
+      <div class="section-heading">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> 03 / CONSUMABLES</div><h2>THE <span>POTION VAULT.</span></h2></div>
+        <div class="collection-count"><strong id="potionCount">52</strong><span> POTIONS LEFT</span></div>
+      </div>
+      <p class="potion-intro">Use one potion to empower your next roll. Each potion is a one-use consumable, and your inventory saves in this browser.</p>
+      <div class="active-potion-label" id="activePotionLabel">NO POTION ACTIVE</div>
+      <div class="potion-grid" id="potionGrid"></div>
     </section>
 
     <section class="collection-section" id="collection">

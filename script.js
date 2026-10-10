@@ -994,7 +994,22 @@
     content.classList.remove("deity-reveal","movie-reveal");
     cutscene.classList.remove("jackpot-running","jackpot-lock","jackpot-burst","jackpot-final");
     cutscene.classList.add("jackpot-running","jackpot-world-tour");
-    if(window.AURABREAK_LOTTERY_JACKPOT&&window.THREE){
+    // The TSL/WebGPU world-tour background is an AURABREAK II exclusive.
+    // Keep the original GLSL shader as a compatibility fallback.
+    if(phaseTwoActive && window.AURABREAK_LOTTERY_JACKPOT_TSL){
+      try{
+        Promise.resolve(window.AURABREAK_LOTTERY_JACKPOT_TSL.start(art)).then(stop=>{
+          if(typeof stop!=="function") return;
+          if(cutscene.classList.contains("hidden") || !cutscene.isConnected) stop();
+          else lotteryJackpotStop=stop;
+        }).catch(err=>{
+          console.warn("TSL/WebGPU unavailable; using GLSL fallback:",err);
+          if(window.AURABREAK_LOTTERY_JACKPOT&&window.THREE){
+            try{lotteryJackpotStop=window.AURABREAK_LOTTERY_JACKPOT.start(art);}catch(fallbackErr){console.warn("GLSL fallback:",fallbackErr);}
+          }
+        });
+      }catch(err){console.warn("TSL/WebGPU unavailable:",err);}
+    }else if(window.AURABREAK_LOTTERY_JACKPOT&&window.THREE){
       try{lotteryJackpotStop=window.AURABREAK_LOTTERY_JACKPOT.start(art);}
       catch(err){console.warn("Jackpot shader fallback:",err);}
     }
@@ -1023,12 +1038,20 @@
     later(tourEnd-2400,()=>{cutscene.classList.add("jackpot-burst");line("WORLD 100","THE LAST LOOP HAS BEEN BROKEN.");eyebrow.textContent="FINAL WORLD • NO MORE DESTINATIONS";playDeityTone(783.99,1.4,"triangle",.06);});
     later(tourEnd,()=>{
       cutscene.classList.add("jackpot-final");
-      eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10^320";
-      line("LOTTERY: JACKPOT","100 WORLDS. EVERY LOOP. ONE IMPOSSIBLE WIN.","jackpot-title jackpot-title-final");
+      eyebrow.textContent=phaseTwoActive ? "AURABREAK II EXCLUSIVE • THE PANTHEON REVEALED" : "ULTRA • RAREST ROLLABLE • 1 IN 10^320";
+      line("LOTTERY: JACKPOT",phaseTwoActive ? "100 WORLDS. EVERY GOD. ONE IMPOSSIBLE WIN." : "100 WORLDS. EVERY LOOP. ONE IMPOSSIBLE WIN.","jackpot-title jackpot-title-final");
       button.textContent="CLAIM LOTTERY: JACKPOT ↗";
       banner.classList.add("jackpot-world-banner-final");
       worldName.textContent="WORLD 100 — THE JACKPOT THRONE";
       worldCount.textContent="100 / 100";
+      if(phaseTwoActive){
+        const pantheon=document.createElement("div");
+        pantheon.className="jackpot-pantheon";
+        pantheon.setAttribute("aria-label","Every god in AURABREAK II");
+        pantheon.innerHTML='<span class="pantheon-kicker">THE COMPLETE PANTHEON</span><div class="pantheon-gods"><span>PURE DEITY</span><span>CHAOTIC END</span><span>GLITCHED SCREAMS</span><span>LORE CREATIONIST</span><span>THE MAKER</span><span>THE FALLEN GOD</span><span>DEVELOPER</span><span>PURE DEITY:GALACTIC</span></div>';
+        cutscene.appendChild(pantheon);
+        cutscene.classList.add("jackpot-pantheon-reveal");
+      }
     });
   }
 

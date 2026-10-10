@@ -968,6 +968,7 @@
     const button = $("closeCutscene");
     stopDeityCutscene();
     if (nullAbsoluteStop) { nullAbsoluteStop(); nullAbsoluteStop = null; }
+    if (lotteryJackpotStop) { lotteryJackpotStop(); lotteryJackpotStop = null; }
     if (fourthWallCleanup) { fourthWallCleanup(); fourthWallCleanup = null; }
     cutscene.dataset.style = "the-viewer";
     cutscene.dataset.aura = "THE VIEWER";
@@ -1115,7 +1116,7 @@
     const cutscene = $("cutscene");
     if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();
     cutscene.classList.add("hidden");
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "na-running", "na-collapse", "na-break", "na-reveal", "na-erasure", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "na-running", "na-collapse", "na-break", "na-reveal", "na-erasure", "jackpot-running", "jackpot-lock", "jackpot-burst", "jackpot-final", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");
     cutscene.classList.remove("fw-running","fw-address","fw-glitch","fw-final");
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";

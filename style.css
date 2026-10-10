@@ -613,3 +613,18 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .movie-apex-infinite .movie-core{background:conic-gradient(#fff,#c8ffff,#8787ff,#f5d9ff,#fff);box-shadow:0 0 90px #fff,0 0 220px #9c8bff99}
 .movie-apex-infinite .movie-ring{border-width:2px;border-color:#fff9}
 @media(prefers-reduced-motion:reduce){.movie-dream-error{animation:none!important}}
+
+/* Admin command console */
+.admin-console{margin-top:12px;border:1px solid #34334f;border-radius:14px;overflow:hidden;background:#070711;box-shadow:inset 0 1px #ffffff08}
+.admin-console-screen{height:210px;overflow:auto;padding:13px;font:12px/1.65 "DM Mono",monospace;color:#d9d8f5;white-space:pre-wrap;overflow-wrap:anywhere}
+.console-line{margin:0 0 3px;color:#d9d8f5}
+.console-line.system{color:#8b83ff;font-weight:700}
+.console-line.error{color:#ff8eaa}
+.console-line.success{color:#86f2c4}
+.console-line.command{color:#75e7ff}
+.admin-console-form{display:flex;align-items:center;gap:8px;padding:10px;border-top:1px solid #28273f;background:#0b0b18}
+.admin-console-form .console-prompt{font:700 12px "DM Mono",monospace;color:#8b83ff;white-space:nowrap}
+.admin-console-form input{min-width:0;flex:1;background:transparent;border:0;outline:0;color:#fff;font:12px "DM Mono",monospace;padding:8px 0}
+.admin-console-form input:focus{box-shadow:none}
+.admin-console-form .console-run{width:auto;min-width:66px;margin:0;padding:9px 12px;font-size:10px}
+@media(max-width:520px){.admin-console-screen{height:180px}.admin-console-form{gap:5px;padding:8px}.admin-console-form .console-run{min-width:55px;padding:9px 8px}}

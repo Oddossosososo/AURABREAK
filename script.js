@@ -196,7 +196,12 @@
     catch { showToast("Browser storage is unavailable; progress may not save."); }
   }
   function formatOdds(odds) {
-    return "1 in " + BigInt(odds).toLocaleString("en-US");
+    const value = BigInt(odds);
+    const digits = value.toString();
+    // Keep ultra-high odds readable instead of injecting thousands of digits into the UI.
+    if (digits.length > 1000 && /^10*$/.test(digits)) return "1 in 10^" + (digits.length - 1);
+    if (digits.length > 1000) return "1 in " + digits[0] + "." + digits.slice(1, 4) + "×10^" + (digits.length - 1);
+    return "1 in " + value.toLocaleString("en-US");
   }
 
   // Keep a compact, browser-local recent-roll log without changing roll odds or discovery saves.
@@ -224,7 +229,7 @@
     list.innerHTML = rollHistory.map(item => {
       const aura = AURAS.find(a => a.name === item.name);
       const color = aura && /^#[0-9a-f]{6}$/i.test(aura.color) ? aura.color : "#aab3c7";
-      const oddsLabel = item.odds === "0" ? "NO ODDS" : "1 in " + BigInt(item.odds).toLocaleString("en-US");
+      const oddsLabel = item.odds === "0" ? "NO ODDS" : formatOdds(BigInt(item.odds));
       const timeLabel = new Date(item.time).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
       return '<article class="history-item" style="--history-color:'+color+'"><span class="history-symbol">'+(aura ? aura.symbol : "∅")+'</span><span class="history-main"><strong>'+escapeHistoryText(item.name)+'</strong><small>'+escapeHistoryText(item.rarity)+' · '+oddsLabel+'</small></span><time>'+timeLabel+'</time></article>';
     }).join("");

@@ -1171,3 +1171,9 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
 @keyframes unfathomableCore{0%,100%{transform:translate(-50%,-50%) scale(.9) rotate(0);filter:brightness(.85)}50%{transform:translate(-50%,-50%) scale(1.14) rotate(180deg);filter:brightness(1.65)}}
 @keyframes omniScreenPulse{0%{filter:brightness(1)}35%{filter:brightness(1.7)}100%{filter:brightness(1)}}
 @media(prefers-reduced-motion:reduce){.cutscene[data-style="lottery-winner"] .movie-core,.cutscene[data-style="unfathomable"] .movie-core{animation:none!important}}
+
+/* Three.js / TSL canvas layers for AURABREAK II omnipotent reveals. */
+.cutscene[data-style="lottery-winner"] .omnipotent-shader-canvas{mix-blend-mode:screen;opacity:.96;}
+.cutscene[data-style="unfathomable"] .omnipotent-shader-canvas{mix-blend-mode:screen;opacity:1;filter:contrast(1.12) saturate(1.25);}
+.cutscene[data-style="lottery-winner"] .movie-core,.cutscene[data-style="lottery-winner"] .movie-ring,.cutscene[data-style="unfathomable"] .movie-core,.cutscene[data-style="unfathomable"] .movie-ring{mix-blend-mode:screen;}
+@media(prefers-reduced-motion:reduce){.omnipotent-shader-canvas{opacity:.7!important;}}

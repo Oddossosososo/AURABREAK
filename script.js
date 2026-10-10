@@ -13,7 +13,7 @@
     {name:"SOLAR FLARE", odds:1500, rarity:"LEGENDARY", tier:"legendary", color:"#ffce77", symbol:"☼", description:"The sun remembers your name.", style:"divinity"},
     {name:"VOID WALKER", odds:5000, rarity:"LEGENDARY", tier:"legendary", color:"#a69bff", symbol:"◉", description:"You crossed the edge and kept walking.", style:"cosmic"},
     {name:"LOTTERY", odds:292201338, rarity:"LOTTERY", tier:"secret", color:"#79ffb0", symbol:"🎟️", description:"A one-in-292,201,338 miracle.", style:"divinity"},
-    {name:"LOTTERY: JACKPOT", odds:10n ** 250n, rarity:"ULTRA • RAREST ROLLABLE", tier:"ultra", color:"#ffe889", symbol:"🎰", description:"One winning ticket beyond the observer. The universe bends around the jackpot.", style:"lottery-jackpot", ultra:true, secret:true},
+    {name:"LOTTERY: JACKPOT", odds:10n ** 320n, rarity:"ULTRA • RAREST ROLLABLE", tier:"ultra", color:"#ffe889", symbol:"🎰", description:"One winning ticket beyond the observer. The universe bends around the jackpot.", style:"lottery-jackpot", ultra:true, secret:true},
     {name:"BLOOD MOON", odds:12000, rarity:"MYTHIC", tier:"mythic", color:"#ff7cae", symbol:"☽", description:"An omen written across the night.", style:"fallen"},
     {name:"STARFORGED", odds:35000, rarity:"MYTHIC", tier:"mythic", color:"#ffe6a6", symbol:"✦", description:"Forged in the heart of a dying star.", style:"divinity"},
     {name:"COSMIC", odds:100000, rarity:"COSMIC", tier:"cosmic", color:"#8a9dff", symbol:"✧", description:"The cosmos opens one eye.", style:"cosmic"},
@@ -192,25 +192,25 @@
     const base = BigInt(aura.odds);
     return phaseTwoActive ? base + PHASE_TWO_ODDS_FLOOR : base;
   }
-  // Preserve real odds above Number.MAX_SAFE_INTEGER using Web Crypto's integer randomness.
-  // 105 bytes = 840 random bits, enough resolution to represent 1-in-10^250 odds.
+  // Exact arbitrary-precision rolls using Web Crypto only; no Math.random or Number odds conversion.
+  // Rejection sampling draws uniformly from [0, odds), regardless of how many digits odds has.
   function winsAura(aura, luck) {
     const odds = auraOdds(aura);
-    const safeLimit = BigInt(Number.MAX_SAFE_INTEGER);
-    if (odds <= safeLimit) return Math.random() < Math.min(1, luck / Number(odds));
-    if (!(luck > 0)) return false;
+    if (odds <= 0n || !(luck > 0)) return false;
     const luckInt = BigInt(Math.floor(luck));
     if (luckInt >= odds) return true;
     if (!window.crypto || typeof window.crypto.getRandomValues !== "function") return false;
-    const scale = 1n << 840n;
-    const threshold = (scale * luckInt) / odds;
-    if (threshold <= 0n) return false;
-    if (threshold >= scale) return true;
-    const bytes = new Uint8Array(105);
-    window.crypto.getRandomValues(bytes);
-    let sample = 0n;
-    for (let i = 0; i < bytes.length; i++) sample = (sample << 8n) | BigInt(bytes[i]);
-    return sample < threshold;
+    const bitCount = odds.toString(2).length;
+    const byteCount = Math.ceil(bitCount / 8);
+    const excessBits = byteCount * 8 - bitCount;
+    const bytes = new Uint8Array(byteCount);
+    for (;;) {
+      window.crypto.getRandomValues(bytes);
+      if (excessBits) bytes[0] &= 0xff >>> excessBits;
+      let sample = 0n;
+      for (let i = 0; i < bytes.length; i++) sample = (sample << 8n) | BigInt(bytes[i]);
+      if (sample < odds) return sample < luckInt;
+    }
   }
   function noAuraResult() {
     return {
@@ -575,7 +575,7 @@
   }
   const MOVIE_SCENES = {
     "LOTTERY": {slug:"lottery", eyebrow:"PROBABILITY HAS LOST ITS MEANING", lines:["A TICKET WAS NEVER SUPPOSED TO EXIST.","ONE CHANCE. ONE IMPOSSIBLE MOMENT.","THE UNIVERSE DREW YOUR NUMBER.","LOTTERY"], subtitles:["A SINGLE GOLDEN SIGNAL.","THE ODDS WERE NEVER ON YOUR SIDE.","AND YET... HERE YOU ARE.","1 IN 292,201,338 • THE JACKPOT OF REALITY"], notes:[392,523.25,659.25,783.99]},
-    "LOTTERY: JACKPOT": {slug:"lottery-jackpot", eyebrow:"ULTRA EVENT • RNG OVERRIDE", lines:["THE MACHINE STOPS MID-ROLL.","EVERY TICKET TURNS GOLD.","THE RNG HAS NO MORE NUMBERS.","LOTTERY: JACKPOT"], subtitles:["ROLL SEQUENCE INTERRUPTED.","ONE WINNER OUT OF IMPOSSIBLE ODDS.","THE FINAL TICKET HAS BEEN DRAWN.","THE RAREST ROLLABLE AURA • 1 IN 10^250"], notes:[196,392,587.33,987.77]},
+    "LOTTERY: JACKPOT": {slug:"lottery-jackpot", eyebrow:"ULTRA EVENT • RNG OVERRIDE", lines:["THE MACHINE STOPS MID-ROLL.","EVERY TICKET TURNS GOLD.","THE RNG HAS NO MORE NUMBERS.","LOTTERY: JACKPOT"], subtitles:["ROLL SEQUENCE INTERRUPTED.","ONE WINNER OUT OF IMPOSSIBLE ODDS.","THE FINAL TICKET HAS BEEN DRAWN.","THE RAREST ROLLABLE AURA • 1 IN 10^320"], notes:[196,392,587.33,987.77]},
     "SOLAR FLARE": {slug:"solar", eyebrow:"STELLAR CORE BREACH", lines:["THE SUN GOES QUIET.","A THOUSAND SUNRISES COLLAPSE INTO ONE.","THE CORE REMEMBERS YOUR NAME.","SOLAR FLARE"], subtitles:["LIGHT IS GATHERING.","THE HORIZON IS BURNING.","DO NOT LOOK AWAY.","A STAR HAS CHOSEN YOU"], notes:[220,330,440,660]},
     "VOID WALKER": {slug:"void", eyebrow:"OUTSIDE THE KNOWN UNIVERSE", lines:["THE STARS HAVE STOPPED.","THERE IS NO FLOOR HERE.","SOMETHING CROSSES THE EMPTY.","VOID WALKER"], subtitles:["SIGNAL LOST.","REALITY HAS AN EDGE.","YOU CROSSED IT ANYWAY.","THE VOID KNOWS YOUR FOOTSTEPS"], notes:[196,146.83,110,73.42]},
     "STARFORGED": {slug:"starforged", eyebrow:"FORGE OF THE FIRST STAR", lines:["A STAR IS DYING.","ITS LAST LIGHT BECOMES A HAMMER.","THE COSMOS FORGES A NEW LEGEND.","STARFORGED"], subtitles:["MATTER BENDS.","THE ANVIL OF CREATION.","EVERY SPARK IS A GALAXY.","BORN FROM A SUPERNOVA"], notes:[261.63,329.63,392,523.25]},

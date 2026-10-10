@@ -1,5 +1,11 @@
 (() => {
   "use strict";
+  // Keep effects lightweight on Chromebooks and other constrained devices.
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const lowPerformanceDevice = (Number(navigator.deviceMemory) > 0 && Number(navigator.deviceMemory) <= 4)
+    || (Number(navigator.hardwareConcurrency) > 0 && Number(navigator.hardwareConcurrency) <= 4)
+    || Boolean(connection && connection.saveData);
+  if (lowPerformanceDevice) document.documentElement.classList.add("low-performance");
   const $ = (id) => document.getElementById(id);
   const AURAS = [
     {name:"DUST", odds:2, rarity:"COMMON", tier:"common", color:"#c3c4d8", symbol:"✧", description:"Every legend begins as a speck of dust.", style:"cosmic"},
@@ -1137,9 +1143,10 @@
       const explosion=document.createElement("div");
       explosion.className="jackpot-compute-burst";
       explosion.setAttribute("aria-hidden","true");
-      for(let i=0;i<96;i++){
+      const burstCount = document.documentElement.classList.contains("low-performance") ? 36 : 96;
+      for(let i=0;i<burstCount;i++){
         const particle=document.createElement("i");
-        const angle=(Math.PI*2*i)/96;
+        const angle=(Math.PI*2*i)/burstCount;
         const distance=180+(i%12)*24;
         particle.style.setProperty("--burst-x",Math.cos(angle)*distance+"px");
         particle.style.setProperty("--burst-y",Math.sin(angle)*distance+"px");

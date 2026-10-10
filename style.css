@@ -950,3 +950,48 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .settings-license-note{margin:14px 0 0;padding-top:12px;border-top:1px solid #ffffff12;font-size:.78rem}
 .settings-license-note code{overflow-wrap:anywhere;color:#f7e9b4}
 @media(max-width:760px){.settings-open{padding:8px 10px;font-size:.65rem}.nav{flex-wrap:wrap}}
+
+
+/* Chromebook-friendly layout + consistent controls */
+*{box-sizing:border-box}
+button,select,input,textarea{font:inherit}
+button{min-height:42px;touch-action:manipulation}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #ffe889;outline-offset:3px}
+.nav{gap:clamp(6px,1vw,14px)}
+.nav-link,.settings-open,.phase-toggle{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 13px;line-height:1.15;text-align:center}
+.roll-button,.cutscene-button,.admin-action{min-height:46px;padding:12px 16px;line-height:1.25}
+.settings-close,.admin-close{width:42px;height:42px;min-width:42px;min-height:42px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+.admin-field button,.admin-console-form button{width:100%;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.admin-console-form{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.admin-console-form input{min-width:0;flex:1 1 140px}
+.admin-console-form .console-run{width:auto;flex:0 0 auto}
+.potion-card button,.potion-button{min-height:42px}
+.settings-window{max-height:calc(100dvh - 28px);overflow:auto}
+@media(max-width:900px){
+  .topbar{align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .nav{width:100%;order:3;display:flex;flex-wrap:wrap;gap:8px}
+  .nav-link,.settings-open,.phase-toggle{flex:1 1 auto;min-width:108px}
+  .top-status{margin-left:auto}
+}
+@media(max-width:600px){
+  .nav-link,.settings-open,.phase-toggle{min-width:calc(50% - 6px);padding:11px 9px;font-size:.72rem}
+  .roll-button{width:100%;min-height:50px}
+  .roll-hint{line-height:1.8;flex-wrap:wrap}
+  .settings-panel{padding:10px}
+  .settings-window{padding:18px;border-radius:18px}
+  .settings-header{gap:10px;margin-bottom:18px}
+  .special-thanks{padding:16px}
+  .admin-window{width:100%;max-width:100%;padding:16px}
+  .admin-action{font-size:.76rem}
+}
+/* Automatically applied on lower-memory / battery-saving devices. */
+.low-performance .ambient{animation:none!important;filter:none!important;opacity:.28}
+.low-performance .roll-card,.low-performance .result-card,.low-performance .potion-card,.low-performance .aura-card{backdrop-filter:none!important;box-shadow:0 8px 24px #0005}
+.low-performance .cutscene[data-style="lottery-jackpot"] .jackpot-terminal-blur .cutscene-art,
+.low-performance .cutscene[data-style="lottery-jackpot"] .jackpot-terminal-blur .jackpot-ring-stage{filter:none!important}
+.low-performance .cutscene[data-style="lottery-jackpot"] .jackpot-terminal-blur .cutscene-art::after{display:none!important}
+.low-performance .jackpot-compute-burst i{box-shadow:0 0 5px #ffcc45}
+.low-performance .settings-panel{backdrop-filter:none}
+@media(prefers-reduced-motion:reduce){
+  .low-performance *, .low-performance *::before, .low-performance *::after{scroll-behavior:auto!important}
+}

@@ -960,19 +960,19 @@
     let ctx;
     try { ctx = new AudioCtx(); } catch (_) { showToast("Could not start the AURABREAK soundtrack."); return null; }
     const master = ctx.createGain();
-    master.gain.value = 0.42;
+    master.gain.value = 0.34;
     const limiter = ctx.createDynamicsCompressor();
-    limiter.threshold.value = -14;
-    limiter.knee.value = 18;
-    limiter.ratio.value = 5;
-    limiter.attack.value = 0.004;
-    limiter.release.value = 0.18;
+    limiter.threshold.value = -12;
+    limiter.knee.value = 20;
+    limiter.ratio.value = 7;
+    limiter.attack.value = 0.003;
+    limiter.release.value = 0.22;
     master.connect(limiter); limiter.connect(ctx.destination);
     const nodes = new Set();
     let stopped = false, loopTimer = null;
-    const bpm = 128, beat = 60 / bpm, bar = beat * 4, cycle = 60;
+    const bpm = 128, beat = 60 / bpm, bar = beat * 4, cycle = 120;
     const chords = [[174.61,207.65,261.63,311.13],[138.59,174.61,207.65,277.18],[164.81,207.65,246.94,311.13],[155.56,196,233.08,293.66]];
-    const arp = [349.23,415.30,523.25,622.25,523.25,415.30,311.13,415.30];
+    const arp = [349.23,415.30,523.25,622.25,523.25,415.30,311.13,415.30,698.46,622.25,523.25,830.61,783.99,622.25,523.25,415.30];
     function track(node) { nodes.add(node); node.addEventListener("ended",()=>nodes.delete(node),{once:true}); return node; }
     function tone(at, freq, dur, volume, wave="sine", decay=2, endFreq=null) {
       if (stopped) return;
@@ -980,54 +980,78 @@
       osc.type=wave; osc.frequency.setValueAtTime(Math.max(1,freq),at);
       if(endFreq) osc.frequency.exponentialRampToValueAtTime(Math.max(1,endFreq),at+dur);
       gain.gain.setValueAtTime(0.0001,at);
-      gain.gain.linearRampToValueAtTime(volume,at+0.012);
+      gain.gain.linearRampToValueAtTime(volume,at+0.008);
       gain.gain.exponentialRampToValueAtTime(0.0001,at+dur);
       osc.connect(gain); gain.connect(master);
       osc.start(at); osc.stop(at+dur+0.03);
     }
-    function kick(at, vol) { tone(at,105,.23,vol,"sine",12,39); }
-    function noiseHit(at, vol, dur=.09) {
+    function kick(at, vol, drop=false) {
+      tone(at,drop?145:105,drop?.42:.23,vol,"sine",12,drop?28:39);
+      if(drop) { tone(at,43.65,.65,vol*.75,"sawtooth",8,25); tone(at+.025,65.41,.5,vol*.55,"square",9,30); }
+    }
+    function noiseHit(at, vol, dur=.09, bright=false) {
       const len=Math.max(1,Math.floor(ctx.sampleRate*dur));
       const buffer=ctx.createBuffer(1,len,ctx.sampleRate), data=buffer.getChannelData(0);
       for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*(1-i/len);
       const src=track(ctx.createBufferSource()), filter=ctx.createBiquadFilter(), gain=ctx.createGain();
-      src.buffer=buffer; filter.type="highpass"; filter.frequency.value=3500;
+      src.buffer=buffer; filter.type=bright?"highpass":"bandpass"; filter.frequency.value=bright?5000:2200;
       gain.gain.setValueAtTime(vol,at); gain.gain.exponentialRampToValueAtTime(.0001,at+dur);
       src.connect(filter); filter.connect(gain); gain.connect(master); src.start(at); src.stop(at+dur);
     }
     function scheduleCycle() {
       if(stopped || ctx.state==="closed") return;
-      const start=ctx.currentTime+.12;
-      // Suspense intro and a steadily rising golden arpeggio.
-      chords.forEach((ch,ci)=>ch.forEach((f,j)=>tone(start+ci*bar*2,f,bar*1.85,.016+(ci*.002),"sine",.12)));
-      for(let k=0;k<120;k++){
+      const start=ctx.currentTime+.15;
+      // A long cinematic climb: the final 20 seconds go from tension to total overload.
+      chords.forEach((ch,ci)=>ch.forEach((f,j)=>tone(start+ci*bar*16,f,bar*15.5,.018+(ci*.004),"sine",.12)));
+      for(let k=0;k<512;k++){
         const at=start+k*beat/2, sec=k*beat/2;
-        const level=sec<12?.035:sec<24?.06:sec<48?.085:.105;
-        tone(at,arp[k%arp.length],.19,level,sec>18?"sawtooth":"sine",4.5);
-        if(sec>=48) tone(at,arp[k%arp.length]*2,.42,.035,"sine",3.2);
+        const level=sec<20?.025:sec<45?.045:sec<70?.065:sec<90?.085:.115;
+        const freq=arp[(k+(Math.floor(sec/8)*3))%arp.length];
+        tone(at,freq,.17,level,sec>38?"sawtooth":"triangle",4.5);
+        if(sec>55 && k%2===0) tone(at,freq*2,.12,.025,"square",5);
+        if(sec>80 && k%4===1) tone(at,freq*0.5,.24,.045,"sawtooth",5);
       }
-      // Three increasingly heavy drops: 16s, 32s, and 48s.
-      for(let k=0;k<120;k++){
-        const sec=k*beat;
-        if(sec<8) continue;
-        const at=start+sec;
-        if(sec>=16) kick(at,sec<32?.25:sec<48?.34:.43);
-        else if(k%2===0) kick(at,.12);
-        if(sec>=16 && k%2===1) noiseHit(at,.09);
-        if(sec>=24) { noiseHit(at+beat/2,.025,.035); if(sec>=32) noiseHit(at+beat*1.5,.035,.04); }
+      // Drums grow denser, but the MAIN DROP is held back until exactly 100 seconds.
+      for(let k=0;k<256;k++){
+        const sec=k*beat, at=start+sec;
+        if(sec>=100) {
+          kick(at,.58,true);
+          noiseHit(at+.02,.20,.14,true);
+          if(k%2===0) noiseHit(at+beat/2,.13,.07,true);
+          if(k%4===0) tone(at,55,.45,.23,"sawtooth",5,27.5);
+        } else if(sec>=76) {
+          kick(at,k%2===0?.36:.24);
+          noiseHit(at+beat/2,.055,.045,true);
+          if(k%2===1) noiseHit(at,.10,.07,true);
+        } else if(sec>=40) {
+          if(k%2===0) kick(at,.25);
+          noiseHit(at+beat/2,.035,.04,true);
+          if(k%4===2) noiseHit(at,.07,.08,true);
+        } else if(sec>=12) {
+          if(k%2===0) kick(at,.15);
+          if(k%4===2) noiseHit(at,.045,.07,true);
+        }
       }
-      // Sub bass punches on the drops.
-      for(let k=0;k<88;k++){
-        const sec=16+k*beat, root=[43.65,36.71,41.20,38.89][Math.floor(sec/bar)%4];
-        tone(start+sec,root,.32,sec<32?.15:sec<48?.22:.27,"sine",6);
+      // Sub-bass builds from 16s and becomes enormous at the 100s payoff.
+      for(let k=0;k<224;k++){
+        const sec=16+k*beat, at=start+sec;
+        const root=[43.65,36.71,41.20,38.89][Math.floor(sec/bar)%4];
+        tone(at,root,.32,sec<40?.12:sec<76?.19:sec<100?.25:.38,"sine",6);
+        if(sec>=100) tone(at,root*2,.24,.16,"sawtooth",5,root);
       }
-      [16,32,48].forEach((sec,i)=>{
-        tone(start+sec,65.41,.75,.25,"sawtooth",3,32.7);
-        tone(start+sec,130.81,.8,.14,"sine",2);
-        // Rising filtered-noise-style accents.
-        for(let j=0;j<10;j++) noiseHit(start+sec-1.8+j*.18,.018+j*.004,.16);
+      // Pre-drop risers, a brief silence, then the 100-second jackpot impact.
+      [32,64,88,96,98,99].forEach((sec,i)=>{
+        for(let j=0;j<12;j++) noiseHit(start+sec-2+j*(2/12),.012+j*.003,.16,true);
+        tone(start+sec,130.81,.7,.12+i*.025,"sawtooth",3,261.63);
       });
-      loopTimer=setTimeout(scheduleCycle,60000);
+      // White-hot stabs and a bright high octave right on the main drop.
+      [100,100.46875,100.9375,101.875,103.75].forEach((sec,i)=>{
+        tone(start+sec,130.81,.8,.26,"sawtooth",3,32.7);
+        tone(start+sec,261.63,.55,.16,"square",3);
+        tone(start+sec,523.25,.35,.12,"triangle",3);
+        if(i===0) for(let j=0;j<20;j++) noiseHit(start+sec+j*.035,.06,.11,true);
+      });
+      loopTimer=setTimeout(scheduleCycle,cycle*1000);
     }
     ctx.resume().then(()=>{if(!stopped)scheduleCycle();}).catch(()=>showToast("Tap the cutscene once to enable its soundtrack."));
     return () => {

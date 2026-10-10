@@ -1209,13 +1209,13 @@
     };
 
     // AURABREAK II soundtrack timeline: lock, rapid 100-world warp, reality fracture, bass-drop collapse, final reveal.
-    cutscene.classList.add("jackpot-lock");
-    eyebrow.textContent="ROLL LOCKED • ODDS NO LONGER RESPONDING";
-    line("THE ROLL HAS STOPPED.","A GOLDEN SIGNAL IS THE ONLY THING LEFT.");
-    playDeityTone(196,1.2,"sine",.04);
+    cutscene.classList.add("jackpot-lock","jackpot-reality-collapse");
+    eyebrow.textContent="JACKPOT IMPACT • REALITY COLLAPSE AT ZERO";
+    line("THE DROP STARTS NOW.","100 WORLDS. ONE IMPOSSIBLE WIN.");
+    playDeityTone(41.2,3.4,"sawtooth",.1);
 
-    // Fast, cinematic 30-second cut: 100 worlds flash by, the bass drop hits at 20s,
-    // then the final world snaps into place and the jackpot reveal lands at 30s.
+    // Fast, cinematic 30-second cut: the full bass drop hits at 0s; the 100-world warp
+    // builds toward the final world snap at 27s and jackpot reveal at 30s.
     const worldStart=0, blurStart=24000, snapAt=27000, collapseAt=30000;
     const worldDuration=(blurStart-worldStart)/worlds.length;
     worlds.forEach((name,index)=>{
@@ -1258,10 +1258,8 @@
       playDeityTone(82.41,2.8,"sawtooth",.08);
     });
     later(20000,()=>{
-      cutscene.classList.add("jackpot-reality-collapse");
       eyebrow.textContent="REALITY COLLAPSE • ALL WORLDS CONVERGING";
-      line("THERE IS ONLY ONE WORLD LEFT.","EVERYTHING IS FALLING INTO THE JACKPOT.");
-      playDeityTone(41.2,3.4,"sawtooth",.1);
+      line("THERE IS ONLY ONE WORLD LEFT.","THE DROP IS ALREADY TEARING THROUGH REALITY.");
     });
     later(blurStart,()=>{
       cutscene.classList.remove("jackpot-warp");

@@ -756,15 +756,39 @@
         eyebrow.textContent = "AURABREAK ORIGINAL • " + aura.rarity;
       }
     };
-    // A short, four-act mini-movie: establishing shot, escalation, reveal, hero frame.
+    // The two rarest evolutions get a longer, multi-phase cinematic.
+    // Keep their timeline inside the existing cutscene timer cleanup system.
+    const sceneElement = art.firstElementChild;
+    const overdrive = aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE";
+    const phase = (name) => {
+      if (!sceneElement || !overdrive) return;
+      sceneElement.classList.remove("phase-build", "phase-fracture", "phase-ascend", "phase-peak");
+      sceneElement.classList.add(name);
+    };
     reveal(0);
-    later(1900, () => reveal(1));
-    later(3900, () => reveal(2));
-    later(6100, () => reveal(3));
-    later(8500, () => {
-      cutscene.classList.remove("movie-running");
-      button.textContent = "CLAIM DISCOVERY ↗";
-    });
+    phase("phase-build");
+    if (overdrive) {
+      later(2100, () => { phase("phase-fracture"); reveal(1); });
+      later(4300, () => { phase("phase-ascend"); reveal(2); });
+      later(6500, () => { phase("phase-peak"); reveal(3); });
+      later(7900, () => {
+        sceneElement?.classList.add("phase-settle");
+        cutscene.classList.add("movie-finale");
+      });
+      later(11200, () => {
+        cutscene.classList.remove("movie-running", "movie-finale");
+        sceneElement?.classList.remove("phase-settle");
+        button.textContent = "CLAIM EVOLUTION ↗";
+      });
+    } else {
+      later(1900, () => reveal(1));
+      later(3900, () => reveal(2));
+      later(6100, () => reveal(3));
+      later(8500, () => {
+        cutscene.classList.remove("movie-running");
+        button.textContent = "CLAIM DISCOVERY ↗";
+      });
+    }
   }
   function startFallenGodCutscene() {
     const cutscene = $("cutscene"), art = $("cutsceneArt");

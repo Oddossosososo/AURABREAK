@@ -14,7 +14,7 @@
       vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
       return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);
     }
-    float fbm(vec2 p){float v=0.,a=.5; for(int i=0;i<5;i++){v+=a*noise(p);p=mat2(1.6,-1.2,1.2,1.6)*p+vec2(3.1,1.7);a*=.5;}return v;}
+    float fbm(vec2 p){float v=0.,a=.5; for(int i=0;i<3;i++){v+=a*noise(p);p=mat2(1.6,-1.2,1.2,1.6)*p+vec2(3.1,1.7);a*=.5;}return v;}
     void main(){
       vec2 uv=(gl_FragCoord.xy-.5*uResolution)/uResolution.y;
       float t=uTime*.34;
@@ -53,7 +53,7 @@
     const THREE=window.THREE;
     const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
     renderer.domElement.className="null-absolute-canvas";
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,0.75));
     renderer.setClearColor(0x000000,0);
     container.appendChild(renderer.domElement);
     const scene=new THREE.Scene();
@@ -63,7 +63,7 @@
     const plane=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:true,depthWrite:false}));
     plane.position.z=-2;
     scene.add(plane);
-    const count=420, positions=new Float32Array(count*3), colors=new Float32Array(count*3);
+    const count=150, positions=new Float32Array(count*3), colors=new Float32Array(count*3);
     for(let i=0;i<count;i++){
       const radius=1.4+Math.random()*9, angle=Math.random()*Math.PI*2;
       positions[i*3]=Math.cos(angle)*radius;
@@ -78,7 +78,7 @@
     const particles=new THREE.Points(geo,new THREE.PointsMaterial({size:.045,vertexColors:true,transparent:true,opacity:.9,depthWrite:false,blending:THREE.AdditiveBlending}));
     scene.add(particles);
     const shards=new THREE.Group(); scene.add(shards);
-    for(let i=0;i<56;i++){
+    for(let i=0;i<22;i++){
       const g=new THREE.TetrahedronGeometry(.12+Math.random()*.24,0);
       const m=new THREE.MeshBasicMaterial({color:i%5===0?0x9bdbff:0xff1b78,wireframe:i%3===0,transparent:true,opacity:.45+Math.random()*.45});
       const mesh=new THREE.Mesh(g,m);
@@ -100,7 +100,8 @@
     function frame(ms){
       if(disposed)return;
       raf=requestAnimationFrame(frame);
-      if(ms-last<30)return; last=ms;
+      if(document.hidden || !container.isConnected || container.getBoundingClientRect().width===0) return;
+      if(ms-last<50)return; last=ms;
       const t=ms*.001;uniforms.uTime.value=t;
       particles.rotation.z=t*.12;
       particles.position.x=Math.sin(t*.7)*.32;

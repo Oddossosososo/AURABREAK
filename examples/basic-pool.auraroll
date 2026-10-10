@@ -1,0 +1,6 @@
+// AURA Script RNG example — save as basic-pool.auraroll
+roll "BasicPool" {
+  base_luck: 1
+  aura: "COMMON"
+  aura: "APEX: INFINITE"
+}

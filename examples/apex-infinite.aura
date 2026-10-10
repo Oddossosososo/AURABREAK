@@ -1,0 +1,9 @@
+// AURA Script example — save as apex-infinite.aura
+aura "APEX: INFINITE" {
+  odds: 1e41
+  rarity: "PRE-GOD ASCENDANT"
+  color: "#ffffff"
+  symbol: "∞"
+  description: "The limit was an illusion."
+  cutscene: "APEX: INFINITE"
+}

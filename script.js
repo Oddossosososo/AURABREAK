@@ -956,16 +956,17 @@
     cutscene.dataset.aura="LOTTERY: JACKPOT";
     cutscene.style.setProperty("--aura-color","#ffe889");
     art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div>';
-    // Play the soundtrack from this repository instead of embedding YouTube.
-    const songAudio=document.createElement("audio");
-    songAudio.className="jackpot-song-player";
-    songAudio.src="https://oddossosososo.github.io/AURABREAK/soundtracks/Y2Mate.is%20-%20Dunkirk%20Official%20Soundtrack%20_%20Supermarine%20-%20Hans%20Zimmer%20_%20WaterTower.mp3";
-    songAudio.preload="auto";
-    songAudio.loop=true;
-    songAudio.volume=0.8;
-    cutscene.appendChild(songAudio);
-    const startSong=()=>songAudio.play().catch(err=>console.warn("Jackpot soundtrack could not autoplay; browser may require another user interaction.",err));
-    startSong();
+    // User-requested soundtrack: loop the supplied YouTube video for the jackpot reveal.
+    const songFrame=document.createElement("iframe");
+    songFrame.className="jackpot-song-player";
+    songFrame.title="LOTTERY: JACKPOT soundtrack";
+    songFrame.src="https://www.youtube-nocookie.com/embed/n1VJ39nVIBk?autoplay=1&controls=1&loop=1&playlist=n1VJ39nVIBk&playsinline=1&rel=0";
+    songFrame.allow="autoplay; encrypted-media; picture-in-picture";
+    songFrame.referrerPolicy="strict-origin-when-cross-origin";
+    songFrame.setAttribute("allowfullscreen","");
+    songFrame.width="200";
+    songFrame.height="200";
+    cutscene.appendChild(songFrame);
     if(!phaseTwoActive){
       // Phase I gets a normal jackpot reveal; the TSL zoom-tour and god pantheon are II-only.
       eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10^320";
@@ -1305,7 +1306,7 @@
     if (lotteryJackpotStop) { lotteryJackpotStop(); lotteryJackpotStop = null; }
     if (fourthWallCleanup) { fourthWallCleanup(); fourthWallCleanup = null; }
     const cutscene = $("cutscene");
-    cutscene.querySelectorAll(".jackpot-song-player").forEach(player => { if (player.tagName === "AUDIO") { player.pause(); player.currentTime = 0; } player.remove(); });
+    cutscene.querySelectorAll(".jackpot-song-player").forEach(player => player.remove());
     if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();
     cutscene.classList.add("hidden");
     cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "na-running", "na-collapse", "na-break", "na-reveal", "na-erasure", "jackpot-running", "jackpot-lock", "jackpot-burst", "jackpot-final", "jackpot-warp", "jackpot-terminal-blur", "jackpot-world-snap", "jackpot-sovereign-collapse", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");

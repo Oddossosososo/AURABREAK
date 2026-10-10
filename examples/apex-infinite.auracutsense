@@ -1,0 +1,11 @@
+// AURA cutscene language — save as apex-infinite.auracutsense
+cutscene "APEX: INFINITE" {
+  duration: 12000
+  title: "THE LIMIT WAS AN ILLUSION"
+  subtitle: "YOU HAVE STEPPED BEYOND INFINITY"
+  effect: reality.break
+  effect: stars.explode
+  effect: screen.glitch
+  effect: aura.expand
+  reveal: "APEX: INFINITE"
+}

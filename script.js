@@ -956,6 +956,20 @@
     cutscene.dataset.aura="LOTTERY: JACKPOT";
     cutscene.style.setProperty("--aura-color","#ffe889");
     art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div>';
+    if(!phaseTwoActive){
+      // Phase I gets a normal jackpot reveal; the TSL zoom-tour and god pantheon are II-only.
+      eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10^320";
+      title.className="jackpot-title jackpot-title-final";
+      title.textContent="LOTTERY: JACKPOT";
+      title.style.color="#fff4c0";
+      subtitle.textContent="ONE IMPOSSIBLE WIN. THE UNIVERSE BENDS AROUND YOU.";
+      button.textContent="CLAIM LOTTERY: JACKPOT ↗";
+      cutscene.classList.add("jackpot-running","jackpot-final");
+      if(window.AURABREAK_LOTTERY_JACKPOT&&window.THREE){
+        try{lotteryJackpotStop=window.AURABREAK_LOTTERY_JACKPOT.start(art);}catch(err){console.warn("Jackpot shader fallback:",err);}
+      }
+      return;
+    }
     const oldBanner=cutscene.querySelector(".jackpot-world-banner");
     if(oldBanner) oldBanner.remove();
     const banner=document.createElement("div");

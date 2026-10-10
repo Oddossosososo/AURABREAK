@@ -1050,19 +1050,34 @@
       try{lotteryJackpotStop=window.AURABREAK_LOTTERY_JACKPOT.start(art);}
       catch(err){console.warn("Jackpot shader fallback:",err);}
     }
-    const later=(ms,fn)=>cutsceneTimers.push(setTimeout(fn,ms));
+    const later=(ms,fn)=>cutsceneTimers.push(setTimeout(()=>{
+      if(!cutscene.isConnected || cutscene.classList.contains("hidden")) return;
+      fn();
+    },ms));
     const line=(head,sub,cls="jackpot-title")=>{
       title.textContent=head;title.className=cls;subtitle.textContent=sub;
       content.classList.remove("deity-reveal");void content.offsetWidth;content.classList.add("deity-reveal");
     };
+
+    // AURABREAK II soundtrack timeline: lock, 100-world climb, blur, snap, collapse.
+    cutscene.classList.add("jackpot-lock");
+    eyebrow.textContent="ROLL LOCKED • ODDS NO LONGER RESPONDING";
+    line("THE ROLL HAS STOPPED.","A GOLDEN SIGNAL IS THE ONLY THING LEFT.");
     playDeityTone(196,1.2,"sine",.04);
-    const worldDuration=620;
+
+    const worldStart=23000, blurStart=82000, snapAt=101000, collapseAt=103000;
+    const worldDuration=(blurStart-worldStart)/worlds.length;
     worlds.forEach((name,index)=>{
-      later(index*worldDuration,()=>{
-        if(!cutscene.isConnected || cutscene.classList.contains("hidden")) return;
+      later(Math.round(worldStart+index*worldDuration),()=>{
+        if(index===0){
+          cutscene.classList.remove("jackpot-lock");
+          cutscene.classList.add("jackpot-warp");
+          eyebrow.textContent="AURABREAK II • 100-WORLD WARP";
+          line("THE LOOPS ARE OPEN.","100 WORLDS. ONE CONTINUOUS DESCENT.");
+          playDeityTone(523.25,1.1,"triangle",.05);
+        }
         worldName.textContent="WORLD "+String(index+1).padStart(3,"0")+" — "+name;
         worldCount.textContent=String(index+1).padStart(2,"0")+" / 100";
-        // Keep the five rings spinning continuously; world changes never restart their motion.
         sideWorldLabels.forEach((label,slot)=>{
           const neighborIndex=(index+[99,1,95,5][slot])%worlds.length;
           label.textContent=worlds[neighborIndex];
@@ -1075,23 +1090,58 @@
         void banner.offsetWidth;
         banner.classList.add("world-banner-arrive");
         cutscene.style.setProperty("--world-hue",String((index*37)%360)+"deg");
+        ringStage.style.setProperty("--warp-progress",String((index+1)/worlds.length));
         if(index%10===0) playDeityTone(220+(index%5)*55,.28,"triangle",.025);
       });
     });
-    const tourEnd=worlds.length*worldDuration;
-    later(2400,()=>{cutscene.classList.add("jackpot-lock");eyebrow.textContent="TICKET VERIFIED • REALITY ODDS OVERRIDDEN";line("THE LOOPS ARE OPEN.","EVERY WORLD LEADS TO THE NEXT.");playDeityTone(523.25,1.1,"triangle",.05);});
-    later(12500,()=>{line("THE VIEWER LOOKED AWAY.","THE SHADER KEEPS RUNNING THROUGH THE MULTIVERSE.");playDeityTone(659.25,1.2,"sine",.05);});
-    later(tourEnd-2400,()=>{cutscene.classList.add("jackpot-burst");line("WORLD 100","THE LAST LOOP HAS BEEN BROKEN.");eyebrow.textContent="FINAL WORLD • NO MORE DESTINATIONS";playDeityTone(783.99,1.4,"triangle",.06);});
-    later(tourEnd,()=>{
+
+    later(22000,()=>{
+      eyebrow.textContent="TICKET VERIFIED • REALITY ODDS OVERRIDDEN";
+      line("THE INDUSTRIAL LOCK.","THE WORLD IS HOLDING ITS BREATH.");
+    });
+    later(blurStart,()=>{
+      cutscene.classList.remove("jackpot-warp");
+      cutscene.classList.add("jackpot-terminal-blur");
+      eyebrow.textContent="TERMINAL VELOCITY • WORLD 100 APPROACHING";
+      line("THE ABSOLUTE LIMIT.","EVERY WORLD BECOMES A STREAK OF GOLD.");
+      playDeityTone(659.25,1.2,"sine",.05);
+    });
+    later(snapAt,()=>{
+      cutscene.classList.remove("jackpot-terminal-blur");
+      cutscene.classList.add("jackpot-world-snap");
+      ringStage.classList.add("jackpot-singularity");
+      worldName.textContent="WORLD 100 — THE 100TH WORLD";
+      worldCount.textContent="100 / 100";
+      eyebrow.textContent="WORLD 100 SINGULARITY • ZERO DISTANCE";
+      line("WORLD 100","THE RADIAL FIELD HAS COLLAPSED TO A SINGLE POINT.");
+      playDeityTone(783.99,1.4,"triangle",.06);
+    });
+    later(collapseAt,()=>{
+      cutscene.classList.remove("jackpot-world-snap");
+      cutscene.classList.add("jackpot-sovereign-collapse","jackpot-burst","jackpot-final");
       ringStage.classList.remove("rings-arrive");
+      ringStage.classList.add("jackpot-singularity");
       sideWorlds.classList.remove("side-worlds-arrive");
-      cutscene.classList.add("jackpot-final");
       eyebrow.textContent=phaseTwoActive ? "AURABREAK II EXCLUSIVE • THE PANTHEON REVEALED" : "ULTRA • RAREST ROLLABLE • 1 IN 10^320";
       line("LOTTERY: JACKPOT",phaseTwoActive ? "100 WORLDS. EVERY GOD. ONE IMPOSSIBLE WIN." : "100 WORLDS. EVERY LOOP. ONE IMPOSSIBLE WIN.","jackpot-title jackpot-title-final");
       button.textContent="CLAIM LOTTERY: JACKPOT ↗";
       banner.classList.add("jackpot-world-banner-final");
       worldName.textContent="WORLD 100 — THE JACKPOT THRONE";
       worldCount.textContent="100 / 100";
+      const explosion=document.createElement("div");
+      explosion.className="jackpot-compute-burst";
+      explosion.setAttribute("aria-hidden","true");
+      for(let i=0;i<96;i++){
+        const particle=document.createElement("i");
+        const angle=(Math.PI*2*i)/96;
+        const distance=180+(i%12)*24;
+        particle.style.setProperty("--burst-x",Math.cos(angle)*distance+"px");
+        particle.style.setProperty("--burst-y",Math.sin(angle)*distance+"px");
+        particle.style.setProperty("--burst-delay",(i%8)*12+"ms");
+        particle.style.setProperty("--burst-size",((i%4)+2)+"px");
+        explosion.appendChild(particle);
+      }
+      art.appendChild(explosion);
       if(phaseTwoActive){
         const pantheon=document.createElement("div");
         pantheon.className="jackpot-pantheon";
@@ -1260,7 +1310,7 @@
     cutscene.querySelectorAll(".jackpot-song-player").forEach(player => player.remove());
     if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();
     cutscene.classList.add("hidden");
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "na-running", "na-collapse", "na-break", "na-reveal", "na-erasure", "jackpot-running", "jackpot-lock", "jackpot-burst", "jackpot-final", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "na-running", "na-collapse", "na-break", "na-reveal", "na-erasure", "jackpot-running", "jackpot-lock", "jackpot-burst", "jackpot-final", "jackpot-warp", "jackpot-terminal-blur", "jackpot-world-snap", "jackpot-sovereign-collapse", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");
     cutscene.classList.remove("fw-running","fw-address","fw-glitch","fw-final");
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";

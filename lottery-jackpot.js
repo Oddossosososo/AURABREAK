@@ -120,7 +120,7 @@
       preserveDrawingBuffer: false
     });
     renderer.domElement.className = "lottery-jackpot-canvas";
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 0.68));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 0.5));
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
@@ -164,7 +164,7 @@
     function frame(ms) {
       raf = 0;
       if (!shouldAnimate()) return;
-      if (ms - lastFrame >= 33) {
+      if (ms - lastFrame >= 42) {
         lastFrame = ms;
         uniforms.uTime.value = ms * 0.001;
         renderer.render(scene, camera);

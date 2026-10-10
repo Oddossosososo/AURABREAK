@@ -930,3 +930,23 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
   .jackpot-compute-burst i{animation:none!important}
   .cutscene[data-style="lottery-jackpot"].jackpot-terminal-blur .cutscene-art::after{animation:none!important}
 }
+
+
+/* Settings / Special Thanks */
+.settings-open{border:1px solid rgba(255,224,137,.35);border-radius:999px;padding:9px 13px;background:rgba(255,224,137,.07);color:#ffe889;font:500 .72rem "DM Mono",monospace;letter-spacing:.05em;cursor:pointer;white-space:nowrap}
+.settings-open:hover{background:rgba(255,224,137,.14)}
+.settings-panel{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:18px;background:rgba(3,3,12,.78);backdrop-filter:blur(12px)}
+.settings-panel.hidden{display:none}
+.settings-window{width:min(520px,100%);padding:clamp(20px,4vw,32px);border:1px solid rgba(255,224,137,.25);border-radius:24px;background:linear-gradient(145deg,#151526,#090912 72%);box-shadow:0 24px 90px #0009;color:#f5f3ff}
+.settings-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px}
+.settings-header h2{margin:4px 0 0;font-size:clamp(1.7rem,6vw,2.4rem);letter-spacing:.08em}
+.settings-eyebrow{margin:0;color:#ffe889;font:500 .7rem "DM Mono",monospace;letter-spacing:.13em}
+.settings-close{width:38px;height:38px;border:1px solid #ffffff25;border-radius:12px;background:#ffffff08;color:#fff;font-size:1.6rem;cursor:pointer}
+.special-thanks{padding:20px;border:1px solid #ffe8892b;border-radius:18px;background:radial-gradient(ellipse at top right,#ffe88912,transparent 65%),#ffffff04}
+.special-thanks h3{margin:12px 0 8px;font-size:1.2rem}
+.special-thanks p{line-height:1.6;color:#c7c5d8}
+.special-thanks a{display:inline-block;margin:4px 0;color:#ffe889;text-decoration:none}
+.special-thanks a:hover{text-decoration:underline}
+.settings-license-note{margin:14px 0 0;padding-top:12px;border-top:1px solid #ffffff12;font-size:.78rem}
+.settings-license-note code{overflow-wrap:anywhere;color:#f7e9b4}
+@media(max-width:760px){.settings-open{padding:8px 10px;font-size:.65rem}.nav{flex-wrap:wrap}}

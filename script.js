@@ -864,44 +864,40 @@
     }
 
     try {
-      const { data: sessionData, error: sessionError } = await auraSupabase.auth.getSession();
+      let { data: sessionData, error: sessionError } = await auraSupabase.auth.getSession();
       if (sessionError) throw sessionError;
 
+      // Passwordless anonymous session: no email, inbox, or confirmation link required.
       if (!sessionData.session) {
-        const email = window.prompt("AURABREAK DEV SIGN-IN\\nEnter your email to receive a secure sign-in link:");
-        if (!email || !email.trim() || !email.includes("@")) {
-          showToast("SIGN-IN CANCELLED.");
-          return false;
-        }
-
-        showToast("SENDING SIGN-IN EMAIL…");
-        const { error } = await auraSupabase.auth.signInWithOtp({
-          email: email.trim(),
-          options: { emailRedirectTo: window.location.href }
-        });
-
+        showToast("CREATING AURABREAK DEV SESSION…");
+        const { data, error } = await auraSupabase.auth.signInAnonymously();
         if (error) {
-          console.error("AURABREAK email sign-in error:", error);
-          window.alert("AURABREAK couldn't send the sign-in email.\\n\\n" + error.message + "\\n\\nCheck the email address and try again.");
+          console.error("AURABREAK anonymous sign-in error:", error);
+          window.alert(
+            "AURABREAK couldn't create a no-email session.\\n\\n" +
+            error.message +
+            "\\n\\nThe project owner may need to enable Anonymous Sign-Ins in Supabase: Authentication → Sign In / Providers → Anonymous."
+          );
           return false;
         }
-
-        window.alert("SIGN-IN REQUEST SENT\\n\\nCheck your inbox and Spam/Junk folder for the AURABREAK sign-in email. It can take a few minutes.\\n\\nAfter opening the link, return to this game and press Shift+A again. If no email arrives, the email provider may need to be configured by the project owner.");
-        showToast("CHECK YOUR EMAIL + SPAM/JUNK.");
-        return false;
+        sessionData = { session: data.session };
       }
 
       showToast("CHECKING DEV ACCESS…");
       const { data, error } = await auraSupabase.functions.invoke("dev-auth");
       if (error) {
         console.error("AURABREAK dev-auth error:", error);
-        window.alert("Your sign-in session was found, but DEV access couldn't be checked.\\n\\n" + (error.message || "Please refresh and try again."));
+        window.alert("Your session was created, but DEV access couldn't be checked.\\n\\n" + (error.message || "Please refresh and try again."));
         return false;
       }
 
       if (!data?.isDev) {
         devAuthorized = false;
-        window.alert("You're signed in, but this account isn't approved for DEV access yet.\\n\\nYour user ID:\\n" + sessionData.session.user.id + "\\n\\nSend only this user ID to the project owner for approval. Never send your sign-in link.");
+        window.alert(
+          "Your AURABREAK session is ready, but DEV access hasn't been approved yet.\\n\\n" +
+          "Your user ID:\\n" + sessionData.session.user.id +
+          "\\n\\nSend only this user ID to the project owner for approval. No email or confirmation link is needed."
+        );
         showToast("DEV ACCESS NOT APPROVED.");
         return false;
       }

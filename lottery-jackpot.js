@@ -57,8 +57,8 @@
       float ringA = pow(max(0.0, 1.0 - abs(fract(r * 13.0 - t * 0.6) - 0.5) * 2.0), 16.0);
       float ringB = pow(max(0.0, 1.0 - abs(fract(r * 7.0 + t * 0.28) - 0.5) * 2.0), 10.0);
       float wheel = abs(fract((a + t * 0.35) * 15.2789) - 0.5);
-      float spokes = pow(max(0.0, 1.0 - wheel * 16.0), 7.0) * smoothstep(0.8, 0.12, r);
-      float rays = pow(max(0.0, cos(a * 19.0 - t * 0.55)), 30.0) * smoothstep(0.72, 0.08, r);
+      float spokes = pow(max(0.0, 1.0 - wheel * 16.0), 7.0) * (1.0 - smoothstep(0.12, 0.8, r));
+      float rays = pow(max(0.0, cos(a * 19.0 - t * 0.55)), 30.0) * (1.0 - smoothstep(0.08, 0.72, r));
       float lens = exp(-abs(r - (0.33 + 0.015 * sin(a * 6.0 + t))) * 70.0);
 
       // Small drifting stars are calculated from a grid, not individual DOM objects.

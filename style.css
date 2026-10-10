@@ -713,3 +713,31 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .cutscene[data-style="lottery-jackpot"].jackpot-pantheon-reveal .cutscene-content{padding-top:clamp(300px,43vh,420px)}
 @media(max-width:600px){.cutscene[data-style="lottery-jackpot"] .jackpot-pantheon{top:140px}.pantheon-gods{gap:5px}.pantheon-gods span{padding:6px 8px;font-size:8px}.cutscene[data-style="lottery-jackpot"].jackpot-pantheon-reveal .cutscene-content{padding-top:330px}}
 @media(prefers-reduced-motion:reduce){.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .cutscene-art{animation:none}}
+
+/* AURABREAK II: five gates per world with visible neighboring realities */
+.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-ring-stage{position:absolute;inset:0;z-index:2;display:grid;place-items:center;perspective:1000px;pointer-events:none;overflow:hidden}
+.jackpot-dimension-ring{position:absolute;left:50%;top:50%;width:min(54vw,58vh);height:min(54vw,58vh);border:2px solid #ffe9a1;border-radius:50%;transform:translate(-50%,-50%) rotateX(67deg) scale(.2);opacity:0;box-shadow:0 0 15px #ffd25a66,inset 0 0 20px #ffcc4430}
+.jackpot-dimension-ring:before{content:"";position:absolute;inset:9%;border:1px solid #fff5ce99;border-radius:50%;box-shadow:0 0 22px #ffce4a44}
+.jackpot-dimension-ring:after{content:"";position:absolute;inset:20%;border:1px dashed #ffc74d99;border-radius:50%}
+.jackpot-dimension-ring.ring-1{border-color:#fff4c4;--ring-scale:1.05;--ring-delay:0ms}
+.jackpot-dimension-ring.ring-2{border-color:#ffd36d;--ring-scale:1.3;--ring-delay:55ms}
+.jackpot-dimension-ring.ring-3{border-color:#ffad49;--ring-scale:1.58;--ring-delay:110ms}
+.jackpot-dimension-ring.ring-4{border-color:#fff0a0;--ring-scale:1.86;--ring-delay:165ms}
+.jackpot-dimension-ring.ring-5{border-color:#fff;--ring-scale:2.2;--ring-delay:220ms}
+.jackpot-ring-core{position:absolute;left:50%;top:50%;display:grid;place-items:center;width:clamp(62px,10vw,130px);aspect-ratio:1;border-radius:50%;font:900 clamp(24px,4vw,52px) Georgia,serif;color:#fff9df;background:radial-gradient(circle,#fff 0%,#ffe58b 8%,#c47b21 32%,#201105 70%);box-shadow:0 0 25px #ffdd70,0 0 90px #ffb22e99;transform:translate(-50%,-50%);animation:jackpotCorePulse 1.2s ease-in-out infinite alternate}
+.rings-arrive .jackpot-dimension-ring{animation:jackpotGateRush 620ms cubic-bezier(.12,.7,.18,1) var(--ring-delay,0ms) both}
+@keyframes jackpotGateRush{0%{opacity:0;transform:translate(-50%,-50%) rotateX(67deg) scale(.12)}12%{opacity:.98}75%{opacity:.8;filter:brightness(1.8)}100%{opacity:0;transform:translate(-50%,-50%) rotateX(67deg) scale(var(--ring-scale,2.2));filter:brightness(1.3)}}
+@keyframes jackpotCorePulse{from{filter:brightness(.9);transform:translate(-50%,-50%) scale(.94)}to{filter:brightness(1.5);transform:translate(-50%,-50%) scale(1.08)}}
+.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-side-worlds{position:absolute;inset:0;z-index:3;pointer-events:none;filter:hue-rotate(var(--world-hue,0deg))}
+.jackpot-side-world{position:absolute;display:flex;flex-direction:column;gap:7px;max-width:min(28vw,290px);padding:10px 14px;border:1px solid #ffe08b77;border-radius:13px;background:linear-gradient(140deg,#090712bb,#4a2b1488);box-shadow:0 0 25px #ffc84a1c;backdrop-filter:blur(5px);opacity:.8}
+.jackpot-side-world span{font:8px 'DM Mono',monospace;letter-spacing:.16em;color:#ffdc86}
+.jackpot-side-world b{font:700 clamp(9px,1.3vw,14px) 'DM Mono',monospace;line-height:1.25;color:#fff4c6;text-shadow:0 0 12px #ffd45c66;overflow-wrap:anywhere}
+.side-world-left{left:3%;top:48%;transform:translateY(-50%) rotateY(16deg)}
+.side-world-right{right:3%;top:48%;transform:translateY(-50%) rotateY(-16deg);text-align:right}
+.side-world-top{left:50%;top:20%;transform:translateX(-50%) scale(.92);text-align:center}
+.side-world-bottom{left:50%;bottom:12%;transform:translateX(-50%) scale(.9);text-align:center}
+.side-worlds-arrive .jackpot-side-world{animation:jackpotSideWorldIn .52s cubic-bezier(.16,1,.3,1) both}
+.side-worlds-arrive .side-world-left{animation-delay:40ms}.side-worlds-arrive .side-world-right{animation-delay:90ms}.side-worlds-arrive .side-world-top{animation-delay:140ms}.side-worlds-arrive .side-world-bottom{animation-delay:190ms}
+@keyframes jackpotSideWorldIn{from{opacity:0;filter:blur(8px);scale:.8}to{opacity:.82;filter:blur(0);scale:1}}
+@media(max-width:600px){.jackpot-side-world{max-width:31vw;padding:7px 8px}.jackpot-side-world span{font-size:6px;letter-spacing:.06em}.jackpot-side-world b{font-size:8px}.side-world-left{left:1%;top:57%}.side-world-right{right:1%;top:57%}.side-world-top{top:26%}.side-world-bottom{bottom:8%}.jackpot-dimension-ring{width:min(64vw,55vh);height:min(64vw,55vh)}.jackpot-ring-core{width:52px}}
+@media(prefers-reduced-motion:reduce){.jackpot-dimension-ring,.jackpot-ring-core,.side-worlds-arrive .jackpot-side-world{animation:none!important}.jackpot-dimension-ring{opacity:.35;transform:translate(-50%,-50%) rotateX(67deg) scale(1)}}

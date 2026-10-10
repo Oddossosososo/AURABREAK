@@ -1186,3 +1186,182 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
 
 
 /* DUST — primordial-universe cinematic: a living nebula, not just an orb. */
+
+
+/* WORLD II: LOTTERY: WINNER — the jackpot ascends beyond probability. */
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-scene.movie-lottery-winner {
+  --winner-gold: #fff1a8;
+  --winner-pink: #f4d8ff;
+  background:
+    radial-gradient(ellipse at 50% 48%, #fff5d9 0%, #ffe58b22 9%, transparent 31%),
+    radial-gradient(ellipse at 50% 50%, #5a236d 0%, #170d2d 43%, #03020a 78%);
+  isolation: isolate;
+}
+.movie-lottery-winner .movie-starfield {
+  inset: -25%;
+  opacity: .95;
+  background:
+    radial-gradient(circle at 12% 18%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 82% 26%, #fff1b8 0 1px, transparent 2px),
+    radial-gradient(circle at 27% 76%, #f4d8ff 0 1px, transparent 2px),
+    radial-gradient(circle at 73% 82%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 48% 12%, #fff1b8 0 2px, transparent 3px);
+  background-size: 127px 131px, 173px 157px, 199px 181px, 149px 211px, 251px 233px;
+  animation: winnerStarDrift 14s linear infinite;
+}
+.movie-lottery-winner .movie-horizon {
+  inset: 20% -25%;
+  border: 2px solid #ffe9a355;
+  border-radius: 50%;
+  box-shadow: 0 0 28px #ffda7a88, inset 0 0 34px #f4d8ff33;
+  transform: perspective(380px) rotateX(68deg) scale(1.25);
+  animation: winnerHorizon 5s ease-in-out infinite alternate;
+}
+.movie-lottery-winner .movie-core {
+  width: clamp(125px, 23vw, 270px);
+  background:
+    radial-gradient(circle at 28% 20%, #fff 0%, #fff7d6 7%, #ffe58b 17%, #df8cff 35%, #5b247f 57%, #10071d 77%);
+  border: 2px solid #fff2bd;
+  border-radius: 29% 41% 31% 44%;
+  box-shadow: 0 0 26px #fff4c9, 0 0 85px #ffcf6e, 0 0 175px #df8cff99;
+  animation: winnerCorePulse 2.4s ease-in-out infinite;
+}
+.movie-lottery-winner .movie-core span {
+  transform: rotate(-12deg);
+  color: #fff;
+  text-shadow: 0 0 12px #fff, 0 0 40px #ffe58b, 0 0 80px #df8cff;
+}
+.movie-lottery-winner .movie-ring {
+  width: clamp(270px, 52vw, 630px);
+  border: 2px solid #fff0b8cc;
+  box-shadow: 0 0 18px #ffe58b88, inset 0 0 20px #df8cff33;
+  animation-duration: 7s;
+}
+.movie-lottery-winner .movie-ring-b {
+  width: clamp(350px, 70vw, 830px);
+  border: 1px dashed #f4d8ffcc;
+  box-shadow: 0 0 30px #c77dff55;
+  animation-duration: 11s;
+}
+.movie-lottery-winner .movie-volumetric {
+  inset: -35%;
+  background: conic-gradient(from 0deg at 50% 48%, transparent 0 8%, #ffe58b44 13%, transparent 20% 33%, #f4d8ff55 39%, transparent 47% 65%, #fff1a833 72%, transparent 83%);
+  filter: blur(8px);
+  animation: winnerCorona 8s linear infinite;
+}
+.movie-lottery-winner .movie-impact {
+  inset: 10%;
+  border: 1px solid #fff1a8aa;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(.15);
+}
+.movie-lottery-winner.phase-fracture .movie-impact,
+.movie-lottery-winner.phase-peak .movie-impact {
+  animation: winnerShockwave 1.15s cubic-bezier(.08,.75,.18,1) both;
+}
+.movie-lottery-winner.phase-fracture .movie-core { animation-duration: .65s; filter: brightness(1.65); }
+.movie-lottery-winner.phase-ascend .movie-core { transform: translate(-50%,-50%) rotate(18deg) scale(1.16); }
+.movie-lottery-winner.phase-peak .movie-core { filter: brightness(1.8) saturate(1.4); box-shadow: 0 0 45px #fff, 0 0 130px #ffe58b, 0 0 250px #df8cff; }
+.movie-lottery-winner.phase-settle .movie-core { animation: winnerCoreSettle 1.1s ease-out both; }
+
+/* WORLD II: PURE DEITY: UNFATHOMABLE — a white-violet horizon beyond creation. */
+.cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-scene.movie-unfathomable {
+  background:
+    radial-gradient(ellipse at 50% 48%, #fff 0%, #e6d6ff 2%, #a28bff55 10%, transparent 30%),
+    radial-gradient(ellipse at 50% 50%, #24114c 0%, #090515 48%, #010106 82%);
+  isolation: isolate;
+}
+.movie-unfathomable .movie-starfield {
+  inset: -30%;
+  background:
+    radial-gradient(circle at 14% 22%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 88% 34%, #e6d6ff 0 1px, transparent 2px),
+    radial-gradient(circle at 23% 83%, #9ffcff 0 1px, transparent 2px),
+    radial-gradient(circle at 70% 73%, #fff 0 2px, transparent 3px);
+  background-size: 113px 137px, 181px 163px, 223px 191px, 251px 229px;
+  animation: unfathomableStarDrift 18s linear infinite;
+}
+.movie-unfathomable .movie-horizon {
+  inset: 15% -35%;
+  border: 1px solid #e6d6ff99;
+  border-radius: 50%;
+  box-shadow: 0 0 32px #b6a0ff88, inset 0 0 50px #9ffcff22;
+  transform: perspective(320px) rotateX(72deg) scale(1.4);
+  animation: unfathomableHorizon 6s ease-in-out infinite alternate;
+}
+.movie-unfathomable .movie-core {
+  width: clamp(135px, 25vw, 290px);
+  border: 2px solid #f8f4ff;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #010106 0 25%, #17102f 31%, #f8f4ff 34%, #b8a0ff 38%, #4b32a0 46%, #0b0718 63%, transparent 70%);
+  box-shadow: 0 0 25px #fff, 0 0 80px #b8a0ff, 0 0 180px #8c6aff88;
+  animation: unfathomableCore 4s ease-in-out infinite;
+}
+.movie-unfathomable .movie-core span {
+  color: #fff;
+  text-shadow: 0 0 18px #fff, 0 0 45px #c4b1ff, 0 0 80px #9ffcff;
+}
+.movie-unfathomable .movie-ring {
+  width: clamp(280px, 55vw, 660px);
+  border-width: 2px;
+  border-color: #f8f4ffcc;
+  box-shadow: 0 0 22px #b8a0ff99, inset 0 0 22px #9ffcff22;
+  animation-duration: 9s;
+}
+.movie-unfathomable .movie-ring-b {
+  width: clamp(380px, 76vw, 900px);
+  border: 1px dotted #9ffcffcc;
+  box-shadow: 0 0 36px #b8a0ff66;
+  animation-duration: 15s;
+}
+.movie-unfathomable .movie-volumetric {
+  inset: -40%;
+  background: conic-gradient(from 15deg at 50% 48%, transparent 0 10%, #e6d6ff44 16%, transparent 24% 38%, #9ffcff33 45%, transparent 55% 70%, #b8a0ff55 78%, transparent 87%);
+  filter: blur(10px);
+  animation: unfathomableCorona 12s linear infinite;
+}
+.movie-unfathomable .movie-impact {
+  inset: 8%;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(.1);
+}
+.movie-unfathomable.phase-fracture .movie-impact,
+.movie-unfathomable.phase-peak .movie-impact {
+  animation: winnerShockwave 1.25s cubic-bezier(.08,.75,.18,1) both;
+}
+.movie-unfathomable.phase-fracture .movie-core { filter: brightness(1.7); transform: translate(-50%,-50%) scale(1.12); }
+.movie-unfathomable.phase-ascend .movie-core { transform: translate(-50%,-50%) scale(1.22); }
+.movie-unfathomable.phase-peak .movie-core { filter: brightness(1.9); box-shadow: 0 0 50px #fff, 0 0 140px #b8a0ff, 0 0 260px #9ffcff88; }
+.movie-unfathomable.phase-settle .movie-core { animation: unfathomableCoreSettle 1.15s ease-out both; }
+
+/* Shared phase choreography for the two World II evolution finales. */
+.movie-lottery-winner.phase-fracture,
+.movie-unfathomable.phase-fracture { filter: brightness(1.25) saturate(1.35); }
+.movie-lottery-winner.phase-ascend,
+.movie-unfathomable.phase-ascend { filter: brightness(1.15) saturate(1.25); }
+.movie-lottery-winner.phase-peak,
+.movie-unfathomable.phase-peak { animation: evolutionPeakFlash .9s ease-out both; }
+@keyframes winnerStarDrift { to { transform: translate3d(-4%, 3%, 0) rotate(5deg); } }
+@keyframes winnerHorizon { from { opacity:.3; } to { opacity:.95; } }
+@keyframes winnerCorePulse { 0%,100% { transform:translate(-50%,-50%) scale(.94) rotate(-5deg); } 50% { transform:translate(-50%,-50%) scale(1.05) rotate(5deg); } }
+@keyframes winnerCorona { to { transform: rotate(360deg); } }
+@keyframes winnerShockwave { 0% { opacity:0; transform:scale(.12); } 12% { opacity:1; } 100% { opacity:0; transform:scale(1.8); } }
+@keyframes winnerCoreSettle { 0% { transform:translate(-50%,-50%) scale(1.25); filter:brightness(1.8); } 100% { transform:translate(-50%,-50%) scale(1); filter:brightness(1); } }
+@keyframes unfathomableStarDrift { to { transform: translate3d(3%, -4%, 0) rotate(-4deg); } }
+@keyframes unfathomableHorizon { from { opacity:.25; } to { opacity:.9; } }
+@keyframes unfathomableCore { 0%,100% { transform:translate(-50%,-50%) scale(.96) rotate(0deg); } 50% { transform:translate(-50%,-50%) scale(1.07) rotate(180deg); } }
+@keyframes unfathomableCorona { to { transform: rotate(-360deg); } }
+@keyframes unfathomableCoreSettle { 0% { transform:translate(-50%,-50%) scale(1.3); filter:brightness(2); } 100% { transform:translate(-50%,-50%) scale(1); filter:brightness(1); } }
+@keyframes evolutionPeakFlash { 0% { opacity:1; } 45% { opacity:.72; } 100% { opacity:1; } }
+@media (prefers-reduced-motion: reduce) {
+  .movie-lottery-winner *, .movie-unfathomable * { animation-duration: 24s !important; animation-iteration-count: 1 !important; }
+}
+@media (max-width: 600px) {
+  .movie-lottery-winner .movie-core, .movie-unfathomable .movie-core { width: 132px; }
+  .movie-lottery-winner .movie-ring, .movie-unfathomable .movie-ring { width: 76vw; }
+  .movie-lottery-winner .movie-ring-b, .movie-unfathomable .movie-ring-b { width: 94vw; }
+}

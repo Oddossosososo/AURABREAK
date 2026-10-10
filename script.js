@@ -956,17 +956,24 @@
     cutscene.dataset.aura="LOTTERY: JACKPOT";
     cutscene.style.setProperty("--aura-color","#ffe889");
     art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div>';
-    // User-requested soundtrack: loop the supplied YouTube video for the jackpot reveal.
-    const songFrame=document.createElement("iframe");
-    songFrame.className="jackpot-song-player";
-    songFrame.title="LOTTERY: JACKPOT soundtrack";
-    songFrame.src="https://www.youtube-nocookie.com/embed/n1VJ39nVIBk?autoplay=1&controls=1&loop=1&playlist=n1VJ39nVIBk&playsinline=1&rel=0";
-    songFrame.allow="autoplay; encrypted-media; picture-in-picture";
-    songFrame.referrerPolicy="strict-origin-when-cross-origin";
-    songFrame.setAttribute("allowfullscreen","");
-    songFrame.width="200";
-    songFrame.height="200";
-    cutscene.appendChild(songFrame);
+    // Local soundtrack slot: add your own licensed/original file at this path.
+    // Keep it unloaded until the jackpot reveal to conserve memory on low-RAM devices.
+    cutscene.querySelectorAll(".jackpot-song-player").forEach(player => {
+      if (player.tagName === "AUDIO") { player.pause(); player.removeAttribute("src"); player.load(); }
+      player.remove();
+    });
+    const songPlayer=document.createElement("audio");
+    songPlayer.className="jackpot-song-player";
+    songPlayer.title="LOTTERY: JACKPOT soundtrack";
+    songPlayer.preload="none";
+    songPlayer.loop=true;
+    songPlayer.volume=0.8;
+    songPlayer.setAttribute("playsinline","");
+    songPlayer.src="soundtracks/lottery-jackpot.mp3";
+    cutscene.appendChild(songPlayer);
+    songPlayer.play().catch(() => {
+      // Browsers may block autoplay; the visual cutscene still runs normally.
+    });
     if(!phaseTwoActive){
       // Phase I gets a normal jackpot reveal; the TSL zoom-tour and god pantheon are II-only.
       eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10^320";
@@ -1306,7 +1313,15 @@
     if (lotteryJackpotStop) { lotteryJackpotStop(); lotteryJackpotStop = null; }
     if (fourthWallCleanup) { fourthWallCleanup(); fourthWallCleanup = null; }
     const cutscene = $("cutscene");
-    cutscene.querySelectorAll(".jackpot-song-player").forEach(player => player.remove());
+    cutscene.querySelectorAll(".jackpot-song-player").forEach(player => {
+      if (player.tagName === "AUDIO") {
+        player.pause();
+        try { player.currentTime = 0; } catch (_) {}
+        player.removeAttribute("src");
+        player.load();
+      }
+      player.remove();
+    });
     if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();
     cutscene.classList.add("hidden");
     cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "na-running", "na-collapse", "na-break", "na-reveal", "na-erasure", "jackpot-running", "jackpot-lock", "jackpot-burst", "jackpot-final", "jackpot-warp", "jackpot-terminal-blur", "jackpot-world-snap", "jackpot-sovereign-collapse", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");

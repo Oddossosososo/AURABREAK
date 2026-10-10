@@ -977,12 +977,17 @@
     songPlayer.setAttribute("playsinline","");
     songPlayer.src="soundtracks/lottery-jackpot.mp3";
     cutscene.appendChild(songPlayer);
-    songPlayer.addEventListener("error", () => {
-      // This file must be added to the repository; the Uppbeat page URL is not a raw audio file.
-      showToast("Soundtrack file missing: add soundtracks/lottery-jackpot.mp3");
-    }, { once: true });
+    let soundtrackErrorShown=false;
+    const showSoundtrackMissing=()=>{
+      if(soundtrackErrorShown) return;
+      soundtrackErrorShown=true;
+      showToast("Music isn't installed yet — add your licensed MP3 to soundtracks/lottery-jackpot.mp3.");
+    };
+    songPlayer.addEventListener("error", showSoundtrackMissing, { once: true });
+    // Don't blame browser settings when the site's soundtrack file is absent.
     songPlayer.play().catch(() => {
-      showToast("Soundtrack could not autoplay. Check the audio file and browser sound settings.");
+      if(songPlayer.error) showSoundtrackMissing();
+      else console.info("Jackpot music playback was blocked or delayed; the cutscene will continue silently.");
     });
     if(!phaseTwoActive){
       // Phase I gets a normal jackpot reveal; the TSL zoom-tour and god pantheon are II-only.

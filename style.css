@@ -741,3 +741,12 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 @keyframes jackpotSideWorldIn{from{opacity:0;filter:blur(8px);scale:.8}to{opacity:.82;filter:blur(0);scale:1}}
 @media(max-width:600px){.jackpot-side-world{max-width:31vw;padding:7px 8px}.jackpot-side-world span{font-size:6px;letter-spacing:.06em}.jackpot-side-world b{font-size:8px}.side-world-left{left:1%;top:57%}.side-world-right{right:1%;top:57%}.side-world-top{top:26%}.side-world-bottom{bottom:8%}.jackpot-dimension-ring{width:min(64vw,55vh);height:min(64vw,55vh)}.jackpot-ring-core{width:52px}}
 @media(prefers-reduced-motion:reduce){.jackpot-dimension-ring,.jackpot-ring-core,.side-worlds-arrive .jackpot-side-world{animation:none!important}.jackpot-dimension-ring{opacity:.35;transform:translate(-50%,-50%) rotateX(67deg) scale(1)}}
+
+/* Each side portal has its own visible miniature world, not just a label. */
+.jackpot-side-world{overflow:hidden;min-height:108px}
+.jackpot-side-world:before{content:"";display:block;width:100%;height:54px;border-radius:8px;background:radial-gradient(circle at 50% 115%,#fff6 0 2%,transparent 3%),radial-gradient(ellipse at 50% 115%,#ffe9a1 0%,#d8872b 18%,#3a1c3d 42%,transparent 67%),radial-gradient(circle at 23% 25%,#fff 0 1px,transparent 2px),radial-gradient(circle at 77% 35%,#fff8 0 1px,transparent 2px),linear-gradient(145deg,#11142c,#2d1647 48%,#070713);border:1px solid #ffe08b44;box-shadow:inset 0 -10px 18px #03020a88,0 0 18px #ffcf4930}
+.side-world-right:before{background:radial-gradient(circle at 50% 48%,#fff 0 2%,#87f5ff 4%,#2576a8 16%,transparent 31%),radial-gradient(ellipse at 50% 120%,#4ae3ff 0%,#17506f 34%,transparent 65%),radial-gradient(circle at 19% 27%,#fff 0 1px,transparent 2px),linear-gradient(145deg,#061b30,#102f5b 52%,#060713)}
+.side-world-top:before{background:radial-gradient(circle at 66% 36%,#fff5bf 0 2%,#ffc85d 4%,#9a4a2e 12%,transparent 25%),repeating-conic-gradient(from 20deg at 50% 110%,#f3b96b 0 4deg,#38204e 5deg 13deg,#0a1027 15deg 24deg)}
+.side-world-bottom:before{background:radial-gradient(ellipse at 50% 100%,#a9ffce 0%,#267b79 19%,#112c3e 39%,transparent 66%),radial-gradient(circle at 24% 28%,#fff 0 1px,transparent 2px),radial-gradient(circle at 79% 18%,#fff9 0 1px,transparent 2px),linear-gradient(145deg,#061d25,#13213f 55%,#090615)}
+.jackpot-side-world span,.jackpot-side-world b{position:relative;z-index:1}
+@media(max-width:600px){.jackpot-side-world{min-height:86px}.jackpot-side-world:before{height:36px}}

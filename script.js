@@ -31,6 +31,7 @@
     {name:"SHATTERCORE", odds:10n ** 80n, rarity:"ORB FRACTURE", tier:"secret", color:"#ff684f", symbol:"◇", description:"The orb was never meant to survive what sleeps inside. Its evolution is hidden in the silence between strikes. The broken core remembers a rhythm no living thing should know.", style:"shattercore", secret:true},
     {name:"SHATTERCORE: REBORN", odds:10n ** 72n, rarity:"FRACTURE EVOLUTION", tier:"secret", color:"#fff0b3", symbol:"✧", description:"Not a second encounter. Not a lucky roll. Seven deliberate strikes taught the broken core how to become something new.", style:"shattercore", secret:true, evolutionOnly:true},
     {name:"THE ENDING", odds:10n ** 120n, rarity:"IMPOSSIBLE", tier:"secret", color:"#ff294f", symbol:"⟡", description:"The final error. Reality has reached the last line of its code.", style:"the-ending", secret:true, adminOnly:true},
+    {name:"NULL//ABSOLUTE", odds:10n ** 150n, rarity:"BEYOND IMPOSSIBLE", tier:"secret", color:"#ff1b78", symbol:"⦿", description:"The universe is not ending. It is being unrendered.", style:"null-absolute", secret:true, adminOnly:true},
   ];
   // Remove the temporary test aura if it ever existed in an older build.
   for (let i = AURAS.length - 1; i >= 0; i--) if (AURAS[i].name === "HI") AURAS.splice(i, 1);
@@ -47,6 +48,7 @@
   let luckMultiplier = 1;
   let pendingAura = null;
   let cutsceneTimers = [];
+  let nullAbsoluteStop = null;
   let deityAudio = null;
   let toastTimer;
   let runRollCount = 0;
@@ -116,6 +118,7 @@
     const content = $("resultContent");
     content.innerHTML = "";
     content.classList.toggle("the-ending-result", aura.name === "THE ENDING");
+    content.classList.toggle("null-absolute-result", aura.name === "NULL//ABSOLUTE");
     $("orbCore").classList.toggle("the-ending-core", aura.name === "THE ENDING");
     const symbol = document.createElement("div");
     symbol.className = "empty-symbol";
@@ -170,7 +173,7 @@
     }
     sorted.forEach((aura, index) => {
       const tile = document.createElement("article");
-      tile.className = "aura-tile " + aura.tier + (aura.name === "THE ENDING" ? " the-ending-tile" : "");
+      tile.className = "aura-tile " + aura.tier + (aura.name === "THE ENDING" ? " the-ending-tile" : "") + (aura.name === "NULL//ABSOLUTE" ? " null-absolute-tile" : "");
       tile.style.animationDelay = Math.min(index * 35, 350) + "ms";
       const rarity = document.createElement("span"); rarity.className = "tile-rarity"; rarity.textContent = aura.rarity;
       const symbol = document.createElement("div"); symbol.className = "tile-symbol"; symbol.textContent = aura.symbol;
@@ -640,6 +643,75 @@
       button.textContent = "CLAIM THE ENDING ↗";
     });
   }
+
+  function startNullAbsoluteCutscene() {
+    const cutscene = $("cutscene"), art = $("cutsceneArt");
+    const content = cutscene.querySelector(".cutscene-content");
+    const eyebrow = $("cutsceneEyebrow"), title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle");
+    const button = $("closeCutscene");
+    stopDeityCutscene();
+    if (nullAbsoluteStop) { nullAbsoluteStop(); nullAbsoluteStop = null; }
+    cutscene.dataset.style = "null-absolute";
+    cutscene.dataset.aura = "NULL//ABSOLUTE";
+    cutscene.style.setProperty("--aura-color", "#ff1b78");
+    cutscene.style.setProperty("--movie-color", "#ff1b78");
+    art.innerHTML = '<div class="null-absolute-fallback"></div><div class="na-scanlines"></div><div class="na-fracture"></div><div class="na-vignette"></div>';
+    eyebrow.textContent = "UNRECOVERABLE RENDER • REALITY INDEX: NULL";
+    title.textContent = "SIGNAL FOUND";
+    title.className = "na-title";
+    title.style.color = "#fff";
+    subtitle.textContent = "A PRESENCE OUTSIDE THE GAME HAS RESPONDED.";
+    button.textContent = "ESCAPE SEQUENCE ↗";
+    content.classList.remove("deity-reveal", "movie-reveal");
+    cutscene.classList.remove("ending-running","ending-collapse","ending-impact","ending-final","na-collapse","na-break","na-reveal","na-erasure");
+    cutscene.classList.add("na-running");
+    if (window.AURABREAK_NULL_ABSOLUTE && window.THREE) {
+      try { nullAbsoluteStop = window.AURABREAK_NULL_ABSOLUTE.start(art); }
+      catch (err) { console.warn("NULL//ABSOLUTE shader fallback active:", err); }
+    }
+    const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
+    const line = (a,b,cls="na-title") => {
+      title.textContent = a; title.className = cls; title.style.color = "#fff";
+      subtitle.textContent = b;
+      content.classList.remove("deity-reveal"); void content.offsetWidth; content.classList.add("deity-reveal");
+    };
+    playDeityTone(55, 2.5, "sawtooth", .08);
+    later(2200, () => {
+      cutscene.classList.add("na-collapse");
+      eyebrow.textContent = "SPACE-TIME COORDINATES INVALID";
+      line("THE WORLD IS A FILE.", "EVERY STAR. EVERY GOD. EVERY LINE OF CODE.");
+      playDeityTone(41.2, 3, "triangle", .09);
+    });
+    later(4800, () => {
+      cutscene.classList.add("na-break");
+      eyebrow.textContent = "MEMORY MAP CORRUPTED • 0x000000";
+      line("UNRENDER EVERYTHING.", "THE SHADER IS LOOKING BACK.");
+      playDeityTone(30.8, 3.5, "sawtooth", .1);
+    });
+    later(7600, () => {
+      eyebrow.textContent = "WARNING: NO KNOWN REALITY BOUNDARY";
+      line("YOU WERE NEVER OUTSIDE.", "THE VOID WAS THE SCREEN.");
+    });
+    later(10100, () => {
+      cutscene.classList.add("na-erasure");
+      line("NULL.", "ALL LIGHT IS BEING REMOVED.");
+      playDeityTone(24.5, 4.5, "sawtooth", .12);
+    });
+    later(12800, () => {
+      cutscene.classList.add("na-reveal");
+      eyebrow.textContent = "BEYOND IMPOSSIBLE • RANK ∅";
+      line("NULL//ABSOLUTE", "THE UNIVERSE IS NOT ENDING. IT IS BEING UNRENDERED.", "na-final-title");
+      playDeityTone(164.8, 4.8, "sine", .1);
+    });
+    later(16500, () => {
+      line("NO FRAME AFTER THIS.", "THE LAST THING THE GAME WILL EVER SHOW.", "na-final-title");
+    });
+    later(19500, () => {
+      cutscene.classList.remove("na-running");
+      button.textContent = "CLAIM NULL//ABSOLUTE ↗";
+    });
+  }
+
   function showCutscene(aura) {
     const cutscene = $("cutscene");
     cutscene.dataset.style = aura.style || "cosmic";
@@ -651,7 +723,8 @@
     $("cutsceneSubtitle").textContent = aura.secret ? "THE RULES NO LONGER APPLY." : aura.description.toUpperCase();
     $("cutsceneArt").textContent = "";
     cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "ending-running", "ending-collapse", "ending-impact", "ending-final");
-    if (aura.name === "SHATTERCORE" || aura.name === "SHATTERCORE: REBORN") startShattercoreCutscene(aura);
+    if (aura.name === "NULL//ABSOLUTE") startNullAbsoluteCutscene();
+    else if (aura.name === "SHATTERCORE" || aura.name === "SHATTERCORE: REBORN") startShattercoreCutscene(aura);
     else if (aura.name === "PURE DEITY") startPureDeityCutscene();
     else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
     else if (aura.name === "THE FALLEN GOD") startFallenGodCutscene();
@@ -663,10 +736,11 @@
   }
   function closeCutscene() {
     stopDeityCutscene();
+    if (nullAbsoluteStop) { nullAbsoluteStop(); nullAbsoluteStop = null; }
     const cutscene = $("cutscene");
     if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();
     cutscene.classList.add("hidden");
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");
+    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "na-running", "na-collapse", "na-break", "na-reveal", "na-erasure", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
     if (pendingAura) {

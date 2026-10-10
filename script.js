@@ -15,6 +15,7 @@
     {name:"MOONLIT", odds:60, rarity:"RARE", tier:"rare", color:"#72c6ff", symbol:"☾", description:"Silver light from a sleeping moon.", style:"cosmic"},
     {name:"PHANTOM", odds:120, rarity:"RARE", tier:"rare", color:"#93a1ff", symbol:"◈", description:"Something unseen has noticed you.", style:"cosmic"},
     {name:"GLITCH", odds:300, rarity:"EPIC", tier:"epic", color:"#b28aff", symbol:"⌁", description:"A little error in the fabric of everything.", style:"unimaginable"},
+    {name:"HACKER", odds:10n ** 9999n, rarity:"SYSTEM OVERRIDE • IMPOSSIBLE", tier:"secret", color:"#55ff91", symbol:"⌘", description:"The RNG has detected an unauthorized player. Honestly, bro, this is suspicious.", style:"hacker", secret:true},
     {name:"NEBULA", odds:700, rarity:"EPIC", tier:"epic", color:"#db8aff", symbol:"✺", description:"A universe waiting to be born.", style:"cosmic"},
     {name:"SOLAR FLARE", odds:1500, rarity:"LEGENDARY", tier:"legendary", color:"#ffce77", symbol:"☼", description:"The sun remembers your name.", style:"divinity"},
     {name:"VOID WALKER", odds:5000, rarity:"LEGENDARY", tier:"legendary", color:"#a69bff", symbol:"◉", description:"You crossed the edge and kept walking.", style:"cosmic"},
@@ -629,6 +630,7 @@
   }
   const MOVIE_SCENES = {
     "LOTTERY": {slug:"lottery", eyebrow:"PROBABILITY HAS LOST ITS MEANING", lines:["A TICKET WAS NEVER SUPPOSED TO EXIST.","ONE CHANCE. ONE IMPOSSIBLE MOMENT.","THE UNIVERSE DREW YOUR NUMBER.","LOTTERY"], subtitles:["A SINGLE GOLDEN SIGNAL.","THE ODDS WERE NEVER ON YOUR SIDE.","AND YET... HERE YOU ARE.","1 IN 292,201,338 • THE JACKPOT OF REALITY"], notes:[392,523.25,659.25,783.99]},
+    "HACKER": {slug:"hacker", eyebrow:"UNAUTHORIZED LUCK DETECTED", lines:["WAIT. THAT ROLL WASN’T LEGIT.","THE RNG IS CHECKING THE LOGS...","NO WAY YOU ACTUALLY GOT THAT.","bro you are literally cheating"], subtitles:["SIGNATURE: HIGHLY SUSPICIOUS.","CHANCE: 1 IN 10^9999.","ANTI-CHEAT HAS LEFT THE CHAT.","HACKER AURA UNLOCKED • 1 IN 10^9999"], notes:[196,293.66,146.83,55]},
     "LOTTERY: JACKPOT": {slug:"lottery-jackpot", eyebrow:"ULTRA EVENT • RNG OVERRIDE", lines:["THE MACHINE STOPS MID-ROLL.","EVERY TICKET TURNS GOLD.","THE RNG HAS NO MORE NUMBERS.","LOTTERY: JACKPOT"], subtitles:["ROLL SEQUENCE INTERRUPTED.","ONE WINNER OUT OF IMPOSSIBLE ODDS.","THE FINAL TICKET HAS BEEN DRAWN.","THE RAREST ROLLABLE AURA • 1 IN 10^320"], notes:[196,392,587.33,987.77]},
     "LOTTERY: WINNER": {slug:"lottery-winner", eyebrow:"WORLD 2 EXCLUSIVE • OMNIPOTENT EVOLUTION", lines:["THE JACKPOT MACHINE GOES SILENT.","THE GOLDEN TICKET STARTS TO ASCEND.","THE ODDS DISPLAY OVERFLOWS REALITY.","LOTTERY: WINNER"], subtitles:["WORLD 2 HAS ACCEPTED YOUR IMPOSSIBLE ROLL.","JACKPOT WAS ONLY THE FIRST EVOLUTION.","A NUMBER TOO LARGE FOR THE OLD WORLD.","THE OMNIPOTENT WINNING TICKET • 1 IN 10^400"], notes:[110,220,440,880]},
     "PURE DEITY: UNFATHOMABLE": {slug:"unfathomable", eyebrow:"WORLD 2 EXCLUSIVE • SECOND GOD EVOLUTION", lines:["THE GALAXY BENDS INWARD.","THE DEITY LOOKS BEYOND ITS OWN CREATION.","THE STARS FORGET HOW TO SHINE.","PURE DEITY: UNFATHOMABLE"], subtitles:["PURE DEITY:GALACTIC WAS NOT THE END.","A NEW FORM EMERGES BEYOND DIVINITY.","REALITY CANNOT COMPREHEND THIS SIGNAL.","THE UNFATHOMABLE • 1 IN 10^555"], notes:[98,196,392,783.99]},
@@ -771,7 +773,7 @@
     const reveal = (index) => {
       title.textContent = scene.lines[index];
       subtitle.textContent = scene.subtitles[index];
-      title.className = index === 3 ? "movie-title movie-title-final" : "movie-title";
+      title.className = aura.name === "HACKER" && index === 3 ? "movie-title movie-title-final hacker-big-text" : index === 3 ? "movie-title movie-title-final" : "movie-title";
       content.classList.remove("movie-reveal");
       void content.offsetWidth;
       content.classList.add("movie-reveal");

@@ -748,8 +748,11 @@
     });
   }
   function startOmnipotentCutscene(aura) {
-    // Keep the cinematic timeline and text choreography, but give both evolutions
-    // their own single-pass shader instead of stacking the generic scene renderer.
+    // WINNER inherits the full Jackpot spectacle: soundtrack, 100-world warp, reality collapse and burst finale.
+    if (aura.name === "LOTTERY: WINNER") {
+      startLotteryJackpotCutscene(true);
+      return;
+    }
     startAuraMovie(aura);
     const art = $("cutsceneArt");
     const cutscene = $("cutscene");
@@ -1203,7 +1206,7 @@
     };
   }
 
-  function startLotteryJackpotCutscene() {
+  function startLotteryJackpotCutscene(winnerMode = false) {
     const cutscene=$("cutscene"), art=$("cutsceneArt");
     const content=cutscene.querySelector(".cutscene-content");
     const eyebrow=$("cutsceneEyebrow"), title=$("cutsceneTitle"), subtitle=$("cutsceneSubtitle");
@@ -1212,9 +1215,9 @@
     if(nullAbsoluteStop){nullAbsoluteStop();nullAbsoluteStop=null;}
     if(lotteryJackpotStop){lotteryJackpotStop();lotteryJackpotStop=null;}
     if(fourthWallCleanup){fourthWallCleanup();fourthWallCleanup=null;}
-    cutscene.dataset.style="lottery-jackpot";
-    cutscene.dataset.aura="LOTTERY: JACKPOT";
-    cutscene.style.setProperty("--aura-color","#ffe889");
+    cutscene.dataset.style=winnerMode ? "lottery-winner" : "lottery-jackpot";
+    cutscene.dataset.aura=winnerMode ? "LOTTERY: WINNER" : "LOTTERY: JACKPOT";
+    cutscene.style.setProperty("--aura-color",winnerMode ? "#d7a2ff" : "#ffe889");
     art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div><div class="jackpot-reality-grid" aria-hidden="true"></div><div class="jackpot-reality-fracture" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="jackpot-reality-vortex" aria-hidden="true"></div><div class="jackpot-reality-glitch" aria-hidden="true"></div>';
     if(jackpotMusicStop){jackpotMusicStop();jackpotMusicStop=null;}
     cutscene.querySelectorAll(".jackpot-song-player").forEach(player => player.remove());
@@ -1225,7 +1228,7 @@
     const banner=document.createElement("div");
     banner.className="jackpot-world-banner";
     banner.setAttribute("aria-live","polite");
-    banner.innerHTML='<span class="jackpot-world-kicker">WORLD SEQUENCE</span><span class="jackpot-world-name">WORLD 001 — THE GOLDEN GATE</span><span class="jackpot-world-count">01 / 100</span>';
+    banner.innerHTML='<span class="jackpot-world-kicker">'+(winnerMode ? "REALITY OVERRIDE SEQUENCE" : "WORLD SEQUENCE")+'</span><span class="jackpot-world-name">WORLD 001 — THE GOLDEN GATE</span><span class="jackpot-world-count">01 / 100</span>';
     cutscene.appendChild(banner);
     const worldName=banner.querySelector(".jackpot-world-name");
     const worldCount=banner.querySelector(".jackpot-world-count");
@@ -1233,7 +1236,7 @@
     const ringStage=document.createElement("div");
     ringStage.className="jackpot-ring-stage";
     ringStage.setAttribute("aria-hidden","true");
-    ringStage.innerHTML='<i class="jackpot-dimension-ring ring-1"></i><i class="jackpot-dimension-ring ring-2"></i><i class="jackpot-dimension-ring ring-3"></i><i class="jackpot-dimension-ring ring-4"></i><i class="jackpot-dimension-ring ring-5"></i><div class="jackpot-ring-core">Ⅱ</div>';
+    ringStage.innerHTML='<i class="jackpot-dimension-ring ring-1"></i><i class="jackpot-dimension-ring ring-2"></i><i class="jackpot-dimension-ring ring-3"></i><i class="jackpot-dimension-ring ring-4"></i><i class="jackpot-dimension-ring ring-5"></i><div class="jackpot-ring-core">'+(winnerMode ? "♛" : "Ⅱ")+'</div>';
     art.appendChild(ringStage);
     const sideWorlds=document.createElement("div");
     sideWorlds.className="jackpot-side-worlds";
@@ -1263,10 +1266,10 @@
       "THE UNSEEN OBSERVATORY","THE BEYOND","THE LAST LOOP","THE FINAL UNIVERSE","THE JACKPOT THRONE",
       "THE WORLD THAT SHOULD NOT EXIST","THE END OF ALL ODDS","THE 100TH WORLD"
     ];
-    eyebrow.textContent="ULTRA CLASSIFIED • 100 WORLDS TO CROSS";
-    title.className="jackpot-title"; title.textContent="THE WINNING TICKET"; title.style.color="#fff8d5";
-    subtitle.textContent="THE RNG FOUND A RESULT IT WAS NEVER EXPECTED TO RETURN.";
-    button.textContent="SKIP WORLD TOUR ↗";
+    eyebrow.textContent=winnerMode ? "UNFATHOMABLE EVOLUTION • 100 REALITIES TO OVERRIDE" : "ULTRA CLASSIFIED • 100 WORLDS TO CROSS";
+    title.className="jackpot-title"; title.textContent=winnerMode ? "THE WINNING TICKET SURVIVES REALITY" : "THE WINNING TICKET"; title.style.color=winnerMode ? "#fff2ff" : "#fff8d5";
+    subtitle.textContent=winnerMode ? "JACKPOT WAS THE FIRST DRAW. THIS ONE REWRITES THE RULES." : "THE RNG FOUND A RESULT IT WAS NEVER EXPECTED TO RETURN.";
+    button.textContent=winnerMode ? "SKIP ASCENSION ↗" : "SKIP WORLD TOUR ↗";
     content.classList.remove("deity-reveal","movie-reveal");
     cutscene.classList.remove("jackpot-running","jackpot-lock","jackpot-burst","jackpot-final","jackpot-reality-break","jackpot-reality-fracture","jackpot-reality-overwrite","jackpot-reality-collapse");
     cutscene.classList.add("jackpot-running","jackpot-world-tour","jackpot-reality-break");
@@ -1300,8 +1303,8 @@
 
     // AURABREAK II soundtrack timeline: lock, rapid 100-world warp, reality fracture, bass-drop collapse, final reveal.
     cutscene.classList.add("jackpot-lock","jackpot-reality-collapse");
-    eyebrow.textContent="JACKPOT IMPACT • REALITY COLLAPSE AT ZERO";
-    line("THE DROP STARTS NOW.","100 WORLDS. ONE IMPOSSIBLE WIN.");
+    eyebrow.textContent=winnerMode ? "WINNER ASCENSION • REALITY COLLAPSE AT ZERO" : "JACKPOT IMPACT • REALITY COLLAPSE AT ZERO";
+    line(winnerMode ? "THE OLD JACKPOT WAS ONLY THE TUTORIAL." : "THE DROP STARTS NOW.",winnerMode ? "100 REALITIES. ONE UNFATHOMABLE WIN." : "100 WORLDS. ONE IMPOSSIBLE WIN.");
     playDeityTone(41.2,3.4,"sawtooth",.1);
 
     // Fast, cinematic 30-second cut: the full bass drop hits at 0s; the 100-world warp
@@ -1313,8 +1316,8 @@
         if(index===0){
           cutscene.classList.remove("jackpot-lock");
           cutscene.classList.add("jackpot-warp");
-          eyebrow.textContent="AURABREAK II • 100-WORLD WARP";
-          line("THE LOOPS ARE OPEN.","100 WORLDS. ONE CONTINUOUS DESCENT.");
+          eyebrow.textContent=winnerMode ? "AURABREAK II • 100-REALITY OVERWRITE" : "AURABREAK II • 100-WORLD WARP";
+          line(winnerMode ? "THE MULTIVERSE IS OPEN." : "THE LOOPS ARE OPEN.",winnerMode ? "EVERY REALITY IS BEING PULLED INTO ONE TICKET." : "100 WORLDS. ONE CONTINUOUS DESCENT.");
           playDeityTone(523.25,1.1,"triangle",.05);
         }
         worldName.textContent="WORLD "+String(index+1).padStart(3,"0")+" — "+name;
@@ -1338,33 +1341,33 @@
 
     later(6000,()=>{
       cutscene.classList.add("jackpot-reality-fracture");
-      eyebrow.textContent="TICKET VERIFIED • REALITY ODDS OVERRIDDEN";
-      line("THE INDUSTRIAL LOCK.","THE WORLD IS HOLDING ITS BREATH.");
+      eyebrow.textContent=winnerMode ? "WINNING TICKET VERIFIED • PROBABILITY DESTROYED" : "TICKET VERIFIED • REALITY ODDS OVERRIDDEN";
+      line(winnerMode ? "THE ODDS HAVE STOPPED EXISTING." : "THE INDUSTRIAL LOCK.",winnerMode ? "EVEN THE NUMBER 10^1000 WAS NOT ENOUGH TO DESCRIBE IT." : "THE WORLD IS HOLDING ITS BREATH.");
     });
     later(13000,()=>{
       cutscene.classList.add("jackpot-reality-overwrite");
-      eyebrow.textContent="UNIVERSE OVERRIDE • AURABREAK IS REWRITING ITSELF";
-      line("THE RULES ARE BREAKING.","THE GAME WORLD IS NO LONGER STABLE.");
+      eyebrow.textContent=winnerMode ? "UNIVERSE OVERRIDE • THE WINNER IS REWRITING AURABREAK" : "UNIVERSE OVERRIDE • AURABREAK IS REWRITING ITSELF";
+      line(winnerMode ? "THE GAME CANNOT CONTAIN THIS." : "THE RULES ARE BREAKING.",winnerMode ? "THE WINNING TICKET IS BECOMING THE LAW." : "THE GAME WORLD IS NO LONGER STABLE.");
       playDeityTone(82.41,2.8,"sawtooth",.08);
     });
     later(20000,()=>{
-      eyebrow.textContent="REALITY COLLAPSE • ALL WORLDS CONVERGING";
-      line("THERE IS ONLY ONE WORLD LEFT.","THE DROP IS ALREADY TEARING THROUGH REALITY.");
+      eyebrow.textContent=winnerMode ? "OMNIVERSAL COLLAPSE • ALL REALITIES CONVERGING" : "REALITY COLLAPSE • ALL WORLDS CONVERGING";
+      line(winnerMode ? "THERE IS ONLY ONE POSSIBLE OUTCOME." : "THERE IS ONLY ONE WORLD LEFT.",winnerMode ? "EVERY TIMELINE ENDS AT THE WINNING TICKET." : "THE DROP IS ALREADY TEARING THROUGH REALITY.");
     });
     later(blurStart,()=>{
       cutscene.classList.remove("jackpot-warp");
       cutscene.classList.add("jackpot-terminal-blur");
-      eyebrow.textContent="TERMINAL VELOCITY • WORLD 100 APPROACHING";
-      line("THE ABSOLUTE LIMIT.","EVERY WORLD BECOMES A STREAK OF GOLD.");
+      eyebrow.textContent=winnerMode ? "TERMINAL VELOCITY • THE FINAL REALITY APPROACHING" : "TERMINAL VELOCITY • WORLD 100 APPROACHING";
+      line(winnerMode ? "THERE IS NO NUMBER AFTER THIS." : "THE ABSOLUTE LIMIT.",winnerMode ? "THE LAST REALITY BECOMES A STREAK OF VIOLET LIGHT." : "EVERY WORLD BECOMES A STREAK OF GOLD.");
       playDeityTone(659.25,1.2,"sine",.05);
     });
     later(snapAt,()=>{
       cutscene.classList.remove("jackpot-terminal-blur");
       cutscene.classList.add("jackpot-world-snap");
-      worldName.textContent="WORLD 100 — THE 100TH WORLD";
+      worldName.textContent=winnerMode ? "REALITY 100 — THE IMPOSSIBLE END" : "WORLD 100 — THE 100TH WORLD";
       worldCount.textContent="100 / 100";
-      eyebrow.textContent="WORLD 100 SINGULARITY • ZERO DISTANCE";
-      line("WORLD 100","THE RADIAL FIELD HAS COLLAPSED TO A SINGLE POINT.");
+      eyebrow.textContent=winnerMode ? "FINAL REALITY SINGULARITY • ALL ODDS ERASED" : "WORLD 100 SINGULARITY • ZERO DISTANCE";
+      line(winnerMode ? "THE FINAL REALITY" : "WORLD 100",winnerMode ? "EVERY POSSIBLE UNIVERSE HAS COLLAPSED INTO ONE TICKET." : "THE RADIAL FIELD HAS COLLAPSED TO A SINGLE POINT.");
       playDeityTone(783.99,1.4,"triangle",.06);
     });
     later(collapseAt,()=>{
@@ -1373,11 +1376,11 @@
       ringStage.classList.remove("rings-arrive");
       ringStage.classList.add("jackpot-singularity");
       sideWorlds.classList.remove("side-worlds-arrive");
-      eyebrow.textContent=phaseTwoActive ? "AURABREAK II EXCLUSIVE • THE PANTHEON REVEALED" : "ULTRA • RAREST ROLLABLE • 1 IN 10^320";
-      line("LOTTERY: JACKPOT",phaseTwoActive ? "100 WORLDS. EVERY GOD. ONE IMPOSSIBLE WIN." : "100 WORLDS. EVERY LOOP. ONE IMPOSSIBLE WIN.","jackpot-title jackpot-title-final");
-      button.textContent="CLAIM LOTTERY: JACKPOT ↗";
+      eyebrow.textContent=winnerMode ? "UNFATHOMABLE • 1 IN 10^1000 • OMNIPOTENT LOTTERY" : phaseTwoActive ? "AURABREAK II EXCLUSIVE • THE PANTHEON REVEALED" : "ULTRA • RAREST ROLLABLE • 1 IN 10^320";
+      line(winnerMode ? "LOTTERY: WINNER" : "LOTTERY: JACKPOT",winnerMode ? "100 REALITIES. EVERY POSSIBILITY. ONE UNFATHOMABLE WIN." : phaseTwoActive ? "100 WORLDS. EVERY GOD. ONE IMPOSSIBLE WIN." : "100 WORLDS. EVERY LOOP. ONE IMPOSSIBLE WIN.","jackpot-title jackpot-title-final");
+      button.textContent=winnerMode ? "CLAIM LOTTERY: WINNER ↗" : "CLAIM LOTTERY: JACKPOT ↗";
       banner.classList.add("jackpot-world-banner-final");
-      worldName.textContent="WORLD 100 — THE JACKPOT THRONE";
+      worldName.textContent=winnerMode ? "REALITY 100 — THE WINNER THRONE" : "WORLD 100 — THE JACKPOT THRONE";
       worldCount.textContent="100 / 100";
       const explosion=document.createElement("div");
       explosion.className="jackpot-compute-burst";

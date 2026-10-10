@@ -155,7 +155,9 @@
     grid.innerHTML = "";
     const sorted = AURAS.filter(a => discovered.has(a.name)).sort((a,b) => Number(a.odds) - Number(b.odds));
     $("collectionCount").textContent = String(discovered.size);
-    $("progressFill").style.width = Math.min(100, discovered.size) + "%";
+    const countLabel = $("collectionCount").parentElement.querySelector("span");
+    if (countLabel) countLabel.textContent = " / " + AURAS.length + " DISCOVERED";
+    $("progressFill").style.width = (AURAS.length ? Math.min(100, discovered.size / AURAS.length * 100) : 0) + "%";
     if (!sorted.length) {
       const empty = document.createElement("div");
       empty.className = "collection-empty";
@@ -994,6 +996,7 @@
     AURAS.push(aura);
     refreshAdminAuraOptions();
     adminAuraSelect.value = name;
+    renderCollection();
     showToast("Added custom aura: " + name);
   });
 

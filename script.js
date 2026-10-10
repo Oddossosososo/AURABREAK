@@ -829,7 +829,7 @@
     if (event.code === "Escape" && !$("cutscene").classList.contains("hidden")) closeCutscene();
   });
 
-  // Admin tools: Shift+A toggles the panel. These are client-side prototype controls.
+  // Admin tools: Shift+A toggles the panel after a server-side Supabase DEV authorization check.
   const adminPanel = $("adminPanel");
   const adminAuraSelect = $("adminAuraSelect");
   const adminUnlockAll = $("adminUnlockAll");
@@ -851,20 +851,62 @@
     });
     if (AURAS.some(aura => aura.name === previous)) adminAuraSelect.value = previous;
   }
-  const DEV_DEVICE_ID = "362A7C7B-A416-4592-8EE5-B4511C5617D0";
-  function toggleAdmin() {
-    if (!devAuthorized && adminPanel.classList.contains("hidden")) {
-      const entered = window.prompt("DEV ACCESS REQUIRED\\nEnter DEVICE ID:");
-      if (entered !== DEV_DEVICE_ID) {
-        showToast("DEV ACCESS DENIED.");
-        return;
-      }
-      devAuthorized = true;
-      showToast("DEV AUTHORITY ACCEPTED.");
+  // DEV access is checked against Supabase Auth and the server-side dev_authorizations table.
+  // A browser/device ID is not a secret and is never used as an authorization credential.
+  const AURABREAK_SUPABASE_URL = "https://acwdieavymmvhqilllvp.supabase.co";
+  const AURABREAK_SUPABASE_KEY = "sb_publishable_HvQ5ZcGKmVKhkhrz9Z3Afw_S6-ADCys";
+  const auraSupabase = window.supabase?.createClient(AURABREAK_SUPABASE_URL, AURABREAK_SUPABASE_KEY);
+
+  async function authorizeDev() {
+    if (!auraSupabase) {
+      showToast("AUTH SERVICE DID NOT LOAD. REFRESH AND TRY AGAIN.");
+      return false;
     }
-    adminPanel.classList.toggle("hidden");
-    adminPanel.setAttribute("aria-hidden", adminPanel.classList.contains("hidden") ? "true" : "false");
-    if (!adminPanel.classList.contains("hidden")) refreshAdminAuraOptions();
+    let { data: sessionData } = await auraSupabase.auth.getSession();
+    if (!sessionData.session) {
+      const email = window.prompt("AURABREAK DEV SIGN-IN\\nEnter your email to receive a secure sign-in link:");
+      if (!email || !email.includes("@")) {
+        showToast("SIGN-IN CANCELLED.");
+        return false;
+      }
+      const { error } = await auraSupabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: { emailRedirectTo: window.location.href }
+      });
+      if (error) {
+        showToast("SIGN-IN ERROR: " + error.message);
+        return false;
+      }
+      showToast("SIGN-IN LINK SENT. OPEN IT, RETURN HERE, THEN PRESS SHIFT+A.");
+      return false;
+    }
+    const { data, error } = await auraSupabase.functions.invoke("dev-auth");
+    if (error) {
+      console.error("AURABREAK dev-auth error:", error);
+      showToast("COULD NOT VERIFY DEV ACCESS. TRY AGAIN.");
+      return false;
+    }
+    if (!data?.isDev) {
+      devAuthorized = false;
+      window.alert("Signed in, but this account is not approved for DEV access yet. Your user ID is:\\n" + sessionData.session.user.id + "\\nSend that ID to the project owner for approval.");
+      showToast("DEV ACCESS DENIED.");
+      return false;
+    }
+    devAuthorized = true;
+    showToast("SUPABASE DEV AUTHORITY VERIFIED.");
+    return true;
+  }
+
+  async function toggleAdmin() {
+    if (!adminPanel.classList.contains("hidden")) {
+      adminPanel.classList.add("hidden");
+      adminPanel.setAttribute("aria-hidden", "true");
+      return;
+    }
+    if (!(await authorizeDev())) return;
+    adminPanel.classList.remove("hidden");
+    adminPanel.setAttribute("aria-hidden", "false");
+    refreshAdminAuraOptions();
   }
   document.addEventListener("keydown", event => {
     if (event.shiftKey && event.code === "KeyA" && !event.repeat) {

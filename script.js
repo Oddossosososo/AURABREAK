@@ -990,150 +990,60 @@
     });
   }
 
-  // Prime audio directly inside the roll-button gesture so browsers allow sound
-  // when the rare aura reveal appears after the roll animation delay.
-  let primedJackpotAudioContext = null;
+  // Prime the original soundtrack on the roll gesture for browser autoplay rules.
+  let primedJackpotAudio = null;
+  const JACKPOT_TRACK_URL = "soundtracks/shine-swoop-main-version-46810-01-31.mp3";
   function primeJackpotAudioContext() {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
     try {
-      if (!primedJackpotAudioContext || primedJackpotAudioContext.state === "closed") {
-        primedJackpotAudioContext = new AudioCtx();
+      if (!primedJackpotAudio) {
+        primedJackpotAudio = new Audio(JACKPOT_TRACK_URL);
+        primedJackpotAudio.preload = "auto";
+        primedJackpotAudio.volume = 0.001;
       }
-      if (primedJackpotAudioContext.state !== "running") {
-        primedJackpotAudioContext.resume().catch(() => {});
+      const audio = primedJackpotAudio;
+      const wasPaused = audio.paused;
+      const promise = audio.play();
+      if (promise && typeof promise.then === "function") {
+        promise.then(() => {
+          if (wasPaused) {
+            audio.pause();
+            audio.currentTime = 0;
+          }
+          audio.volume = 1;
+        }).catch(() => {});
       }
     } catch (error) {
-      console.warn("Jackpot audio could not be primed:", error);
+      console.warn("Original jackpot soundtrack could not be primed:", error);
     }
   }
 
-  // Original AURABREAK electronic jackpot score, synthesized in-browser (no external audio file).
+  // Use AURABREAK's original Shine — Swoop MP3 instead of synthesizing music.
   function startJackpotOriginalScore() {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) {
-      showToast("This browser does not support the AURABREAK soundtrack.");
+    let audio;
+    try {
+      audio = primedJackpotAudio || new Audio(JACKPOT_TRACK_URL);
+      primedJackpotAudio = audio;
+      audio.pause();
+      audio.currentTime = 0;
+      audio.loop = false;
+      audio.volume = 1;
+      audio.preload = "auto";
+      const playPromise = audio.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => showToast("Tap the cutscene once to enable its soundtrack."));
+      }
+    } catch (error) {
+      console.warn("Original jackpot soundtrack could not start:", error);
+      showToast("Could not start the original AURABREAK soundtrack.");
       return null;
     }
-    let ctx;
-    try {
-      ctx = primedJackpotAudioContext && primedJackpotAudioContext.state !== "closed"
-        ? primedJackpotAudioContext
-        : new AudioCtx();
-      primedJackpotAudioContext = ctx;
-    } catch (_) { showToast("Could not start the AURABREAK soundtrack."); return null; }
-    const master = ctx.createGain();
-    master.gain.value = 0.34;
-    const limiter = ctx.createDynamicsCompressor();
-    limiter.threshold.value = -12;
-    limiter.knee.value = 20;
-    limiter.ratio.value = 7;
-    limiter.attack.value = 0.003;
-    limiter.release.value = 0.22;
-    master.connect(limiter); limiter.connect(ctx.destination);
-    const nodes = new Set();
-    let stopped = false, loopTimer = null, scheduled = false;
-    const bpm = 128, beat = 60 / bpm, bar = beat * 4, cycle = 120;
-    const chords = [[174.61,207.65,261.63,311.13],[138.59,174.61,207.65,277.18],[164.81,207.65,246.94,311.13],[155.56,196,233.08,293.66]];
-    const arp = [349.23,415.30,523.25,622.25,523.25,415.30,311.13,415.30,698.46,622.25,523.25,830.61,783.99,622.25,523.25,415.30];
-    function track(node) { nodes.add(node); node.addEventListener("ended",()=>nodes.delete(node),{once:true}); return node; }
-    function tone(at, freq, dur, volume, wave="sine", decay=2, endFreq=null) {
-      if (stopped) return;
-      const osc=track(ctx.createOscillator()), gain=ctx.createGain();
-      osc.type=wave; osc.frequency.setValueAtTime(Math.max(1,freq),at);
-      if(endFreq) osc.frequency.exponentialRampToValueAtTime(Math.max(1,endFreq),at+dur);
-      gain.gain.setValueAtTime(0.0001,at);
-      gain.gain.linearRampToValueAtTime(volume,at+0.008);
-      gain.gain.exponentialRampToValueAtTime(0.0001,at+dur);
-      osc.connect(gain); gain.connect(master);
-      osc.start(at); osc.stop(at+dur+0.03);
-    }
-    function kick(at, vol, drop=false) {
-      tone(at,drop?145:105,drop?.42:.23,vol,"sine",12,drop?28:39);
-      if(drop) { tone(at,43.65,.65,vol*.75,"sawtooth",8,25); tone(at+.025,65.41,.5,vol*.55,"square",9,30); }
-    }
-    function noiseHit(at, vol, dur=.09, bright=false) {
-      const len=Math.max(1,Math.floor(ctx.sampleRate*dur));
-      const buffer=ctx.createBuffer(1,len,ctx.sampleRate), data=buffer.getChannelData(0);
-      for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*(1-i/len);
-      const src=track(ctx.createBufferSource()), filter=ctx.createBiquadFilter(), gain=ctx.createGain();
-      src.buffer=buffer; filter.type=bright?"highpass":"bandpass"; filter.frequency.value=bright?5000:2200;
-      gain.gain.setValueAtTime(vol,at); gain.gain.exponentialRampToValueAtTime(.0001,at+dur);
-      src.connect(filter); filter.connect(gain); gain.connect(master); src.start(at); src.stop(at+dur);
-    }
-    // Schedule the soundtrack in short rolling intervals instead of creating
-    // thousands of audio nodes at once. This is more reliable on slower devices.
-    let songStartTime = 0, nextStep = 0;
-    function scheduleCycle() {
-      if(stopped || ctx.state==="closed") return;
-      if(!songStartTime) songStartTime=ctx.currentTime+.12;
-      const horizon=ctx.currentTime+1.0;
-      const stepsPerCycle=Math.round(cycle/(beat/2));
-      while(!stopped && songStartTime+(nextStep*beat/2)<=horizon){
-        if(nextStep>=stepsPerCycle){
-          songStartTime+=cycle;
-          nextStep=0;
-        }
-        const k=nextStep++;
-        const sec=k*beat/2;
-        const at=songStartTime+sec;
-        const freq=arp[(k+(Math.floor(sec/8)*3))%arp.length];
-        tone(at,freq,.17,.115,sec>38?"sawtooth":"triangle",4.5);
-        if(sec>55 && k%2===0) tone(at,freq*2,.12,.025,"square",5);
-        if(sec>80 && k%4===1) tone(at,freq*.5,.24,.045,"sawtooth",5);
-
-        // Heavy kick, snare-like noise, and sub-bass on each beat.
-        if(k%2===0){
-          const beatIndex=k/2;
-          kick(at,.58,true);
-          noiseHit(at+.02,.20,.14,true);
-          if(beatIndex%2===0) noiseHit(at+beat/2,.13,.07,true);
-          if(beatIndex%4===0) tone(at,55,.45,.23,"sawtooth",5,27.5);
-          const root=[43.65,36.71,41.20,38.89][Math.floor(sec/bar)%4];
-          tone(at,root,.32,.38,"sine",6);
-          tone(at,root*2,.24,.16,"sawtooth",5,root);
-        }
-
-        // Sustained harmony changes every 30 seconds.
-        if(k%128===0){
-          const chord=chords[Math.floor(sec/30)%chords.length];
-          chord.forEach((f,j)=>tone(at,f,bar*15.5,.018+(Math.floor(sec/30)*.004),"sine",.12));
-        }
-
-        // The jackpot impact stabs begin on the very first step.
-        if([0,2,4,8,16].includes(k)){
-          tone(at,130.81,.8,.26,"sawtooth",3,32.7);
-          tone(at,261.63,.55,.16,"square",3);
-          tone(at,523.25,.35,.12,"triangle",3);
-          if(k===0) for(let j=0;j<20;j++) noiseHit(at+j*.035,.06,.11,true);
-        }
-      }
-      // Keep a little audio scheduled ahead so the music doesn't cut out between batches.
-      loopTimer=setTimeout(scheduleCycle,200);
-    }
-    // Some browsers suspend audio when the reveal starts after an asynchronous roll.
-    // Resume on the next real user gesture, and only schedule the score once.
-    function beginScore() {
-      if (stopped || scheduled || ctx.state !== "running") return;
-      scheduled = true;
-      scheduleCycle();
-    }
-    function unlockScore() {
-      if (stopped || ctx.state === "closed") return;
-      ctx.resume().then(beginScore).catch(() => {});
-    }
-    document.addEventListener("pointerdown", unlockScore, true);
-    document.addEventListener("keydown", unlockScore, true);
-    ctx.resume().then(beginScore).catch(() => showToast("Tap the cutscene once to enable its soundtrack."));
+    let stopped = false;
     return () => {
-      if(stopped) return;
-      stopped=true; clearTimeout(loopTimer);
-      document.removeEventListener("pointerdown", unlockScore, true);
-      document.removeEventListener("keydown", unlockScore, true);
-      nodes.forEach(node=>{try{node.stop();}catch(_){} try{node.disconnect();}catch(_){}});
-      try{master.disconnect();limiter.disconnect();}catch(_){}
-      if (primedJackpotAudioContext === ctx) primedJackpotAudioContext = null;
-      if(ctx.state!=="closed") ctx.close().catch(()=>{});
+      if (stopped) return;
+      stopped = true;
+      audio.pause();
+      try { audio.currentTime = 0; } catch (_) {}
+      if (primedJackpotAudio === audio) primedJackpotAudio = null;
     };
   }
 

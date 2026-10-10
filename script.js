@@ -977,8 +977,12 @@
     songPlayer.setAttribute("playsinline","");
     songPlayer.src="soundtracks/lottery-jackpot.mp3";
     cutscene.appendChild(songPlayer);
+    songPlayer.addEventListener("error", () => {
+      // This file must be added to the repository; the Uppbeat page URL is not a raw audio file.
+      showToast("Soundtrack file missing: add soundtracks/lottery-jackpot.mp3");
+    }, { once: true });
     songPlayer.play().catch(() => {
-      // Browsers may block autoplay; the visual cutscene still runs normally.
+      showToast("Soundtrack could not autoplay. Check the audio file and browser sound settings.");
     });
     if(!phaseTwoActive){
       // Phase I gets a normal jackpot reveal; the TSL zoom-tour and god pantheon are II-only.

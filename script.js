@@ -170,6 +170,7 @@
   let rolling = false;
   let forcedAura = null;
   let hackerRigNextRoll = false;
+  let hackerRigWasForced = false;
   let luckMultiplier = 1;
   let pendingAura = null;
   let cutsceneTimers = [];
@@ -752,7 +753,13 @@
     const eyebrow = $("cutsceneEyebrow"), title = $("cutsceneTitle"), subtitle = $("cutsceneSubtitle");
     const button = $("closeCutscene");
     stopDeityCutscene();
-    const scene = MOVIE_SCENES[aura.name] || {
+    const legitHackerScene = aura.name === "HACKER" && !hackerRigWasForced;
+    const scene = legitHackerScene ? {
+      slug:"hacker", eyebrow:"IMPOSSIBLE SIGNATURE CONFIRMED • NO RIG DETECTED",
+      lines:["A REAL 1 IN 10^9999?!","THE RNG IS RECHECKING REALITY...","WAIT. THE SIGNATURE IS GENUINE.","bro you are literally cheating"],
+      subtitles:["NATURAL ROLL CONFIRMED.","ALL 9,999 DIGITS CHECK OUT.","NO OVERRIDE. NO SHORTCUT. JUST IMPOSSIBLE LUCK.","LEGITIMATE HACKER DISCOVERY • 1 IN 10^9999"],
+      notes:[196,293.66,440,987.77]
+    } : MOVIE_SCENES[aura.name] || {
       slug:"cosmic", eyebrow:"REALITY DISTORTION DETECTED",
       lines:["THE AIR STARTS TO HUM.","LIGHT GATHERS AROUND THE ORB.","THE WORLD MAKES ROOM FOR SOMETHING NEW.",aura.name],
       subtitles:["AN UNKNOWN SIGNAL.","ENERGY LEVELS RISING.","A NEW FORCE HAS AWAKENED.",aura.description.toUpperCase()],
@@ -773,7 +780,8 @@
     subtitle.textContent = "";
     button.textContent = "SKIP CUTSCENE ↗";
     content.classList.remove("deity-reveal");
-    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","hacker-panic","hacker-overload");
+    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","hacker-panic","hacker-overload","hacker-legit-roll","hacker-legit-awakening","hacker-legit-overflow");
+    if (legitHackerScene) cutscene.classList.add("hacker-legit-roll");
     cutscene.classList.add("movie-running");
     const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
     const reveal = (index) => {
@@ -793,7 +801,8 @@
     // The two rarest evolutions get a longer, multi-phase cinematic.
     // Keep their timeline inside the existing cutscene timer cleanup system.
     const sceneElement = art.firstElementChild;
-    const hackerPanic = aura.name === "HACKER";
+    const hackerPanic = aura.name === "HACKER" && !legitHackerScene;
+    const hackerLegit = legitHackerScene;
     const overdrive = aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE" || hackerPanic;
     const phase = (name) => {
       if (!sceneElement || !overdrive) return;
@@ -802,6 +811,10 @@
       if (hackerPanic) {
         cutscene.classList.toggle("hacker-panic", name === "phase-fracture" || name === "phase-ascend");
         cutscene.classList.toggle("hacker-overload", name === "phase-peak");
+      }
+      if (hackerLegit) {
+        cutscene.classList.toggle("hacker-legit-awakening", name === "phase-ascend");
+        cutscene.classList.toggle("hacker-legit-overflow", name === "phase-peak");
       }
     };
     reveal(0);
@@ -815,7 +828,7 @@
         cutscene.classList.add("movie-finale");
       });
       later(11200, () => {
-        cutscene.classList.remove("movie-running", "movie-finale", "hacker-panic", "hacker-overload");
+        cutscene.classList.remove("movie-running", "movie-finale", "hacker-panic", "hacker-overload", "hacker-legit-roll", "hacker-legit-awakening", "hacker-legit-overflow");
         sceneElement?.classList.remove("phase-settle");
         button.textContent = hackerPanic ? "CLAIM HACKER ↗" : "CLAIM EVOLUTION ↗";
       });
@@ -1723,9 +1736,11 @@
     $("rollButton").disabled = true;
     document.body.classList.add("rolling");
     $("stageLabel").textContent = "REALITY IS REARRANGING...";
+    hackerRigWasForced = false;
     let aura = chooseAura();
     // Optional one-shot local testing toggle: force HACKER, but run the normal reveal path.
     if (hackerRigNextRoll) {
+      hackerRigWasForced = true;
       const hackerAura = AURAS.find(item => item.name === "HACKER");
       if (hackerAura) aura = hackerAura;
       hackerRigNextRoll = false;

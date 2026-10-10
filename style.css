@@ -780,3 +780,25 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
   }
   .cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-ring-stage{animation:none}
 }
+
+/* Compact, visible YouTube player for the requested jackpot soundtrack. */
+.cutscene[data-style="lottery-jackpot"] .jackpot-song-player{
+  position:absolute;
+  right:clamp(10px,2vw,24px);
+  bottom:clamp(10px,2vw,24px);
+  z-index:30;
+  width:200px;
+  height:200px;
+  max-width:34vw;
+  max-height:34vw;
+  border:1px solid rgba(255,224,137,.65);
+  border-radius:12px;
+  background:#080811;
+  box-shadow:0 0 24px rgba(255,201,74,.2);
+}
+@media(max-width:600px){
+  .cutscene[data-style="lottery-jackpot"] .jackpot-song-player{
+    width:200px;height:200px;max-width:36vw;max-height:36vw;
+    right:8px;bottom:8px;
+  }
+}

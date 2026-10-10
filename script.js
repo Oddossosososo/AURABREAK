@@ -1085,7 +1085,7 @@
     cutscene.dataset.style="lottery-jackpot";
     cutscene.dataset.aura="LOTTERY: JACKPOT";
     cutscene.style.setProperty("--aura-color","#ffe889");
-    art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div>';
+    art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div><div class="jackpot-reality-grid" aria-hidden="true"></div><div class="jackpot-reality-fracture" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="jackpot-reality-vortex" aria-hidden="true"></div><div class="jackpot-reality-glitch" aria-hidden="true"></div>';
     if(jackpotMusicStop){jackpotMusicStop();jackpotMusicStop=null;}
     cutscene.querySelectorAll(".jackpot-song-player").forEach(player => player.remove());
     jackpotMusicStop=startJackpotOriginalScore();
@@ -1138,8 +1138,8 @@
     subtitle.textContent="THE RNG FOUND A RESULT IT WAS NEVER EXPECTED TO RETURN.";
     button.textContent="SKIP WORLD TOUR ↗";
     content.classList.remove("deity-reveal","movie-reveal");
-    cutscene.classList.remove("jackpot-running","jackpot-lock","jackpot-burst","jackpot-final");
-    cutscene.classList.add("jackpot-running","jackpot-world-tour");
+    cutscene.classList.remove("jackpot-running","jackpot-lock","jackpot-burst","jackpot-final","jackpot-reality-break","jackpot-reality-fracture","jackpot-reality-overwrite","jackpot-reality-collapse");
+    cutscene.classList.add("jackpot-running","jackpot-world-tour","jackpot-reality-break");
     // The TSL/WebGPU world-tour background is an AURABREAK II exclusive.
     // Keep the original GLSL shader as a compatibility fallback.
     if(phaseTwoActive && window.AURABREAK_LOTTERY_JACKPOT_TSL){
@@ -1207,8 +1207,21 @@
     });
 
     later(22000,()=>{
+      cutscene.classList.add("jackpot-reality-fracture");
       eyebrow.textContent="TICKET VERIFIED • REALITY ODDS OVERRIDDEN";
       line("THE INDUSTRIAL LOCK.","THE WORLD IS HOLDING ITS BREATH.");
+    });
+    later(65000,()=>{
+      cutscene.classList.add("jackpot-reality-overwrite");
+      eyebrow.textContent="UNIVERSE OVERRIDE • AURABREAK IS REWRITING ITSELF";
+      line("THE RULES ARE BREAKING.","THE GAME WORLD IS NO LONGER STABLE.");
+      playDeityTone(82.41,2.8,"sawtooth",.08);
+    });
+    later(88000,()=>{
+      cutscene.classList.add("jackpot-reality-collapse");
+      eyebrow.textContent="REALITY COLLAPSE • ALL WORLDS CONVERGING";
+      line("THERE IS ONLY ONE WORLD LEFT.","EVERYTHING IS FALLING INTO THE JACKPOT.");
+      playDeityTone(41.2,3.4,"sawtooth",.1);
     });
     later(blurStart,()=>{
       cutscene.classList.remove("jackpot-warp");
@@ -1431,6 +1444,7 @@
     if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();
     cutscene.classList.add("hidden");
     cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform", "ending-running", "ending-collapse", "ending-impact", "ending-final", "na-running", "na-collapse", "na-break", "na-reveal", "na-erasure", "jackpot-running", "jackpot-lock", "jackpot-burst", "jackpot-final", "jackpot-warp", "jackpot-terminal-blur", "jackpot-world-snap", "jackpot-sovereign-collapse", "orb-break-running", "orb-break-cracking", "orb-break-shatter", "orb-break-reform");
+    cutscene.classList.remove("jackpot-reality-break","jackpot-reality-fracture","jackpot-reality-overwrite","jackpot-reality-collapse");
     cutscene.classList.remove("fw-running","fw-address","fw-glitch","fw-final");
     cutscene.setAttribute("aria-hidden", "true");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";

@@ -979,6 +979,18 @@
     cutscene.appendChild(banner);
     const worldName=banner.querySelector(".jackpot-world-name");
     const worldCount=banner.querySelector(".jackpot-world-count");
+    // Five visible dimensional gates per world, with four genuinely named neighboring worlds.
+    const ringStage=document.createElement("div");
+    ringStage.className="jackpot-ring-stage";
+    ringStage.setAttribute("aria-hidden","true");
+    ringStage.innerHTML='<i class="jackpot-dimension-ring ring-1"></i><i class="jackpot-dimension-ring ring-2"></i><i class="jackpot-dimension-ring ring-3"></i><i class="jackpot-dimension-ring ring-4"></i><i class="jackpot-dimension-ring ring-5"></i><div class="jackpot-ring-core">Ⅱ</div>';
+    art.appendChild(ringStage);
+    const sideWorlds=document.createElement("div");
+    sideWorlds.className="jackpot-side-worlds";
+    sideWorlds.setAttribute("aria-hidden","true");
+    sideWorlds.innerHTML='<div class="jackpot-side-world side-world-left"><span>NEIGHBOR REALITY</span><b></b></div><div class="jackpot-side-world side-world-right"><span>NEIGHBOR REALITY</span><b></b></div><div class="jackpot-side-world side-world-top"><span>ABOVE THIS WORLD</span><b></b></div><div class="jackpot-side-world side-world-bottom"><span>BELOW THIS WORLD</span><b></b></div>';
+    art.appendChild(sideWorlds);
+    const sideWorldLabels=[...sideWorlds.querySelectorAll("b")];
     const worlds=[
       "THE GOLDEN GATE","THE STARFORGE","THE FIRST NEBULA","THE CRYSTAL SEA","THE SOLAR CROWN",
       "THE ECLIPSE KINGDOM","THE CLOCKWORK SKY","THE PRISMATIC VAULT","THE SILENT GALAXY","THE ASTRAL OCEAN",
@@ -1039,6 +1051,19 @@
         if(!cutscene.isConnected || cutscene.classList.contains("hidden")) return;
         worldName.textContent="WORLD "+String(index+1).padStart(3,"0")+" — "+name;
         worldCount.textContent=String(index+1).padStart(2,"0")+" / 100";
+        // The five gates reset and rush toward the viewer on every single world.
+        ringStage.style.setProperty("--ring-world",String(index));
+        ringStage.classList.remove("rings-arrive");
+        void ringStage.offsetWidth;
+        ringStage.classList.add("rings-arrive");
+        sideWorldLabels.forEach((label,slot)=>{
+          const neighborIndex=(index+[99,1,Math.max(0,index-5),Math.min(99,index+5)][slot])%worlds.length;
+          label.textContent=worlds[neighborIndex];
+        });
+        sideWorlds.style.setProperty("--world-hue",String((index*37)%360)+"deg");
+        sideWorlds.classList.remove("side-worlds-arrive");
+        void sideWorlds.offsetWidth;
+        sideWorlds.classList.add("side-worlds-arrive");
         banner.classList.remove("world-banner-arrive");
         void banner.offsetWidth;
         banner.classList.add("world-banner-arrive");
@@ -1051,6 +1076,8 @@
     later(12500,()=>{line("THE VIEWER LOOKED AWAY.","THE SHADER KEEPS RUNNING THROUGH THE MULTIVERSE.");playDeityTone(659.25,1.2,"sine",.05);});
     later(tourEnd-2400,()=>{cutscene.classList.add("jackpot-burst");line("WORLD 100","THE LAST LOOP HAS BEEN BROKEN.");eyebrow.textContent="FINAL WORLD • NO MORE DESTINATIONS";playDeityTone(783.99,1.4,"triangle",.06);});
     later(tourEnd,()=>{
+      ringStage.classList.remove("rings-arrive");
+      sideWorlds.classList.remove("side-worlds-arrive");
       cutscene.classList.add("jackpot-final");
       eyebrow.textContent=phaseTwoActive ? "AURABREAK II EXCLUSIVE • THE PANTHEON REVEALED" : "ULTRA • RAREST ROLLABLE • 1 IN 10^320";
       line("LOTTERY: JACKPOT",phaseTwoActive ? "100 WORLDS. EVERY GOD. ONE IMPOSSIBLE WIN." : "100 WORLDS. EVERY LOOP. ONE IMPOSSIBLE WIN.","jackpot-title jackpot-title-final");

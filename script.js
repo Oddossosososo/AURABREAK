@@ -193,6 +193,46 @@
   function formatOdds(odds) {
     return "1 in " + BigInt(odds).toLocaleString("en-US");
   }
+
+  // Keep a compact, browser-local recent-roll log without changing roll odds or discovery saves.
+  const ROLL_HISTORY_KEY = "aurabreak-roll-history-v1";
+  let rollHistory = loadRollHistory();
+  function loadRollHistory() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(ROLL_HISTORY_KEY) || "[]");
+      if (!Array.isArray(saved)) return [];
+      return saved.filter(item => item && typeof item.name === "string" && typeof item.rarity === "string"
+        && typeof item.odds === "string" && typeof item.time === "number").slice(0, 15);
+    } catch { return []; }
+  }
+  function saveRollHistory() {
+    try { localStorage.setItem(ROLL_HISTORY_KEY, JSON.stringify(rollHistory.slice(0, 15))); } catch {}
+  }
+  function renderRollHistory() {
+    const list = $("rollHistoryList"), count = $("rollHistoryCount");
+    if (!list || !count) return;
+    count.textContent = String(rollHistory.length);
+    if (!rollHistory.length) {
+      list.innerHTML = '<div class="history-empty">Your rolls will appear here. Your latest 15 results are saved in this browser.</div>';
+      return;
+    }
+    list.innerHTML = rollHistory.map(item => {
+      const aura = AURAS.find(a => a.name === item.name);
+      const color = aura && /^#[0-9a-f]{6}$/i.test(aura.color) ? aura.color : "#aab3c7";
+      const oddsLabel = item.odds === "0" ? "NO ODDS" : "1 in " + BigInt(item.odds).toLocaleString("en-US");
+      const timeLabel = new Date(item.time).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+      return '<article class="history-item" style="--history-color:'+color+'"><span class="history-symbol">'+(aura ? aura.symbol : "∅")+'</span><span class="history-main"><strong>'+escapeHistoryText(item.name)+'</strong><small>'+escapeHistoryText(item.rarity)+' · '+oddsLabel+'</small></span><time>'+timeLabel+'</time></article>';
+    }).join("");
+  }
+  function escapeHistoryText(value) {
+    return String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+  }
+  function addRollHistory(aura) {
+    rollHistory.unshift({name:aura.name, rarity:aura.rarity, odds:String(aura.noAura ? 0 : auraOdds(aura)), time:Date.now()});
+    rollHistory = rollHistory.slice(0, 15);
+    saveRollHistory();
+    renderRollHistory();
+  }
   // In AURABREAK II, even the most common aura sits beyond THE MAKER's original odds.
   const PHASE_TWO_ODDS_FLOOR = 10n ** 60n;
   function auraOdds(aura) {
@@ -1645,6 +1685,7 @@
       document.body.classList.remove("rolling");
       const isNoAura = !!aura.noAura;
       const isNew = !isNoAura && !discovered.has(aura.name);
+      addRollHistory(aura);
       if (!isNoAura) discovered.add(aura.name);
       if (!transcendenceUnlocked && ORIGINAL_GODS.every(name => discovered.has(name))) transcendencePending = true;
       saveDiscoveries();
@@ -2017,6 +2058,7 @@
   });
 
   renderCollection();
+  renderRollHistory();
   renderPotions();
 
   // Backfill progression for players who discovered all five gods before Phase II existed.

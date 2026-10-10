@@ -1208,15 +1208,15 @@
       content.classList.remove("deity-reveal");void content.offsetWidth;content.classList.add("deity-reveal");
     };
 
-    // AURABREAK II soundtrack timeline: lock, 100-world climb, blur, snap, collapse.
+    // AURABREAK II soundtrack timeline: lock, rapid 100-world warp, reality fracture, bass-drop collapse, final reveal.
     cutscene.classList.add("jackpot-lock");
     eyebrow.textContent="ROLL LOCKED • ODDS NO LONGER RESPONDING";
     line("THE ROLL HAS STOPPED.","A GOLDEN SIGNAL IS THE ONLY THING LEFT.");
     playDeityTone(196,1.2,"sine",.04);
 
-    // World 100 lands at 99s and the main bass drop hits at 100s. Keep the finale on screen
-    // through the complete 120-second score so the music is not cut off at 101s.
-    const worldStart=0, blurStart=97000, snapAt=99000, collapseAt=120000;
+    // Fast, cinematic 30-second cut: 100 worlds flash by, the bass drop hits at 20s,
+    // then the final world snaps into place and the jackpot reveal lands at 30s.
+    const worldStart=0, blurStart=24000, snapAt=27000, collapseAt=30000;
     const worldDuration=(blurStart-worldStart)/worlds.length;
     worlds.forEach((name,index)=>{
       later(Math.round(worldStart+index*worldDuration),()=>{
@@ -1246,18 +1246,18 @@
       });
     });
 
-    later(22000,()=>{
+    later(6000,()=>{
       cutscene.classList.add("jackpot-reality-fracture");
       eyebrow.textContent="TICKET VERIFIED • REALITY ODDS OVERRIDDEN";
       line("THE INDUSTRIAL LOCK.","THE WORLD IS HOLDING ITS BREATH.");
     });
-    later(65000,()=>{
+    later(13000,()=>{
       cutscene.classList.add("jackpot-reality-overwrite");
       eyebrow.textContent="UNIVERSE OVERRIDE • AURABREAK IS REWRITING ITSELF";
       line("THE RULES ARE BREAKING.","THE GAME WORLD IS NO LONGER STABLE.");
       playDeityTone(82.41,2.8,"sawtooth",.08);
     });
-    later(88000,()=>{
+    later(20000,()=>{
       cutscene.classList.add("jackpot-reality-collapse");
       eyebrow.textContent="REALITY COLLAPSE • ALL WORLDS CONVERGING";
       line("THERE IS ONLY ONE WORLD LEFT.","EVERYTHING IS FALLING INTO THE JACKPOT.");

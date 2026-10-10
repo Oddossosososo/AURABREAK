@@ -17,19 +17,19 @@
     float fbm(vec2 p){float v=0.,a=.5; for(int i=0;i<5;i++){v+=a*noise(p);p=mat2(1.6,-1.2,1.2,1.6)*p+vec2(3.1,1.7);a*=.5;}return v;}
     void main(){
       vec2 uv=(gl_FragCoord.xy-.5*uResolution)/uResolution.y;
-      float t=uTime*.16;
+      float t=uTime*.34;
       float r=length(uv);
       float a=atan(uv.y,uv.x);
       float lens=0.018/(abs(r-.19)+.018);
-      vec2 warped=uv*(1.0+0.035*sin(a*7.0-t*2.0)/(r+.12));
-      warped+=vec2(cos(a*3.0+t),sin(a*4.0-t))*0.025/(r+.12);
+      vec2 warped=uv*(1.0+0.065*sin(a*7.0-t*3.0)/(r+.10));
+      warped+=vec2(cos(a*3.0+t*1.6),sin(a*4.0-t*1.4))*0.045/(r+.10);
       vec2 p=warped*3.4;
       float f=fbm(p+vec2(t,-t*.7));
       float f2=fbm(p*1.8+vec2(-t*1.4,t));
       float fil=pow(max(0.,1.0-abs(f-f2)*2.8),5.0);
-      float rings=pow(max(0.,1.0-abs(fract(r*17.0-t*.65)-.5)*2.0),12.0);
+      float rings=pow(max(0.,1.0-abs(fract(r*19.0-t*1.25)-.5)*2.0),10.0);
       float core=exp(-r*24.0);
-      float horizon=smoothstep(.28,.17,r);
+      float horizon=1.0-smoothstep(.17,.28,r);
       vec3 col=vec3(.012,.002,.025);
       col+=vec3(.52,.015,.18)*fil*(.35+f);
       col+=vec3(.9,.02,.3)*rings*(.2+f2)*smoothstep(.42,.12,r);
@@ -60,10 +60,10 @@
     const camera=new THREE.PerspectiveCamera(55,1,.1,100);
     camera.position.z=12;
     const uniforms={uTime:{value:0},uResolution:{value:new THREE.Vector2(1,1)}};
-    const plane=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:true,depthWrite:false}));
+    const plane=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:true,depthWrite:false}));
     plane.position.z=-2;
     scene.add(plane);
-    const count=260, positions=new Float32Array(count*3), colors=new Float32Array(count*3);
+    const count=420, positions=new Float32Array(count*3), colors=new Float32Array(count*3);
     for(let i=0;i<count;i++){
       const radius=1.4+Math.random()*9, angle=Math.random()*Math.PI*2;
       positions[i*3]=Math.cos(angle)*radius;
@@ -78,14 +78,14 @@
     const particles=new THREE.Points(geo,new THREE.PointsMaterial({size:.045,vertexColors:true,transparent:true,opacity:.9,depthWrite:false,blending:THREE.AdditiveBlending}));
     scene.add(particles);
     const shards=new THREE.Group(); scene.add(shards);
-    for(let i=0;i<42;i++){
+    for(let i=0;i<56;i++){
       const g=new THREE.TetrahedronGeometry(.12+Math.random()*.24,0);
       const m=new THREE.MeshBasicMaterial({color:i%5===0?0x9bdbff:0xff1b78,wireframe:i%3===0,transparent:true,opacity:.45+Math.random()*.45});
       const mesh=new THREE.Mesh(g,m);
       const angle=Math.random()*Math.PI*2, radius=2+Math.random()*7;
       mesh.position.set(Math.cos(angle)*radius,Math.sin(angle)*radius,(Math.random()-.5)*6);
       mesh.rotation.set(Math.random()*6,Math.random()*6,Math.random()*6);
-      mesh.userData={speed:.2+Math.random()*.8,phase:Math.random()*6.28,baseX:mesh.position.x,baseY:mesh.position.y};
+      mesh.userData={speed:.45+Math.random()*1.5,phase:Math.random()*6.28,baseX:mesh.position.x,baseY:mesh.position.y,baseZ:mesh.position.z,drift:.25+Math.random()*.8};
       shards.add(mesh);
     }
     let raf=0,disposed=false,last=0;
@@ -102,15 +102,19 @@
       raf=requestAnimationFrame(frame);
       if(ms-last<30)return; last=ms;
       const t=ms*.001;uniforms.uTime.value=t;
-      particles.rotation.z=t*.035;
+      particles.rotation.z=t*.12;
+      particles.position.x=Math.sin(t*.7)*.32;
+      particles.position.y=Math.cos(t*.55)*.24;
       shards.children.forEach((m,i)=>{
         const d=m.userData, a=t*d.speed+d.phase;
-        m.rotation.x+=.002*d.speed;m.rotation.y+=.003*d.speed;
-        m.position.x=d.baseX+Math.sin(a)*.18;
-        m.position.y=d.baseY+Math.cos(a*1.2)*.18;
+        m.rotation.x+=.008*d.speed;m.rotation.y+=.011*d.speed;m.rotation.z+=.004*d.speed;
+        m.position.x=d.baseX+Math.sin(a*1.2)*d.drift;
+        m.position.y=d.baseY+Math.cos(a*1.45)*d.drift;
+        m.position.z=d.baseZ+Math.sin(a*.7)*.7;
       });
-      camera.position.x=Math.sin(t*.22)*.16;
-      camera.position.y=Math.cos(t*.18)*.12;
+      camera.position.x=Math.sin(t*.42)*.3;
+      camera.position.y=Math.cos(t*.34)*.22;
+      camera.position.z=12+Math.sin(t*.28)*.35;
       camera.lookAt(0,0,0);
       renderer.render(scene,camera);
     }

@@ -20,6 +20,7 @@
     {name:"VOID WALKER", odds:5000, rarity:"LEGENDARY", tier:"legendary", color:"#a69bff", symbol:"◉", description:"You crossed the edge and kept walking.", style:"cosmic"},
     {name:"LOTTERY", odds:292201338, rarity:"LOTTERY", tier:"secret", color:"#79ffb0", symbol:"🎟️", description:"A one-in-292,201,338 miracle.", style:"divinity"},
     {name:"LOTTERY: JACKPOT", odds:10n ** 320n, rarity:"ULTRA • RAREST ROLLABLE", tier:"ultra", color:"#ffe889", symbol:"🎰", description:"One winning ticket beyond the observer. The universe bends around the jackpot.", style:"lottery-jackpot", ultra:true, secret:true},
+    {name:"LOTTERY: WINNER", odds:10n ** 400n, rarity:"OMNIPOTENT • LOTTERY EVOLUTION II", tier:"secret", color:"#f4d8ff", symbol:"♛", description:"JACKPOT was only the entrance. The winning ticket has become omnipotence itself.", style:"lottery-winner", secret:true, phaseTwoOnly:true, omnipotent:true},
     {name:"BLOOD MOON", odds:12000, rarity:"MYTHIC", tier:"mythic", color:"#ff7cae", symbol:"☽", description:"An omen written across the night.", style:"fallen"},
     {name:"STARFORGED", odds:35000, rarity:"MYTHIC", tier:"mythic", color:"#ffe6a6", symbol:"✦", description:"Forged in the heart of a dying star.", style:"divinity"},
     {name:"COSMIC", odds:100000, rarity:"COSMIC", tier:"cosmic", color:"#8a9dff", symbol:"✧", description:"The cosmos opens one eye.", style:"cosmic"},
@@ -57,6 +58,7 @@
     {name:"THE FALLEN GOD", odds:10n ** 72n, rarity:"THE TRUE SOVEREIGN", tier:"secret", color:"#f4e8ff", symbol:"✦", description:"The one who knows the truth and controls AURABREAK itself.", style:"fallen-god", secret:true, adminOnly:true, god:true},
     {name:"DEVELOPER", odds:10n ** 100n, rarity:"RANK 0 • THE REAL CREATOR", tier:"secret", color:"#ffffff", symbol:"⟡", description:"The true strongest. The author beyond the Fallen God, who can rewrite the rules of AURABREAK.", style:"developer", secret:true, adminOnly:true, god:true},
     {name:"PURE DEITY:GALACTIC", odds:2n * (10n ** 68n), rarity:"GALACTIC EVOLUTION", tier:"secret", color:"#9be7ff", symbol:"✦", description:"Wait... I remember you. The deity has shattered its own limits.", style:"galactic", secret:true},
+    {name:"PURE DEITY: UNFATHOMABLE", odds:10n ** 555n, rarity:"OMNIPOTENT • SECOND GOD EVOLUTION", tier:"secret", color:"#e6d6ff", symbol:"∞", description:"The galaxy was only the first boundary. This form exists beyond comprehension.", style:"unfathomable", secret:true, phaseTwoOnly:true, omnipotent:true},
     {name:"UNSIN­FUL".replace("­",""), odds:1234567899876543211234567890n, rarity:"UNSINFUL", tier:"secret", color:"#ff4df0", symbol:"⟁", description:"A shapeless anomaly beyond every known law.", style:"unsinful", secret:true},
     {name:"SHATTERCORE", odds:10n ** 80n, rarity:"ORB FRACTURE", tier:"secret", color:"#ff684f", symbol:"◇", description:"The orb was never meant to survive what sleeps inside. Its evolution is hidden in the silence between strikes. The broken core remembers a rhythm no living thing should know.", style:"shattercore", secret:true},
     {name:"SHATTERCORE: REBORN", odds:10n ** 72n, rarity:"FRACTURE EVOLUTION", tier:"secret", color:"#fff0b3", symbol:"✧", description:"Not a second encounter. Not a lucky roll. Seven deliberate strikes taught the broken core how to become something new.", style:"shattercore", secret:true, evolutionOnly:true},
@@ -272,6 +274,9 @@
       noAura: true
     };
   }
+  function isAuraAvailable(aura) {
+    return !aura.adminOnly && !aura.evolutionOnly && (!aura.phaseTwoOnly || phaseTwoActive);
+  }
   function chooseAura(applyPotion = true) {
     const potion = applyPotion ? activePotion : null;
     if (applyPotion && activePotion) {
@@ -279,12 +284,12 @@
       saveActivePotion();
     }
     if (potion?.type === "god") {
-      const gods = AURAS.filter(a => a.god && !a.adminOnly && !a.evolutionOnly);
+      const gods = AURAS.filter(a => a.god && isAuraAvailable(a));
       if (gods.length) return gods[Math.floor(Math.random() * gods.length)];
     }
     if (potion?.type === "guarantee") {
       const threshold = BigInt(Math.max(1, Math.floor(potion.value)));
-      const eligible = AURAS.filter(a => !a.adminOnly && !a.evolutionOnly && auraOdds(a) >= threshold);
+      const eligible = AURAS.filter(a => isAuraAvailable(a) && auraOdds(a) >= threshold);
       if (eligible.length) return eligible[Math.floor(Math.random() * eligible.length)];
     }
     if (potion?.type === "bestof") {
@@ -302,7 +307,7 @@
       return selected;
     }
     // Test rarest first. Phase II raises every aura above THE MAKER's original odds.
-    const pool = AURAS.filter(a => !a.adminOnly && !a.evolutionOnly).sort((a, b) => {
+    const pool = AURAS.filter(a => isAuraAvailable(a)).sort((a, b) => {
       const ao = auraOdds(a), bo = auraOdds(b);
       return ao > bo ? -1 : ao < bo ? 1 : 0;
     });
@@ -1373,6 +1378,7 @@
       else if (aura.name === "SHATTERCORE" || aura.name === "SHATTERCORE: REBORN") startShattercoreCutscene(aura);
       else if (aura.name === "PURE DEITY") startPureDeityCutscene();
       else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
+      else if (aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE") startAuraMovie(aura);
       else if (aura.name === "THE FALLEN GOD") startFallenGodCutscene();
       else if (aura.name === "DEVELOPER") startDeveloperCutscene();
       else if (aura.name === "THE ENDING") startTheEndingCutscene();
@@ -1442,7 +1448,23 @@
       ? "Switch back to AURABREAK I"
       : "Switch to AURABREAK II");
   }
+  function showWorldTwoWelcome() {
+    const key = "aurabreak-world-two-welcome-v1";
+    try { if (localStorage.getItem(key) === "yes") return; localStorage.setItem(key, "yes"); } catch {}
+    if (document.getElementById("worldTwoWelcome")) return;
+    const style = document.createElement("style");
+    style.textContent = "#worldTwoWelcome{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;padding:20px;background:rgba(4,3,14,.86);backdrop-filter:blur(12px);animation:w2fade .35s ease}#worldTwoWelcome .w2-card{width:min(560px,100%);border:1px solid #a98cff88;border-radius:22px;padding:clamp(24px,5vw,42px);text-align:center;background:radial-gradient(ellipse at 50% 0%,#8c5bff35,transparent 62%),linear-gradient(145deg,#19132b,#090912);box-shadow:0 0 80px #8a5dff30}#worldTwoWelcome .w2-icon{font-size:48px;filter:drop-shadow(0 0 22px #bd9aff)}#worldTwoWelcome h2{font-size:clamp(26px,5vw,42px);letter-spacing:-.04em;margin:12px 0;color:#e7d7ff}#worldTwoWelcome p{color:#c5bedb;line-height:1.7;font-size:14px}#worldTwoWelcome .w2-unlocks{margin:22px 0;padding:16px;border:1px solid #a98cff44;border-radius:14px;background:#a98cff0d;color:#f2eaff;font-weight:700;line-height:1.9}#worldTwoWelcome button{margin-top:8px;border:1px solid #bda4ff;background:linear-gradient(100deg,#9b7aff,#7057d7);color:white;border-radius:10px;padding:13px 24px;font:700 11px var(--font);letter-spacing:.12em;cursor:pointer}@keyframes w2fade{from{opacity:0}to{opacity:1}}";
+    document.head.append(style);
+    const overlay = document.createElement("div"); overlay.id = "worldTwoWelcome"; overlay.setAttribute("role","dialog"); overlay.setAttribute("aria-modal","true"); overlay.setAttribute("aria-labelledby","worldTwoWelcomeTitle");
+    overlay.innerHTML = '<div class="w2-card"><div class="w2-icon">🌌</div><div class="eyebrow">A NEW REALITY HAS OPENED</div><h2 id="worldTwoWelcomeTitle">WELCOME TO WORLD 2</h2><p>You may get no auras at all here. World 2 is beyond the old rules — even a roll can return nothing.</p><div class="w2-unlocks">UNLOCKED<br>✦ SPECIAL WORLD 2 EXCLUSIVE AURAS<br>∞ ALL OMNIPOTENTS</div><p>Two new omnipotent discoveries await beyond the familiar universe.</p><button type="button" id="worldTwoWelcomeClose">ENTER WORLD 2 ↗</button></div>';
+    document.body.append(overlay);
+    const close = () => { overlay.remove(); style.remove(); };
+    overlay.querySelector("#worldTwoWelcomeClose").addEventListener("click", close);
+    overlay.addEventListener("click", event => { if (event.target === overlay) close(); });
+    document.addEventListener("keydown", function onKey(event) { if (event.key === "Escape" && overlay.isConnected) { close(); document.removeEventListener("keydown", onKey); } });
+  }
   function activateTranscendenceMode() {
+    const firstWorldTwoEntry = !transcendenceUnlocked;
     transcendenceUnlocked = true;
     phaseTwoActive = true;
     try { localStorage.setItem(TRANSCENDENCE_KEY, "yes"); } catch {}
@@ -1461,6 +1483,7 @@
     const stage = $("stageLabel");
     if (stage) stage.textContent = "AURABREAK II // TRANSCENDENCE";
     updatePhaseToggle();
+    if (firstWorldTwoEntry) setTimeout(showWorldTwoWelcome, 120);
   }
   function activateBaseMode() {
     phaseTwoActive = false;

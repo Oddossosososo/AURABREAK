@@ -438,3 +438,26 @@ body.transcendence-mode .status-dot{background:#8dfff4;box-shadow:0 0 12px #8dff
 @keyframes fwEyeBreak{0%{transform:translate(-50%,-50%) scale(1);opacity:1}65%{transform:translate(-50%,-50%) scale(1.6);opacity:1}100%{transform:translate(-50%,-50%) scale(.08);opacity:0}}
 @keyframes fwCore{from{filter:brightness(.7);transform:scale(.94)}to{filter:brightness(1.5);transform:scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.fw-starfield,.fw-grid,.fw-rift,.fw-eye,.fw-eye span,.fw-orbit,.fw-code,.fw-title,.fw-final-title,#orbCore.the-viewer-core{animation-duration:20s!important}.fw-flash{animation:none!important}}
+
+
+/* PERFORMANCE PATCH: preserve the fourth-wall atmosphere without repaint-heavy filters. */
+.ambient{filter:none!important;opacity:1;background:radial-gradient(circle,rgba(118,77,255,.17) 0%,rgba(118,77,255,.07) 35%,transparent 72%)!important}
+.ambient-two{background:radial-gradient(circle,rgba(0,217,255,.16) 0%,rgba(0,217,255,.06) 35%,transparent 72%)!important}
+.fw-starfield{animation:fwStarsLite 10s linear infinite!important;will-change:transform}
+.fw-grid{animation:fwGridLite 8s linear infinite!important;will-change:transform}
+.fw-rift{animation:fwRiftLite 5s ease-in-out infinite alternate!important;will-change:transform}
+.fw-eye{animation:fwEyeLite 5s ease-in-out infinite alternate!important;will-change:transform}
+.fw-eye span{animation:fwPupil 3.5s ease-in-out infinite alternate!important}
+.fw-orbit-a{animation:fwOrbit 16s linear infinite!important}
+.fw-orbit-b{animation:fwOrbit 22s linear infinite reverse!important}
+.fw-code{animation:fwCode 5s steps(2,end) infinite!important}
+.cutscene.fw-address .fw-eye,.cutscene.fw-glitch .fw-rift,.cutscene.fw-glitch .fw-orbit{filter:none!important}
+.cutscene.fw-address .fw-grid{filter:none!important}
+.cutscene.fw-final .fw-starfield{filter:none!important}
+#orbCore.the-viewer-core{animation:fwCoreLite 2s ease-in-out infinite alternate!important}
+@keyframes fwStarsLite{from{transform:translate3d(calc(var(--fw-x)*-26px),calc(var(--fw-y)*-20px),0) scale(1.15)}to{transform:translate3d(calc(var(--fw-x)*-26px - 10px),calc(var(--fw-y)*-20px + 16px),0) scale(1.22)}}
+@keyframes fwGridLite{from{transform:rotateX(63deg) translate3d(calc(var(--fw-x)*-30px),calc(var(--fw-y)*-22px),0) scale(1.5)}to{transform:rotateX(63deg) translate3d(calc(var(--fw-x)*-30px - 8px),calc(var(--fw-y)*-22px + 12px),0) scale(1.5)}}
+@keyframes fwRiftLite{from{transform:translate(calc(-50% + var(--fw-x)*22px),calc(-50% + var(--fw-y)*22px)) rotateX(68deg) rotate(-4deg) scale(.96)}to{transform:translate(calc(-50% + var(--fw-x)*22px),calc(-50% + var(--fw-y)*22px)) rotateX(68deg) rotate(4deg) scale(1.04)}}
+@keyframes fwEyeLite{from{transform:translate(calc(-50% + var(--fw-x)*34px),calc(-50% + var(--fw-y)*30px)) scale(.96)}to{transform:translate(calc(-50% + var(--fw-x)*34px),calc(-50% + var(--fw-y)*30px)) scale(1.04)}}
+@keyframes fwCoreLite{from{transform:scale(.97)}to{transform:scale(1.03)}}
+@media(prefers-reduced-motion:reduce){.fw-starfield,.fw-grid,.fw-rift,.fw-eye,.fw-eye span,.fw-orbit,.fw-code,#orbCore.the-viewer-core{animation:none!important}}

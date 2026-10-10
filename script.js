@@ -13,7 +13,7 @@
     {name:"SOLAR FLARE", odds:1500, rarity:"LEGENDARY", tier:"legendary", color:"#ffce77", symbol:"☼", description:"The sun remembers your name.", style:"divinity"},
     {name:"VOID WALKER", odds:5000, rarity:"LEGENDARY", tier:"legendary", color:"#a69bff", symbol:"◉", description:"You crossed the edge and kept walking.", style:"cosmic"},
     {name:"LOTTERY", odds:292201338, rarity:"LOTTERY", tier:"secret", color:"#79ffb0", symbol:"🎟️", description:"A one-in-292,201,338 miracle.", style:"divinity"},
-    {name:"LOTTERY: JACKPOT", odds:10n ** 90n, rarity:"ULTRA • RAREST", tier:"ultra", color:"#ffe889", symbol:"🎰", description:"The final winning ticket. The RNG itself has run out of luck.", style:"lottery-jackpot", ultra:true},
+    {name:"LOTTERY: JACKPOT", odds:10n ** 250n, rarity:"ULTRA • RAREST ROLLABLE", tier:"ultra", color:"#ffe889", symbol:"🎰", description:"One winning ticket beyond the observer. The universe bends around the jackpot.", style:"lottery-jackpot", ultra:true, secret:true},
     {name:"BLOOD MOON", odds:12000, rarity:"MYTHIC", tier:"mythic", color:"#ff7cae", symbol:"☽", description:"An omen written across the night.", style:"fallen"},
     {name:"STARFORGED", odds:35000, rarity:"MYTHIC", tier:"mythic", color:"#ffe6a6", symbol:"✦", description:"Forged in the heart of a dying star.", style:"divinity"},
     {name:"COSMIC", odds:100000, rarity:"COSMIC", tier:"cosmic", color:"#8a9dff", symbol:"✧", description:"The cosmos opens one eye.", style:"cosmic"},
@@ -164,6 +164,7 @@
   let pendingAura = null;
   let cutsceneTimers = [];
   let nullAbsoluteStop = null;
+  let lotteryJackpotStop = null;
   let fourthWallCleanup = null;
   let deityAudio = null;
   let toastTimer;
@@ -1041,7 +1042,8 @@
     cutscene.setAttribute("aria-hidden", "false");
     $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
     try {
-      if (aura.name === "THE VIEWER") startTheViewerCutscene();
+      if (aura.name === "LOTTERY: JACKPOT") startLotteryJackpotCutscene();
+      else if (aura.name === "THE VIEWER") startTheViewerCutscene();
       else if (aura.name === "NULL//ABSOLUTE") startNullAbsoluteCutscene();
       else if (aura.name === "SHATTERCORE" || aura.name === "SHATTERCORE: REBORN") startShattercoreCutscene(aura);
       else if (aura.name === "PURE DEITY") startPureDeityCutscene();

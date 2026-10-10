@@ -171,6 +171,7 @@
   let cutsceneTimers = [];
   let nullAbsoluteStop = null;
   let lotteryJackpotStop = null;
+  let jackpotMusicStop = null;
   let fourthWallCleanup = null;
   let deityAudio = null;
   let toastTimer;
@@ -949,6 +950,95 @@
     });
   }
 
+  // Original AURABREAK electronic jackpot score, synthesized in-browser (no external audio file).
+  function startJackpotOriginalScore() {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) {
+      showToast("This browser does not support the AURABREAK soundtrack.");
+      return null;
+    }
+    let ctx;
+    try { ctx = new AudioCtx(); } catch (_) { showToast("Could not start the AURABREAK soundtrack."); return null; }
+    const master = ctx.createGain();
+    master.gain.value = 0.42;
+    const limiter = ctx.createDynamicsCompressor();
+    limiter.threshold.value = -14;
+    limiter.knee.value = 18;
+    limiter.ratio.value = 5;
+    limiter.attack.value = 0.004;
+    limiter.release.value = 0.18;
+    master.connect(limiter); limiter.connect(ctx.destination);
+    const nodes = new Set();
+    let stopped = false, loopTimer = null;
+    const bpm = 128, beat = 60 / bpm, bar = beat * 4, cycle = 60;
+    const chords = [[174.61,207.65,261.63,311.13],[138.59,174.61,207.65,277.18],[164.81,207.65,246.94,311.13],[155.56,196,233.08,293.66]];
+    const arp = [349.23,415.30,523.25,622.25,523.25,415.30,311.13,415.30];
+    function track(node) { nodes.add(node); node.addEventListener("ended",()=>nodes.delete(node),{once:true}); return node; }
+    function tone(at, freq, dur, volume, wave="sine", decay=2, endFreq=null) {
+      if (stopped) return;
+      const osc=track(ctx.createOscillator()), gain=ctx.createGain();
+      osc.type=wave; osc.frequency.setValueAtTime(Math.max(1,freq),at);
+      if(endFreq) osc.frequency.exponentialRampToValueAtTime(Math.max(1,endFreq),at+dur);
+      gain.gain.setValueAtTime(0.0001,at);
+      gain.gain.linearRampToValueAtTime(volume,at+0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001,at+dur);
+      osc.connect(gain); gain.connect(master);
+      osc.start(at); osc.stop(at+dur+0.03);
+    }
+    function kick(at, vol) { tone(at,105,.23,vol,"sine",12,39); }
+    function noiseHit(at, vol, dur=.09) {
+      const len=Math.max(1,Math.floor(ctx.sampleRate*dur));
+      const buffer=ctx.createBuffer(1,len,ctx.sampleRate), data=buffer.getChannelData(0);
+      for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*(1-i/len);
+      const src=track(ctx.createBufferSource()), filter=ctx.createBiquadFilter(), gain=ctx.createGain();
+      src.buffer=buffer; filter.type="highpass"; filter.frequency.value=3500;
+      gain.gain.setValueAtTime(vol,at); gain.gain.exponentialRampToValueAtTime(.0001,at+dur);
+      src.connect(filter); filter.connect(gain); gain.connect(master); src.start(at); src.stop(at+dur);
+    }
+    function scheduleCycle() {
+      if(stopped || ctx.state==="closed") return;
+      const start=ctx.currentTime+.12;
+      // Suspense intro and a steadily rising golden arpeggio.
+      chords.forEach((ch,ci)=>ch.forEach((f,j)=>tone(start+ci*bar*2,f,bar*1.85,.016+(ci*.002),"sine",.12)));
+      for(let k=0;k<120;k++){
+        const at=start+k*beat/2, sec=k*beat/2;
+        const level=sec<12?.035:sec<24?.06:sec<48?.085:.105;
+        tone(at,arp[k%arp.length],.19,level,sec>18?"sawtooth":"sine",4.5);
+        if(sec>=48) tone(at,arp[k%arp.length]*2,.42,.035,"sine",3.2);
+      }
+      // Three increasingly heavy drops: 16s, 32s, and 48s.
+      for(let k=0;k<120;k++){
+        const sec=k*beat;
+        if(sec<8) continue;
+        const at=start+sec;
+        if(sec>=16) kick(at,sec<32?.25:sec<48?.34:.43);
+        else if(k%2===0) kick(at,.12);
+        if(sec>=16 && k%2===1) noiseHit(at,.09);
+        if(sec>=24) { noiseHit(at+beat/2,.025,.035); if(sec>=32) noiseHit(at+beat*1.5,.035,.04); }
+      }
+      // Sub bass punches on the drops.
+      for(let k=0;k<88;k++){
+        const sec=16+k*beat, root=[43.65,36.71,41.20,38.89][Math.floor(sec/bar)%4];
+        tone(start+sec,root,.32,sec<32?.15:sec<48?.22:.27,"sine",6);
+      }
+      [16,32,48].forEach((sec,i)=>{
+        tone(start+sec,65.41,.75,.25,"sawtooth",3,32.7);
+        tone(start+sec,130.81,.8,.14,"sine",2);
+        // Rising filtered-noise-style accents.
+        for(let j=0;j<10;j++) noiseHit(start+sec-1.8+j*.18,.018+j*.004,.16);
+      });
+      loopTimer=setTimeout(scheduleCycle,60000);
+    }
+    ctx.resume().then(()=>{if(!stopped)scheduleCycle();}).catch(()=>showToast("Tap the cutscene once to enable its soundtrack."));
+    return () => {
+      if(stopped) return;
+      stopped=true; clearTimeout(loopTimer);
+      nodes.forEach(node=>{try{node.stop();}catch(_){} try{node.disconnect();}catch(_){}});
+      try{master.disconnect();limiter.disconnect();}catch(_){}
+      if(ctx.state!=="closed") ctx.close().catch(()=>{});
+    };
+  }
+
   function startLotteryJackpotCutscene() {
     const cutscene=$("cutscene"), art=$("cutsceneArt");
     const content=cutscene.querySelector(".cutscene-content");
@@ -962,33 +1052,9 @@
     cutscene.dataset.aura="LOTTERY: JACKPOT";
     cutscene.style.setProperty("--aura-color","#ffe889");
     art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div>';
-    // Load the licensed Shine — Swoop track stored in the repository.
-    // Keep it unloaded until the jackpot reveal to conserve memory on low-RAM devices.
-    cutscene.querySelectorAll(".jackpot-song-player").forEach(player => {
-      if (player.tagName === "AUDIO") { player.pause(); player.removeAttribute("src"); player.load(); }
-      player.remove();
-    });
-    const songPlayer=document.createElement("audio");
-    songPlayer.className="jackpot-song-player";
-    songPlayer.title="LOTTERY: JACKPOT soundtrack";
-    songPlayer.preload="auto";
-    songPlayer.loop=true;
-    songPlayer.volume=0.8;
-    songPlayer.setAttribute("playsinline","");
-    songPlayer.src="soundtracks/shine-swoop-main-version-46810-01-31.mp3";
-    cutscene.appendChild(songPlayer);
-    let soundtrackErrorShown=false;
-    const showSoundtrackMissing=()=>{
-      if(soundtrackErrorShown) return;
-      soundtrackErrorShown=true;
-      showToast("Music isn't installed yet — add your licensed MP3 to soundtracks/lottery-jackpot.mp3.");
-    };
-    songPlayer.addEventListener("error", showSoundtrackMissing, { once: true });
-    // Don't blame browser settings when the site's soundtrack file is absent.
-    songPlayer.play().catch(() => {
-      if(songPlayer.error) showSoundtrackMissing();
-      else console.info("Jackpot music playback was blocked or delayed; the cutscene will continue silently.");
-    });
+    if(jackpotMusicStop){jackpotMusicStop();jackpotMusicStop=null;}
+    cutscene.querySelectorAll(".jackpot-song-player").forEach(player => player.remove());
+    jackpotMusicStop=startJackpotOriginalScore();
     if(!phaseTwoActive){
       // Phase I gets a normal jackpot reveal; the TSL zoom-tour and god pantheon are II-only.
       eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10^320";
@@ -1328,6 +1394,7 @@
     if (nullAbsoluteStop) { nullAbsoluteStop(); nullAbsoluteStop = null; }
     if (lotteryJackpotStop) { lotteryJackpotStop(); lotteryJackpotStop = null; }
     if (fourthWallCleanup) { fourthWallCleanup(); fourthWallCleanup = null; }
+    if(jackpotMusicStop){jackpotMusicStop();jackpotMusicStop=null;}
     const cutscene = $("cutscene");
     cutscene.querySelectorAll(".jackpot-song-player").forEach(player => {
       if (player.tagName === "AUDIO") {

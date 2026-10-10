@@ -1011,26 +1011,63 @@
 
   function showCutscene(aura) {
     const cutscene = $("cutscene");
+    const title = $("cutsceneTitle");
+    const subtitle = $("cutsceneSubtitle");
+    const art = $("cutsceneArt");
+    if (!cutscene || !title || !subtitle || !art || !aura) {
+      console.error("[AURABREAK cutscene] Missing cutscene DOM element or aura.", { aura });
+      showToast("CUTSCENE ERROR: required screen element missing.");
+      return;
+    }
+    // Reveal the overlay before starting an animation so an animation error cannot keep it hidden.
     cutscene.dataset.style = aura.style || "cosmic";
-    cutscene.dataset.aura = aura.name;
-    cutscene.style.setProperty("--aura-color", aura.color);
-    $("cutsceneEyebrow").textContent = aura.secret ? "UNCLASSIFIED REALITY FAILURE" : aura.odds >= 1000000 ? "ANOMALY EVENT DETECTED" : "A NEW FORCE HAS AWAKENED";
-    $("cutsceneTitle").textContent = aura.name;
-    $("cutsceneTitle").style.color = aura.color;
-    $("cutsceneSubtitle").textContent = aura.secret ? "THE RULES NO LONGER APPLY." : aura.description.toUpperCase();
-    $("cutsceneArt").textContent = "";
-    cutscene.classList.remove("deity-running", "deity-impact", "galactic-running", "galactic-break", "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened", "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact", "ending-running", "ending-collapse", "ending-impact", "ending-final");
-    if (aura.name === "THE VIEWER") startTheViewerCutscene();
-    else if (aura.name === "NULL//ABSOLUTE") startNullAbsoluteCutscene();
-    else if (aura.name === "SHATTERCORE" || aura.name === "SHATTERCORE: REBORN") startShattercoreCutscene(aura);
-    else if (aura.name === "PURE DEITY") startPureDeityCutscene();
-    else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
-    else if (aura.name === "THE FALLEN GOD") startFallenGodCutscene();
-    else if (aura.name === "DEVELOPER") startDeveloperCutscene();
-    else if (aura.name === "THE ENDING") startTheEndingCutscene();
-    else startAuraMovie(aura);
+    cutscene.dataset.aura = aura.name || "UNKNOWN";
+    cutscene.style.setProperty("--aura-color", aura.color || "#ffffff");
+    cutscene.style.setProperty("--movie-color", aura.color || "#ffffff");
+    $("cutsceneEyebrow").textContent = aura.secret ? "UNCLASSIFIED REALITY FAILURE" : "ANOMALY EVENT DETECTED";
+    title.textContent = aura.name || "UNKNOWN";
+    title.style.color = aura.color || "#ffffff";
+    subtitle.textContent = aura.secret ? "THE RULES NO LONGER APPLY." : String(aura.description || "REALITY IS CHANGING.").toUpperCase();
+    art.replaceChildren();
+    cutscene.classList.remove(
+      "deity-running", "deity-impact", "galactic-running", "galactic-break",
+      "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened",
+      "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact",
+      "ending-running", "ending-collapse", "ending-impact", "ending-final",
+      "transcendence-running", "transcendence-break", "fw-running", "fw-address", "fw-glitch", "fw-final"
+    );
     cutscene.classList.remove("hidden");
     cutscene.setAttribute("aria-hidden", "false");
+    $("closeCutscene").textContent = "CLAIM DISCOVERY ↗";
+    try {
+      if (aura.name === "THE VIEWER") startTheViewerCutscene();
+      else if (aura.name === "NULL//ABSOLUTE") startNullAbsoluteCutscene();
+      else if (aura.name === "SHATTERCORE" || aura.name === "SHATTERCORE: REBORN") startShattercoreCutscene(aura);
+      else if (aura.name === "PURE DEITY") startPureDeityCutscene();
+      else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
+      else if (aura.name === "THE FALLEN GOD") startFallenGodCutscene();
+      else if (aura.name === "DEVELOPER") startDeveloperCutscene();
+      else if (aura.name === "THE ENDING") startTheEndingCutscene();
+      else startAuraMovie(aura);
+    } catch (error) {
+      console.error("[AURABREAK cutscene] Special animation failed; using fallback.", aura.name, error);
+      cutscene.classList.remove(
+        "deity-running", "deity-impact", "galactic-running", "galactic-break",
+        "movie-running", "movie-finale", "fallen-god-running", "fallen-god-awakened",
+        "fallen-god-impact", "developer-running", "developer-overwrite", "developer-impact",
+        "ending-running", "ending-collapse", "ending-impact", "ending-final"
+      );
+      art.replaceChildren();
+      subtitle.textContent = "THE ANOMALY HAS MANIFESTED.";
+      try { startAuraMovie(aura); }
+      catch (fallbackError) {
+        console.error("[AURABREAK cutscene] Fallback animation also failed.", fallbackError);
+        art.textContent = aura.symbol || "✦";
+        art.style.fontSize = "clamp(5rem, 18vw, 12rem)";
+        art.style.color = aura.color || "#ffffff";
+      }
+      showToast("CUTSCENE FALLBACK: " + (aura.name || "UNKNOWN"));
+    }
   }
   function closeCutscene() {
     stopDeityCutscene();
@@ -1245,17 +1282,12 @@
       saveDiscoveries();
       renderCollection();
       renderResult(aura, isNew);
-      // Only Phase II gives every aura a cutscene. Phase I uses the old roll flow.
-      if (!isNoAura && phaseTwoActive) {
-        // AURABREAK II keeps the full cinematic roll experience.
+      // Every successful manual roll gets its cutscene in both phases.
+      if (!isNoAura) {
         pendingAura = aura;
         showCutscene(aura);
-      } else if (isNoAura) {
-        showToast("NOTHING MANIFESTED.");
-      } else if (isNew) {
-        showToast("NEW DISCOVERY: " + aura.name);
       } else {
-        showToast(aura.name + " — already in your collection.");
+        showToast("NOTHING MANIFESTED.");
       }
       if (transcendencePending && !transcendenceUnlocked && $("cutscene").classList.contains("hidden")) {
         setTimeout(() => {

@@ -169,6 +169,7 @@
   let discovered = loadDiscoveries();
   let rolling = false;
   let forcedAura = null;
+  let hackerRigNextRoll = false;
   let luckMultiplier = 1;
   let pendingAura = null;
   let cutsceneTimers = [];
@@ -792,11 +793,16 @@
     // The two rarest evolutions get a longer, multi-phase cinematic.
     // Keep their timeline inside the existing cutscene timer cleanup system.
     const sceneElement = art.firstElementChild;
-    const overdrive = aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE";
+    const hackerPanic = aura.name === "HACKER";
+    const overdrive = aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE" || hackerPanic;
     const phase = (name) => {
       if (!sceneElement || !overdrive) return;
       sceneElement.classList.remove("phase-build", "phase-fracture", "phase-ascend", "phase-peak");
       sceneElement.classList.add(name);
+      if (hackerPanic) {
+        cutscene.classList.toggle("hacker-panic", name === "phase-fracture" || name === "phase-ascend");
+        cutscene.classList.toggle("hacker-overload", name === "phase-peak");
+      }
     };
     reveal(0);
     phase("phase-build");
@@ -809,9 +815,9 @@
         cutscene.classList.add("movie-finale");
       });
       later(11200, () => {
-        cutscene.classList.remove("movie-running", "movie-finale");
+        cutscene.classList.remove("movie-running", "movie-finale", "hacker-panic", "hacker-overload");
         sceneElement?.classList.remove("phase-settle");
-        button.textContent = "CLAIM EVOLUTION ↗";
+        button.textContent = hackerPanic ? "CLAIM HACKER ↗" : "CLAIM EVOLUTION ↗";
       });
     } else {
       later(1900, () => reveal(1));
@@ -1718,6 +1724,15 @@
     document.body.classList.add("rolling");
     $("stageLabel").textContent = "REALITY IS REARRANGING...";
     let aura = chooseAura();
+    // Optional one-shot local testing toggle: force HACKER, but run the normal reveal path.
+    if (hackerRigNextRoll) {
+      const hackerAura = AURAS.find(item => item.name === "HACKER");
+      if (hackerAura) aura = hackerAura;
+      hackerRigNextRoll = false;
+      const rigToggle = $("hackerRigToggle");
+      if (rigToggle) rigToggle.checked = false;
+      showToast("ROLL SIGNATURE ACCEPTED. NO IRREGULARITIES FOUND.");
+    }
     if (aura.name === "LOTTERY: JACKPOT") primeJackpotAudioContext();
     renderPotions();
     runRollCount++;
@@ -2091,6 +2106,11 @@
     settingsPanel.setAttribute("aria-hidden", "true");
     settingsOpen?.focus();
   }
+  const hackerRigToggle = $("hackerRigToggle");
+  hackerRigToggle?.addEventListener("change", () => {
+    hackerRigNextRoll = !!hackerRigToggle.checked;
+    showToast(hackerRigNextRoll ? "HACKER RIG ARMED — NEXT ROLL ONLY." : "HACKER RIG DISARMED.");
+  });
   settingsOpen?.addEventListener("click", () => {
     settingsPanel.classList.remove("hidden");
     settingsPanel.setAttribute("aria-hidden", "false");

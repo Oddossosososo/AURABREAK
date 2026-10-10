@@ -1051,11 +1051,7 @@
         if(!cutscene.isConnected || cutscene.classList.contains("hidden")) return;
         worldName.textContent="WORLD "+String(index+1).padStart(3,"0")+" — "+name;
         worldCount.textContent=String(index+1).padStart(2,"0")+" / 100";
-        // The five gates reset and rush toward the viewer on every single world.
-        ringStage.style.setProperty("--ring-world",String(index));
-        ringStage.classList.remove("rings-arrive");
-        void ringStage.offsetWidth;
-        ringStage.classList.add("rings-arrive");
+        // Keep the five rings spinning continuously; world changes never restart their motion.
         sideWorldLabels.forEach((label,slot)=>{
           const neighborIndex=(index+[99,1,95,5][slot])%worlds.length;
           label.textContent=worlds[neighborIndex];

@@ -1177,3 +1177,9 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
 .cutscene[data-style="unfathomable"] .omnipotent-shader-canvas{mix-blend-mode:screen;opacity:1;filter:contrast(1.12) saturate(1.25);}
 .cutscene[data-style="lottery-winner"] .movie-core,.cutscene[data-style="lottery-winner"] .movie-ring,.cutscene[data-style="unfathomable"] .movie-core,.cutscene[data-style="unfathomable"] .movie-ring{mix-blend-mode:screen;}
 @media(prefers-reduced-motion:reduce){.omnipotent-shader-canvas{opacity:.7!important;}}
+
+/* Shared modern Three.js / TSL shader layer used by every cutscene. */
+#cutsceneArt{isolation:isolate;}
+#cutsceneArt .aurabreak-scene-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:2;pointer-events:none;mix-blend-mode:screen;opacity:.66;}
+#cutsceneArt .aurabreak-scene-tsl{opacity:.58;}
+@media(prefers-reduced-motion:reduce){#cutsceneArt .aurabreak-scene-canvas{opacity:.32;}}

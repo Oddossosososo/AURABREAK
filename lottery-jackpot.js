@@ -155,11 +155,11 @@
       const height = Math.max(1, container.clientHeight);
       renderer.setSize(width, height, false);
       uniforms.uResolution.value.set(renderer.domElement.width, renderer.domElement.height);
-      if (reducedMotion) renderer.render(scene, camera);
+      renderer.render(scene, camera);
     }
 
     function shouldAnimate() {
-      return !disposed && !reducedMotion && !document.hidden && visible && container.isConnected;
+      return !disposed && !document.hidden && visible && container.isConnected;
     }
     function frame(ms) {
       raf = 0;
@@ -196,8 +196,7 @@
     }
     document.addEventListener("visibilitychange", onVisibilityChange);
     resize();
-    if (reducedMotion) renderer.render(scene, camera);
-    else syncAnimation();
+    syncAnimation();
 
     return function stop() {
       if (disposed) return;

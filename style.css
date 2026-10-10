@@ -1020,3 +1020,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   .cutscene[data-style="lottery-jackpot"] .jackpot-compute-burst i{animation-name:jackpotBurstTravel!important}
   .cutscene[data-style="lottery-jackpot"].jackpot-running .cutscene-content{animation-duration:1.2s!important;animation-iteration-count:1!important}
 }
+
+
+@keyframes jackpotTicketFloat{0%,100%{transform:translate(-50%,-50%) rotate(-4deg) scale(1)}50%{transform:translate(-50%,-52%) rotate(4deg) scale(1.04)}}
+@keyframes jackpotParticleDrift{0%,100%{transform:translate3d(0,0,0);opacity:.35}50%{transform:translate3d(0,-10px,0);opacity:.7}}
+@keyframes jackpotFallbackPulse{0%,100%{opacity:.15;transform:scale(.98)}50%{opacity:.35;transform:scale(1.04)}}
+@keyframes jackpotRingOrbit{0%{opacity:.2;transform:translate(-50%,-50%) rotateX(67deg) rotateZ(0deg) scale(var(--ring-scale,1.3))}50%{opacity:.65}100%{opacity:.2;transform:translate(-50%,-50%) rotateX(67deg) rotateZ(180deg) scale(var(--ring-scale,1.3))}}
+@keyframes jackpotWorldFlow{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes jackpotBurstTravel{0%{opacity:0;transform:translate(0,0) scale(.5)}35%{opacity:1}100%{opacity:0;transform:translate(var(--burst-x),var(--burst-y)) scale(1.1)}}

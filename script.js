@@ -962,7 +962,7 @@
     cutscene.dataset.aura="LOTTERY: JACKPOT";
     cutscene.style.setProperty("--aura-color","#ffe889");
     art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div>';
-    // Local soundtrack slot: add your own licensed/original file at this path.
+    // Load the licensed Shine — Swoop track stored in the repository.
     // Keep it unloaded until the jackpot reveal to conserve memory on low-RAM devices.
     cutscene.querySelectorAll(".jackpot-song-player").forEach(player => {
       if (player.tagName === "AUDIO") { player.pause(); player.removeAttribute("src"); player.load(); }
@@ -975,7 +975,7 @@
     songPlayer.loop=true;
     songPlayer.volume=0.8;
     songPlayer.setAttribute("playsinline","");
-    songPlayer.src="soundtracks/lottery-jackpot.mp3";
+    songPlayer.src="soundtracks/shine-swoop-main-version-46810-01-31.mp3";
     cutscene.appendChild(songPlayer);
     let soundtrackErrorShown=false;
     const showSoundtrackMissing=()=>{

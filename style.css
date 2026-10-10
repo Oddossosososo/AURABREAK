@@ -1429,3 +1429,50 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
   .cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-unfathomable::before,
   .cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-unfathomable::after { animation:none!important; }
 }
+
+
+/* HACKER: suspicious RNG signature / terminal breach reveal */
+.cutscene[data-style="hacker"] .cutscene-backdrop {
+  background:radial-gradient(ellipse at 50% 45%,#062514 0%,#020806 46%,#000 100%);
+}
+.cutscene[data-style="hacker"] .movie-hacker {
+  background:radial-gradient(ellipse at 50% 50%,#0bff7320,transparent 35%),#010604;
+  color:#55ff91;
+}
+.cutscene[data-style="hacker"] .movie-hacker::before {
+  content:"01001000 01000001 01000011 01001011 01000101 01010010  // RNG_OVERRIDE // 10^9999";
+  position:absolute; inset:-15%; display:flex; align-items:center; justify-content:center;
+  width:130%; overflow:hidden; pointer-events:none; z-index:0;
+  color:#55ff91; opacity:.16; font:500 clamp(12px,2vw,24px)/2.8 "DM Mono",monospace;
+  letter-spacing:.24em; overflow-wrap:anywhere; text-align:center;
+  transform:rotate(-12deg); text-shadow:0 0 16px #00ff6a;
+  animation:hackerCodeDrift 7s linear infinite;
+}
+.cutscene[data-style="hacker"] .movie-hacker::after {
+  content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:repeating-linear-gradient(0deg,#00ff8a0b 0 1px,transparent 1px 5px),
+    linear-gradient(90deg,transparent 0 49.7%,#55ff911c 50%,transparent 50.3%);
+  mix-blend-mode:screen;
+}
+.cutscene[data-style="hacker"] .movie-core {
+  border-color:#55ff9180; background:radial-gradient(circle,#55ff9130,transparent 68%);
+  box-shadow:0 0 55px #00ff6a22,inset 0 0 40px #00ff6a12;
+}
+.cutscene[data-style="hacker"] .movie-ring {
+  border-color:#55ff9177; box-shadow:0 0 24px #00ff6a20;
+}
+.cutscene[data-style="hacker"] .movie-title,
+.cutscene[data-style="hacker"] .movie-subtitle { color:#baffcf; text-shadow:0 0 22px #00ff6a70; }
+.cutscene[data-style="hacker"] .hacker-big-text {
+  max-width:min(1100px,94vw); color:#eaffef!important;
+  font-size:clamp(2.1rem,7vw,6.8rem); line-height:1.03; letter-spacing:-.055em;
+  text-transform:none; text-wrap:balance;
+  text-shadow:0 0 12px #55ff91,0 0 45px #00ff6a99,0 0 90px #00ff6a55;
+  animation:hackerTextGlitch .9s steps(2,end) infinite;
+}
+@keyframes hackerCodeDrift { from{transform:translateY(5%) rotate(-12deg)} to{transform:translateY(-5%) rotate(-12deg)} }
+@keyframes hackerTextGlitch { 0%,88%,100%{transform:translate(0);filter:none} 90%{transform:translate(-3px,1px);filter:hue-rotate(25deg)} 94%{transform:translate(3px,-1px);filter:brightness(1.6)} 97%{transform:translate(-1px,0);filter:none} }
+@media(prefers-reduced-motion:reduce) {
+  .cutscene[data-style="hacker"] .movie-hacker::before,
+  .cutscene[data-style="hacker"] .hacker-big-text { animation:none!important; }
+}

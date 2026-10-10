@@ -1,6 +1,6 @@
 // AURABREAK II exclusive TSL/WebGPU background. GLSL fallback remains in lottery-jackpot.js.
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js";
-import { Fn, uv, time, vec2, vec3, vec4, float, sin, cos, length, smoothstep, abs, pow, max, exp, atan } from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.tsl.js";
+import * as THREE from "three/webgpu";
+import { Fn, uv, time, vec2, vec3, vec4, float, sin, cos, length, smoothstep, abs, pow, max, exp, atan } from "three/tsl";
 
 async function start(container) {
   if (!container || !container.isConnected) throw new Error("Jackpot art container unavailable");

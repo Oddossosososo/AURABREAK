@@ -750,3 +750,32 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .side-world-bottom:before{background:radial-gradient(ellipse at 50% 100%,#a9ffce 0%,#267b79 19%,#112c3e 39%,transparent 66%),radial-gradient(circle at 24% 28%,#fff 0 1px,transparent 2px),radial-gradient(circle at 79% 18%,#fff9 0 1px,transparent 2px),linear-gradient(145deg,#061d25,#13213f 55%,#090615)}
 .jackpot-side-world span,.jackpot-side-world b{position:relative;z-index:1}
 @media(max-width:600px){.jackpot-side-world{min-height:86px}.jackpot-side-world:before{height:36px}}
+
+
+/* AURABREAK II: keep the five-gate tunnel scrolling continuously, even after World 100. */
+.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-ring-stage .jackpot-dimension-ring{
+  animation:jackpotContinuousGate 620ms cubic-bezier(.12,.7,.18,1) var(--ring-delay,0ms) infinite;
+  will-change:transform,opacity,filter;
+}
+@keyframes jackpotContinuousGate{
+  0%{opacity:0;transform:translate(-50%,-50%) rotateX(67deg) scale(.12);filter:brightness(1)}
+  12%{opacity:.98}
+  56%{opacity:.82;filter:brightness(1.8)}
+  100%{opacity:0;transform:translate(-50%,-50%) rotateX(67deg) scale(var(--ring-scale,2.2));filter:brightness(1.3)}
+}
+.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-ring-stage{
+  background:repeating-radial-gradient(ellipse at center,transparent 0 7%,rgba(255,205,77,.035) 7.2% 7.45%,transparent 7.7% 14%);
+  background-size:100% 100%;
+  animation:jackpotTunnelDrift 1.4s linear infinite;
+}
+@keyframes jackpotTunnelDrift{
+  0%{background-position:0 0;filter:brightness(1)}
+  50%{filter:brightness(1.18)}
+  100%{background-position:0 24px;filter:brightness(1)}
+}
+@media(prefers-reduced-motion:reduce){
+  .cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-ring-stage .jackpot-dimension-ring{
+    animation:none!important;opacity:.4;transform:translate(-50%,-50%) rotateX(67deg) scale(var(--ring-scale,1.3));will-change:auto
+  }
+  .cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-ring-stage{animation:none}
+}

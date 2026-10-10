@@ -956,13 +956,44 @@
     cutscene.dataset.aura="LOTTERY: JACKPOT";
     cutscene.style.setProperty("--aura-color","#ffe889");
     art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div>';
-    eyebrow.textContent="ULTRA CLASSIFIED • ODDS BREAKDOWN UNAVAILABLE";
+    const oldBanner=cutscene.querySelector(".jackpot-world-banner");
+    if(oldBanner) oldBanner.remove();
+    const banner=document.createElement("div");
+    banner.className="jackpot-world-banner";
+    banner.setAttribute("aria-live","polite");
+    banner.innerHTML='<span class="jackpot-world-kicker">WORLD SEQUENCE</span><span class="jackpot-world-name">WORLD 001 — THE GOLDEN GATE</span><span class="jackpot-world-count">01 / 100</span>';
+    cutscene.appendChild(banner);
+    const worldName=banner.querySelector(".jackpot-world-name");
+    const worldCount=banner.querySelector(".jackpot-world-count");
+    const worlds=[
+      "THE GOLDEN GATE","THE STARFORGE","THE FIRST NEBULA","THE CRYSTAL SEA","THE SOLAR CROWN",
+      "THE ECLIPSE KINGDOM","THE CLOCKWORK SKY","THE PRISMATIC VAULT","THE SILENT GALAXY","THE ASTRAL OCEAN",
+      "THE INFINITE LIBRARY","THE PHOENIX REALM","THE FROZEN SUN","THE THUNDER THRONE","THE CELESTIAL GARDEN",
+      "THE OBSIDIAN MOON","THE LUMINOUS ABYSS","THE COMET HIGHWAY","THE QUANTUM TEMPLE","THE AURORA PALACE",
+      "THE SHATTERED HORIZON","THE DRAGON EMPIRE","THE MIRROR DIMENSION","THE SAPPHIRE VOID","THE TIMELESS CITY",
+      "THE GRAVITY WELL","THE DREAMING MACHINE","THE SUPERNOVA HALL","THE RIFT KINGDOM","THE STARDUST DESERT",
+      "THE HIDDEN CONSTELLATION","THE GLASS UNIVERSE","THE BLUE GIANT","THE NEON SANCTUM","THE COSMIC WATERFALL",
+      "THE ORBITAL CITADEL","THE HOLLOW STAR","THE REALITY ENGINE","THE GOLDEN LABYRINTH","THE LUNAR ARCHIVE",
+      "THE DEEP SPACE FRONTIER","THE INFINITY BRIDGE","THE ANCIENT COMET","THE SKY OF MILLIONS","THE CELESTIAL FORGE",
+      "THE DARK MATTER SEA","THE RADIANT FORTRESS","THE WARPED DIMENSION","THE STAR EATER'S DOMAIN","THE VIOLET HORIZON",
+      "THE WORLD BETWEEN WORLDS","THE COLLAPSING SUN","THE HYPERSPACE GARDEN","THE CHRONO CATHEDRAL","THE QUASAR THRONE",
+      "THE CRIMSON NEBULA","THE FLOATING KINGDOM","THE FINAL CONSTELLATION","THE DIAMOND EVENT HORIZON","THE LIGHTLESS REALM",
+      "THE COSMIC JUNGLE","THE RAINBOW SINGULARITY","THE FIRST ANDROMEDA","THE PHANTOM ORBIT","THE CELESTIAL CLOCK",
+      "THE FORGOTTEN MULTIVERSE","THE STARLIGHT CAVERN","THE SOLSTICE GATE","THE WHITE DWARF PALACE","THE GALACTIC SPIRAL",
+      "THE UNWRITTEN WORLD","THE INFINITE STAIRWAY","THE DIVINE CIRCUIT","THE HYPERNOVA CORE","THE EMERALD COSMOS",
+      "THE FRACTAL KINGDOM","THE LIVING CONSTELLATION","THE EVENT HORIZON","THE LAST STARPORT","THE COSMIC MIRROR",
+      "THE PRIMORDIAL VOID","THE ENDLESS SUNRISE","THE GOLDEN AFTERLIFE","THE ORIGIN POINT","THE UNIVERSE'S HEART",
+      "THE LAST DIMENSION","THE JACKPOT CORRIDOR","THE REALITY BREAK","THE MILLIONTH SUN","THE IMPOSSIBLE GARDEN",
+      "THE UNSEEN OBSERVATORY","THE BEYOND","THE LAST LOOP","THE FINAL UNIVERSE","THE JACKPOT THRONE",
+      "THE WORLD THAT SHOULD NOT EXIST","THE END OF ALL ODDS","THE 100TH WORLD"
+    ];
+    eyebrow.textContent="ULTRA CLASSIFIED • 100 WORLDS TO CROSS";
     title.className="jackpot-title"; title.textContent="THE WINNING TICKET"; title.style.color="#fff8d5";
     subtitle.textContent="THE RNG FOUND A RESULT IT WAS NEVER EXPECTED TO RETURN.";
-    button.textContent="REVEAL JACKPOT ↗";
+    button.textContent="SKIP WORLD TOUR ↗";
     content.classList.remove("deity-reveal","movie-reveal");
     cutscene.classList.remove("jackpot-running","jackpot-lock","jackpot-burst","jackpot-final");
-    cutscene.classList.add("jackpot-running");
+    cutscene.classList.add("jackpot-running","jackpot-world-tour");
     if(window.AURABREAK_LOTTERY_JACKPOT&&window.THREE){
       try{lotteryJackpotStop=window.AURABREAK_LOTTERY_JACKPOT.start(art);}
       catch(err){console.warn("Jackpot shader fallback:",err);}
@@ -972,11 +1003,33 @@
       title.textContent=head;title.className=cls;subtitle.textContent=sub;
       content.classList.remove("deity-reveal");void content.offsetWidth;content.classList.add("deity-reveal");
     };
-    playDeityTone(392,1.3,"sine",.045);
-    later(2400,()=>{cutscene.classList.add("jackpot-lock");eyebrow.textContent="TICKET VERIFIED • REALITY ODDS OVERRIDDEN";line("ONE IN 10²⁵⁰","FIFTY ORDERS OF MAGNITUDE BEYOND THE VIEWER.");playDeityTone(523.25,1.4,"triangle",.05);});
-    later(5600,()=>{line("THE VIEWER LOOKED AWAY.","THIS TIME, THE GAME DIDN'T NEED AN OBSERVER.");playDeityTone(659.25,1.5,"sine",.055);});
-    later(8800,()=>{cutscene.classList.add("jackpot-burst");line("LOTTERY: JACKPOT","THE RAREST AURA THAT CAN BE WON THROUGH NORMAL ROLLS.","jackpot-title jackpot-title-final");eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10²⁵⁰";playDeityTone(783.99,2,"sine",.06);});
-    later(12500,()=>{cutscene.classList.add("jackpot-final");button.textContent="CLAIM LOTTERY: JACKPOT ↗";});
+    playDeityTone(196,1.2,"sine",.04);
+    const worldDuration=620;
+    worlds.forEach((name,index)=>{
+      later(index*worldDuration,()=>{
+        if(!cutscene.isConnected || cutscene.classList.contains("hidden")) return;
+        worldName.textContent="WORLD "+String(index+1).padStart(3,"0")+" — "+name;
+        worldCount.textContent=String(index+1).padStart(2,"0")+" / 100";
+        banner.classList.remove("world-banner-arrive");
+        void banner.offsetWidth;
+        banner.classList.add("world-banner-arrive");
+        cutscene.style.setProperty("--world-hue",String((index*37)%360)+"deg");
+        if(index%10===0) playDeityTone(220+(index%5)*55,.28,"triangle",.025);
+      });
+    });
+    const tourEnd=worlds.length*worldDuration;
+    later(2400,()=>{cutscene.classList.add("jackpot-lock");eyebrow.textContent="TICKET VERIFIED • REALITY ODDS OVERRIDDEN";line("THE LOOPS ARE OPEN.","EVERY WORLD LEADS TO THE NEXT.");playDeityTone(523.25,1.1,"triangle",.05);});
+    later(12500,()=>{line("THE VIEWER LOOKED AWAY.","THE SHADER KEEPS RUNNING THROUGH THE MULTIVERSE.");playDeityTone(659.25,1.2,"sine",.05);});
+    later(tourEnd-2400,()=>{cutscene.classList.add("jackpot-burst");line("WORLD 100","THE LAST LOOP HAS BEEN BROKEN.");eyebrow.textContent="FINAL WORLD • NO MORE DESTINATIONS";playDeityTone(783.99,1.4,"triangle",.06);});
+    later(tourEnd,()=>{
+      cutscene.classList.add("jackpot-final");
+      eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10^320";
+      line("LOTTERY: JACKPOT","100 WORLDS. EVERY LOOP. ONE IMPOSSIBLE WIN.","jackpot-title jackpot-title-final");
+      button.textContent="CLAIM LOTTERY: JACKPOT ↗";
+      banner.classList.add("jackpot-world-banner-final");
+      worldName.textContent="WORLD 100 — THE JACKPOT THRONE";
+      worldCount.textContent="100 / 100";
+    });
   }
 
   function startTheViewerCutscene() {

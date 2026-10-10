@@ -1164,9 +1164,9 @@
     line("THE ROLL HAS STOPPED.","A GOLDEN SIGNAL IS THE ONLY THING LEFT.");
     playDeityTone(196,1.2,"sine",.04);
 
-    // 100 worlds scroll for almost the full 100-second score. World 100 lands at 99s;
-    // the soundtrack's main bass drop hits at exactly 100s, then the reveal resolves at 101s.
-    const worldStart=0, blurStart=97000, snapAt=99000, collapseAt=101000;
+    // World 100 lands at 99s and the main bass drop hits at 100s. Keep the finale on screen
+    // through the complete 120-second score so the music is not cut off at 101s.
+    const worldStart=0, blurStart=97000, snapAt=99000, collapseAt=120000;
     const worldDuration=(blurStart-worldStart)/worlds.length;
     worlds.forEach((name,index)=>{
       later(Math.round(worldStart+index*worldDuration),()=>{

@@ -1873,6 +1873,29 @@
     });
   }
 
+  // Lightweight Settings / Special Thanks dialog. No external assets are loaded here.
+  const settingsPanel = $("settingsPanel");
+  const settingsOpen = $("settingsOpen");
+  const settingsClose = $("settingsClose");
+  function closeSettings() {
+    if (!settingsPanel) return;
+    settingsPanel.classList.add("hidden");
+    settingsPanel.setAttribute("aria-hidden", "true");
+    settingsOpen?.focus();
+  }
+  settingsOpen?.addEventListener("click", () => {
+    settingsPanel.classList.remove("hidden");
+    settingsPanel.setAttribute("aria-hidden", "false");
+    settingsClose?.focus();
+  });
+  settingsClose?.addEventListener("click", closeSettings);
+  settingsPanel?.addEventListener("click", event => {
+    if (event.target === settingsPanel) closeSettings();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && settingsPanel && !settingsPanel.classList.contains("hidden")) closeSettings();
+  });
+
   renderCollection();
   renderPotions();
 

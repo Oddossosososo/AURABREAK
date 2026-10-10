@@ -115,10 +115,11 @@
     {name:"Universe Breaker Brew", desc:"Guarantees a rollable aura with odds of at least 1 in 1e36.", type:"guarantee", value:1e36, color:"#ff4d74", symbol:"✹"},
     {name:"Apex: Infinite Potion", desc:"Roll 250 times internally and keep the rarest result.", type:"bestof", value:250, color:"#ffffff", symbol:"∞"}
   ];
+  // Declare both storage keys before loading saved values. loadActivePotion() reads this key.
+  const ACTIVE_POTION_STORAGE_KEY = "aurabreak-active-potion-v1";
   const DEFAULT_POTION_INVENTORY = Object.fromEntries(POTIONS.map(potion => [potion.name, 1]));
   let potionInventory = loadPotionInventory();
   let activePotion = loadActivePotion();
-  const ACTIVE_POTION_STORAGE_KEY = "aurabreak-active-potion-v1";
   function loadPotionInventory() {
     try {
       const saved = JSON.parse(localStorage.getItem(POTION_STORAGE_KEY) || "null");

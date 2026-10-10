@@ -192,6 +192,26 @@
     const base = BigInt(aura.odds);
     return phaseTwoActive ? base + PHASE_TWO_ODDS_FLOOR : base;
   }
+  // Preserve real odds above Number.MAX_SAFE_INTEGER using Web Crypto's integer randomness.
+  // 105 bytes = 840 random bits, enough resolution to represent 1-in-10^250 odds.
+  function winsAura(aura, luck) {
+    const odds = auraOdds(aura);
+    const safeLimit = BigInt(Number.MAX_SAFE_INTEGER);
+    if (odds <= safeLimit) return Math.random() < Math.min(1, luck / Number(odds));
+    if (!(luck > 0)) return false;
+    const luckInt = BigInt(Math.floor(luck));
+    if (luckInt >= odds) return true;
+    if (!window.crypto || typeof window.crypto.getRandomValues !== "function") return false;
+    const scale = 1n << 840n;
+    const threshold = (scale * luckInt) / odds;
+    if (threshold <= 0n) return false;
+    if (threshold >= scale) return true;
+    const bytes = new Uint8Array(105);
+    window.crypto.getRandomValues(bytes);
+    let sample = 0n;
+    for (let i = 0; i < bytes.length; i++) sample = (sample << 8n) | BigInt(bytes[i]);
+    return sample < threshold;
+  }
   function noAuraResult() {
     return {
       name: "NO AURA",
@@ -242,9 +262,7 @@
     const potionLuck = potion?.type === "luck" ? Number(potion.value) : 1;
     const luck = Math.max(1, Number.isFinite(luckMultiplier * potionLuck) ? luckMultiplier * potionLuck : Number.MAX_VALUE);
     for (const aura of pool) {
-      const odds = Number(auraOdds(aura));
-      const chance = Math.min(1, luck / odds);
-      if (Math.random() < chance) return aura;
+      if (winsAura(aura, luck)) return aura;
     }
     return phaseTwoActive ? noAuraResult() : AURAS[0];
   }
@@ -1112,6 +1130,7 @@
   function closeCutscene() {
     stopDeityCutscene();
     if (nullAbsoluteStop) { nullAbsoluteStop(); nullAbsoluteStop = null; }
+    if (lotteryJackpotStop) { lotteryJackpotStop(); lotteryJackpotStop = null; }
     if (fourthWallCleanup) { fourthWallCleanup(); fourthWallCleanup = null; }
     const cutscene = $("cutscene");
     if (cutscene.dataset.style === "transcendence") activateTranscendenceMode();

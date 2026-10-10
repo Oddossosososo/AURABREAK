@@ -1001,20 +1001,20 @@
     function scheduleCycle() {
       if(stopped || ctx.state==="closed") return;
       const start=ctx.currentTime+.15;
-      // A long cinematic climb: the final 20 seconds go from tension to total overload.
+      // A short cinematic climb: build tension for 20 seconds, then hit the jackpot drop.
       chords.forEach((ch,ci)=>ch.forEach((f,j)=>tone(start+ci*bar*16,f,bar*15.5,.018+(ci*.004),"sine",.12)));
       for(let k=0;k<512;k++){
         const at=start+k*beat/2, sec=k*beat/2;
-        const level=sec<20?.025:sec<45?.045:sec<70?.065:sec<90?.085:.115;
+        const level=sec<8?.025:sec<14?.045:sec<18?.065:sec<20?.085:.115;
         const freq=arp[(k+(Math.floor(sec/8)*3))%arp.length];
         tone(at,freq,.17,level,sec>38?"sawtooth":"triangle",4.5);
         if(sec>55 && k%2===0) tone(at,freq*2,.12,.025,"square",5);
         if(sec>80 && k%4===1) tone(at,freq*0.5,.24,.045,"sawtooth",5);
       }
-      // Drums grow denser, but the MAIN DROP is held back until exactly 100 seconds.
+      // Hold the heavy drums for the MAIN DROP at exactly 20 seconds.
       for(let k=0;k<256;k++){
         const sec=k*beat, at=start+sec;
-        if(sec>=100) {
+        if(sec>=20) {
           kick(at,.58,true);
           noiseHit(at+.02,.20,.14,true);
           if(k%2===0) noiseHit(at+beat/2,.13,.07,true);
@@ -1032,20 +1032,20 @@
           if(k%4===2) noiseHit(at,.045,.07,true);
         }
       }
-      // Sub-bass builds from 16s and becomes enormous at the 100s payoff.
+      // Sub-bass builds from 8s and becomes enormous at the 20s payoff.
       for(let k=0;k<224;k++){
         const sec=16+k*beat, at=start+sec;
         const root=[43.65,36.71,41.20,38.89][Math.floor(sec/bar)%4];
-        tone(at,root,.32,sec<40?.12:sec<76?.19:sec<100?.25:.38,"sine",6);
-        if(sec>=100) tone(at,root*2,.24,.16,"sawtooth",5,root);
+        tone(at,root,.32,sec<12?.12:sec<18?.19:sec<20?.25:.38,"sine",6);
+        if(sec>=20) tone(at,root*2,.24,.16,"sawtooth",5,root);
       }
-      // Pre-drop risers, a brief silence, then the 100-second jackpot impact.
-      [32,64,88,96,98,99].forEach((sec,i)=>{
+      // Pre-drop risers, a brief silence, then the 20-second jackpot impact.
+      [12,16,18,19,19.5].forEach((sec,i)=>{
         for(let j=0;j<12;j++) noiseHit(start+sec-2+j*(2/12),.012+j*.003,.16,true);
         tone(start+sec,130.81,.7,.12+i*.025,"sawtooth",3,261.63);
       });
-      // White-hot stabs and a bright high octave right on the main drop.
-      [100,100.46875,100.9375,101.875,103.75].forEach((sec,i)=>{
+      // White-hot stabs and a bright high octave right on the 20-second main drop.
+      [20,20.46875,20.9375,21.875,23.75].forEach((sec,i)=>{
         tone(start+sec,130.81,.8,.26,"sawtooth",3,32.7);
         tone(start+sec,261.63,.55,.16,"square",3);
         tone(start+sec,523.25,.35,.12,"triangle",3);

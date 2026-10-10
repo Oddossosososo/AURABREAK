@@ -13,6 +13,7 @@
     {name:"SOLAR FLARE", odds:1500, rarity:"LEGENDARY", tier:"legendary", color:"#ffce77", symbol:"☼", description:"The sun remembers your name.", style:"divinity"},
     {name:"VOID WALKER", odds:5000, rarity:"LEGENDARY", tier:"legendary", color:"#a69bff", symbol:"◉", description:"You crossed the edge and kept walking.", style:"cosmic"},
     {name:"LOTTERY", odds:292201338, rarity:"LOTTERY", tier:"secret", color:"#79ffb0", symbol:"🎟️", description:"A one-in-292,201,338 miracle.", style:"divinity"},
+    {name:"LOTTERY: JACKPOT", odds:10n ** 90n, rarity:"ULTRA • RAREST", tier:"ultra", color:"#ffe889", symbol:"🎰", description:"The final winning ticket. The RNG itself has run out of luck.", style:"lottery-jackpot", ultra:true},
     {name:"BLOOD MOON", odds:12000, rarity:"MYTHIC", tier:"mythic", color:"#ff7cae", symbol:"☽", description:"An omen written across the night.", style:"fallen"},
     {name:"STARFORGED", odds:35000, rarity:"MYTHIC", tier:"mythic", color:"#ffe6a6", symbol:"✦", description:"Forged in the heart of a dying star.", style:"divinity"},
     {name:"COSMIC", odds:100000, rarity:"COSMIC", tier:"cosmic", color:"#8a9dff", symbol:"✧", description:"The cosmos opens one eye.", style:"cosmic"},
@@ -555,6 +556,7 @@
   }
   const MOVIE_SCENES = {
     "LOTTERY": {slug:"lottery", eyebrow:"PROBABILITY HAS LOST ITS MEANING", lines:["A TICKET WAS NEVER SUPPOSED TO EXIST.","ONE CHANCE. ONE IMPOSSIBLE MOMENT.","THE UNIVERSE DREW YOUR NUMBER.","LOTTERY"], subtitles:["A SINGLE GOLDEN SIGNAL.","THE ODDS WERE NEVER ON YOUR SIDE.","AND YET... HERE YOU ARE.","1 IN 292,201,338 • THE JACKPOT OF REALITY"], notes:[392,523.25,659.25,783.99]},
+    "LOTTERY: JACKPOT": {slug:"lottery-jackpot", eyebrow:"ULTRA EVENT • RNG OVERRIDE", lines:["THE MACHINE STOPS MID-ROLL.","EVERY TICKET TURNS GOLD.","THE RNG HAS NO MORE NUMBERS.","LOTTERY: JACKPOT"], subtitles:["ROLL SEQUENCE INTERRUPTED.","ONE WINNER OUT OF IMPOSSIBLE ODDS.","THE FINAL TICKET HAS BEEN DRAWN.","THE RAREST ROLLABLE AURA • 1 IN 10^90"], notes:[196,392,587.33,987.77]},
     "SOLAR FLARE": {slug:"solar", eyebrow:"STELLAR CORE BREACH", lines:["THE SUN GOES QUIET.","A THOUSAND SUNRISES COLLAPSE INTO ONE.","THE CORE REMEMBERS YOUR NAME.","SOLAR FLARE"], subtitles:["LIGHT IS GATHERING.","THE HORIZON IS BURNING.","DO NOT LOOK AWAY.","A STAR HAS CHOSEN YOU"], notes:[220,330,440,660]},
     "VOID WALKER": {slug:"void", eyebrow:"OUTSIDE THE KNOWN UNIVERSE", lines:["THE STARS HAVE STOPPED.","THERE IS NO FLOOR HERE.","SOMETHING CROSSES THE EMPTY.","VOID WALKER"], subtitles:["SIGNAL LOST.","REALITY HAS AN EDGE.","YOU CROSSED IT ANYWAY.","THE VOID KNOWS YOUR FOOTSTEPS"], notes:[196,146.83,110,73.42]},
     "STARFORGED": {slug:"starforged", eyebrow:"FORGE OF THE FIRST STAR", lines:["A STAR IS DYING.","ITS LAST LIGHT BECOMES A HAMMER.","THE COSMOS FORGES A NEW LEGEND.","STARFORGED"], subtitles:["MATTER BENDS.","THE ANVIL OF CREATION.","EVERY SPARK IS A GALAXY.","BORN FROM A SUPERNOVA"], notes:[261.63,329.63,392,523.25]},

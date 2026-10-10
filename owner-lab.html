@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080811">
+  <meta name="description" content="AURABREAK Owner Lab — build and validate AURA Script definitions.">
+  <title>OWNER LAB — AURABREAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="owner-lab.css?v=1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="aura-language.js?v=2" defer></script>
+  <script src="owner-lab.js?v=1" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">A</span><span>AURA<span class="brand-light">BREAK</span><small>OWNER LAB</small></span></a>
+    <nav><a href="index.html">← Back to game</a><span class="secure-label"><i></i> DEV AUTH REQUIRED</span></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">AURABREAK / ROOT WORKSPACE</p>
+      <h1>OWNER <span>LAB.</span></h1>
+      <p>Build, validate, save and export AURA Script definitions without editing the source files by hand.</p>
+    </section>
+
+    <section class="auth-card" id="authCard">
+      <div class="auth-icon">⌁</div>
+      <div><h2 id="authTitle">VERIFYING DEV ACCESS</h2><p id="authMessage">Checking your AURABREAK authorization…</p></div>
+      <button id="authRetry" hidden>RETRY ↻</button>
+    </section>
+
+    <section id="workspace" hidden>
+      <div class="workspace-head">
+        <div><p class="eyebrow">WORKSPACE / AURA SCRIPT <span id="versionTag">v0.2.0</span></p><h2>Definition editor</h2></div>
+        <div class="status-pill" id="statusPill">READY</div>
+      </div>
+      <div class="editor-layout">
+        <section class="panel editor-panel">
+          <div class="toolbar">
+            <label for="fileType">FILE TYPE</label>
+            <select id="fileType">
+              <option value="aura">.aura — Aura</option>
+              <option value="cutscene">.auracutsense — Cutscene</option>
+              <option value="roll">.auraroll — Roll pool</option>
+            </select>
+            <button id="loadExample" class="subtle">LOAD EXAMPLE</button>
+          </div>
+          <label class="field-label" for="sourceEditor">SOURCE</label>
+          <textarea id="sourceEditor" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+          <div class="editor-actions">
+            <button id="validateButton" class="primary">VALIDATE + REGISTER ↗</button>
+            <button id="saveButton" class="subtle">SAVE LOCAL</button>
+            <button id="exportButton" class="subtle">EXPORT FILE ↓</button>
+          </div>
+          <div id="output" class="output" role="status" aria-live="polite"><strong>READY</strong><span>Choose a file type and validate your definition.</span></div>
+        </section>
+        <aside class="panel side-panel">
+          <p class="eyebrow">REFERENCE</p><h3>Quick syntax</h3>
+          <div class="reference-item"><b>AURA</b><code>odds: 1000000</code><code>rarity: "DIVINE"</code><code>color: "#b8a9ff"</code><code>symbol: "✦"</code></div>
+          <div class="reference-item"><b>CUTSCENE</b><code>duration: 5000</code><code>title: "THE REVEAL"</code><code>effect: "flash"</code><code>reveal: "STAR EATER"</code></div>
+          <div class="reference-item"><b>ROLL POOL</b><code>base_luck: 1</code><code>aura: "COMMON"</code></div>
+          <p class="hint">AURA Script is a data language, not JavaScript. Only supported fields are parsed; scripts are never evaluated as code.</p>
+        </aside>
+      </div>
+
+      <section class="panel saved-panel">
+        <div class="saved-head"><div><p class="eyebrow">THIS BROWSER</p><h2>Saved definitions</h2></div><button id="clearSaved" class="subtle danger">CLEAR LOCAL SAVES</button></div>
+        <div id="savedList" class="saved-list"><p class="empty">No local definitions saved yet.</p></div>
+      </section>
+      <section class="notice"><b>Important:</b> Definitions saved here stay in this browser. Export a file to keep a backup or add it to GitHub. Registering a definition here does not automatically add it to the live game's roll engine or cutscene system.</section>
+    </section>
+    <footer><span>AURABREAK / OWNER LAB</span><span>CLIENT-SIDE EDITOR · SERVER-VERIFIED DEV GATE</span></footer>
+  </main>
+</body>
+</html>

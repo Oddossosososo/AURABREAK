@@ -701,3 +701,15 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .cutscene[data-style="lottery-jackpot"] .jackpot-title-final{color:#fff4c0!important;text-shadow:0 0 15px #fff1a5,0 0 42px #ffc43b,0 0 90px #ff9b19}
 @keyframes jackpotWorldArrive{from{opacity:0;transform:translateY(-12px) scale(.94);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
 @media(max-width:600px){.jackpot-world-banner{top:18px;gap:5px}.jackpot-world-kicker,.jackpot-world-count{font-size:8px}.cutscene[data-style="lottery-jackpot"] .cutscene-content{padding:105px 18px 24px}.jackpot-world-name{letter-spacing:.025em}}
+
+/* AURABREAK II exclusive: TSL world-tour zoom + final pantheon */
+.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .cutscene-art{transform-origin:50% 50%;animation:jackpotUniverseZoom 62s cubic-bezier(.12,.68,.2,1) both}
+@keyframes jackpotUniverseZoom{0%{transform:scale(1)}12%{transform:scale(1.12)}30%{transform:scale(1.28)}52%{transform:scale(1.48)}75%{transform:scale(1.72)}100%{transform:scale(2.05)}}
+.cutscene[data-style="lottery-jackpot"] .jackpot-pantheon{position:absolute;z-index:7;left:50%;top:clamp(150px,24vh,245px);transform:translateX(-50%);width:min(94vw,980px);display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 12px;pointer-events:none;animation:jackpotPantheonIn 1.2s cubic-bezier(.16,1,.3,1) both}
+.pantheon-kicker{font:10px 'DM Mono',monospace;letter-spacing:.36em;color:#fff4c0;text-shadow:0 0 18px #ffce56}
+.pantheon-gods{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;max-width:900px}
+.pantheon-gods span{font:700 clamp(9px,1.35vw,13px) 'DM Mono',monospace;letter-spacing:.07em;color:#fff9de;border:1px solid #ffdc7a77;background:linear-gradient(135deg,#201508cc,#6b431d66);border-radius:999px;padding:8px 11px;box-shadow:0 0 18px #ffcc3d22;text-shadow:0 0 10px #ffdb8c66}
+@keyframes jackpotPantheonIn{from{opacity:0;transform:translate(-50%,18px) scale(.82);filter:blur(9px)}to{opacity:1;transform:translate(-50%,0) scale(1);filter:blur(0)}}
+.cutscene[data-style="lottery-jackpot"].jackpot-pantheon-reveal .cutscene-content{padding-top:clamp(300px,43vh,420px)}
+@media(max-width:600px){.cutscene[data-style="lottery-jackpot"] .jackpot-pantheon{top:140px}.pantheon-gods{gap:5px}.pantheon-gods span{padding:6px 8px;font-size:8px}.cutscene[data-style="lottery-jackpot"].jackpot-pantheon-reveal .cutscene-content{padding-top:330px}}
+@media(prefers-reduced-motion:reduce){.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .cutscene-art{animation:none}}

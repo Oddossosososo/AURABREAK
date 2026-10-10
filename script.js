@@ -1079,20 +1079,7 @@
     if(jackpotMusicStop){jackpotMusicStop();jackpotMusicStop=null;}
     cutscene.querySelectorAll(".jackpot-song-player").forEach(player => player.remove());
     jackpotMusicStop=startJackpotOriginalScore();
-    if(!phaseTwoActive){
-      // Phase I gets a normal jackpot reveal; the TSL zoom-tour and god pantheon are II-only.
-      eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10^320";
-      title.className="jackpot-title jackpot-title-final";
-      title.textContent="LOTTERY: JACKPOT";
-      title.style.color="#fff4c0";
-      subtitle.textContent="ONE IMPOSSIBLE WIN. THE UNIVERSE BENDS AROUND YOU.";
-      button.textContent="CLAIM LOTTERY: JACKPOT ↗";
-      cutscene.classList.add("jackpot-running","jackpot-final");
-      if(window.AURABREAK_LOTTERY_JACKPOT&&window.THREE){
-        try{lotteryJackpotStop=window.AURABREAK_LOTTERY_JACKPOT.start(art);}catch(err){console.warn("Jackpot shader fallback:",err);}
-      }
-      return;
-    }
+    // Every version gets the full 100-world tour; the pantheon remains Phase II-only.
     const oldBanner=cutscene.querySelector(".jackpot-world-banner");
     if(oldBanner) oldBanner.remove();
     const banner=document.createElement("div");
@@ -1177,7 +1164,9 @@
     line("THE ROLL HAS STOPPED.","A GOLDEN SIGNAL IS THE ONLY THING LEFT.");
     playDeityTone(196,1.2,"sine",.04);
 
-    const worldStart=1800, blurStart=33000, snapAt=38000, collapseAt=40500;
+    // 100 worlds scroll for almost the full 100-second score. World 100 lands at 99s;
+    // the soundtrack's main bass drop hits at exactly 100s, then the reveal resolves at 101s.
+    const worldStart=0, blurStart=97000, snapAt=99000, collapseAt=101000;
     const worldDuration=(blurStart-worldStart)/worlds.length;
     worlds.forEach((name,index)=>{
       later(Math.round(worldStart+index*worldDuration),()=>{

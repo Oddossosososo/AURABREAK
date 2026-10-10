@@ -1061,55 +1061,55 @@
       gain.gain.setValueAtTime(vol,at); gain.gain.exponentialRampToValueAtTime(.0001,at+dur);
       src.connect(filter); filter.connect(gain); gain.connect(master); src.start(at); src.stop(at+dur);
     }
+    // Schedule the soundtrack in short rolling intervals instead of creating
+    // thousands of audio nodes at once. This is more reliable on slower devices.
+    let songStartTime = 0, nextStep = 0;
     function scheduleCycle() {
       if(stopped || ctx.state==="closed") return;
-      const start=ctx.currentTime+.15;
-      // Start the jackpot track at full intensity immediately—no 20-second wait.
-      chords.forEach((ch,ci)=>ch.forEach((f,j)=>tone(start+ci*bar*16,f,bar*15.5,.018+(ci*.004),"sine",.12)));
-      for(let k=0;k<512;k++){
-        const at=start+k*beat/2, sec=k*beat/2;
-        const level=.115;
+      if(!songStartTime) songStartTime=ctx.currentTime+.12;
+      const horizon=ctx.currentTime+1.0;
+      const stepsPerCycle=Math.round(cycle/(beat/2));
+      while(!stopped && songStartTime+(nextStep*beat/2)<=horizon){
+        if(nextStep>=stepsPerCycle){
+          songStartTime+=cycle;
+          nextStep=0;
+        }
+        const k=nextStep++;
+        const sec=k*beat/2;
+        const at=songStartTime+sec;
         const freq=arp[(k+(Math.floor(sec/8)*3))%arp.length];
-        tone(at,freq,.17,level,sec>38?"sawtooth":"triangle",4.5);
+        tone(at,freq,.17,.115,sec>38?"sawtooth":"triangle",4.5);
         if(sec>55 && k%2===0) tone(at,freq*2,.12,.025,"square",5);
-        if(sec>80 && k%4===1) tone(at,freq*0.5,.24,.045,"sawtooth",5);
-      }
-      // Full-power jackpot drums start immediately.
-      for(let k=0;k<256;k++){
-        const sec=k*beat, at=start+sec;
-        if(sec>=0) {
+        if(sec>80 && k%4===1) tone(at,freq*.5,.24,.045,"sawtooth",5);
+
+        // Heavy kick, snare-like noise, and sub-bass on each beat.
+        if(k%2===0){
+          const beatIndex=k/2;
           kick(at,.58,true);
           noiseHit(at+.02,.20,.14,true);
-          if(k%2===0) noiseHit(at+beat/2,.13,.07,true);
-          if(k%4===0) tone(at,55,.45,.23,"sawtooth",5,27.5);
-        } else if(sec>=76) {
-          kick(at,k%2===0?.36:.24);
-          noiseHit(at+beat/2,.055,.045,true);
-          if(k%2===1) noiseHit(at,.10,.07,true);
-        } else if(sec>=40) {
-          if(k%2===0) kick(at,.25);
-          noiseHit(at+beat/2,.035,.04,true);
-          if(k%4===2) noiseHit(at,.07,.08,true);
-        } else if(sec>=12) {
-          if(k%2===0) kick(at,.15);
-          if(k%4===2) noiseHit(at,.045,.07,true);
+          if(beatIndex%2===0) noiseHit(at+beat/2,.13,.07,true);
+          if(beatIndex%4===0) tone(at,55,.45,.23,"sawtooth",5,27.5);
+          const root=[43.65,36.71,41.20,38.89][Math.floor(sec/bar)%4];
+          tone(at,root,.32,.38,"sine",6);
+          tone(at,root*2,.24,.16,"sawtooth",5,root);
+        }
+
+        // Sustained harmony changes every 30 seconds.
+        if(k%128===0){
+          const chord=chords[Math.floor(sec/30)%chords.length];
+          chord.forEach((f,j)=>tone(at,f,bar*15.5,.018+(Math.floor(sec/30)*.004),"sine",.12));
+        }
+
+        // The jackpot impact stabs begin on the very first step.
+        if([0,2,4,8,16].includes(k)){
+          tone(at,130.81,.8,.26,"sawtooth",3,32.7);
+          tone(at,261.63,.55,.16,"square",3);
+          tone(at,523.25,.35,.12,"triangle",3);
+          if(k===0) for(let j=0;j<20;j++) noiseHit(at+j*.035,.06,.11,true);
         }
       }
-      // Full sub-bass starts immediately.
-      for(let k=0;k<256;k++){
-        const sec=k*beat, at=start+sec;
-        const root=[43.65,36.71,41.20,38.89][Math.floor(sec/bar)%4];
-        tone(at,root,.32,.38,"sine",6);
-        if(sec>=0) tone(at,root*2,.24,.16,"sawtooth",5,root);
-      }
-      // Immediate impact and bright jackpot stabs from the very first beat.
-      [0,.46875,.9375,1.875,3.75].forEach((sec,i)=>{
-        tone(start+sec,130.81,.8,.26,"sawtooth",3,32.7);
-        tone(start+sec,261.63,.55,.16,"square",3);
-        tone(start+sec,523.25,.35,.12,"triangle",3);
-        if(i===0) for(let j=0;j<20;j++) noiseHit(start+sec+j*.035,.06,.11,true);
-      });
-      loopTimer=setTimeout(scheduleCycle,cycle*1000);
+      // Keep a little audio scheduled ahead so the music doesn't cut out between batches.
+      loopTimer=setTimeout(scheduleCycle,200);
     }
     // Some browsers suspend audio when the reveal starts after an asynchronous roll.
     // Resume on the next real user gesture, and only schedule the score once.

@@ -21,6 +21,34 @@
   <script src="omnipotent-cutscenes.js?v=1" defer></script>
   <script src="aura-language.js?v=2" defer></script>
   <script src="script.js?v=63" defer></script>
+
+  <style id="soft-pink-accent">
+    /* Soft pink accent requested for the main roll viewer */
+    .roll-card {
+      border-color: rgba(255, 155, 205, .52);
+      box-shadow: 0 0 0 1px rgba(255, 155, 205, .08), 0 14px 42px rgba(255, 105, 180, .08);
+    }
+    .roll-card > .card-top {
+      border-bottom-color: rgba(255, 155, 205, .24);
+    }
+    .roll-card .orb-stage {
+      background: radial-gradient(ellipse at center, rgba(255, 135, 195, .12), transparent 64%);
+    }
+    .roll-card .stage-label { color: #d99bbd; }
+    .roll-card .roll-button {
+      border-color: #f3a5cf;
+      background: linear-gradient(100deg, #d978ad, #9670e8);
+      box-shadow: 0 6px 28px rgba(232, 126, 184, .2);
+    }
+    .roll-card .roll-button:focus-visible {
+      outline: 2px solid #ffd2e8;
+      outline-offset: 3px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .roll-card .roll-button { transition: none; }
+    }
+  </style>
+
 </head>
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>

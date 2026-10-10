@@ -728,7 +728,7 @@
     cutscene.dataset.style = "the-viewer";
     cutscene.dataset.aura = "THE VIEWER";
     cutscene.style.setProperty("--aura-color", "#b7fffe");
-    art.innerHTML = '<div class="fw-starfield"></div><div class="fw-grid"></div><div class="fw-rift"></div><div class="fw-eye"><span>◉</span></div><div class="fw-orbit fw-orbit-a"></div><div class="fw-orbit fw-orbit-b"></div><div class="fw-code" aria-hidden="true">01010100 01001000 01000101<br>YOU ARE HERE<br>RENDER TARGET: VIEWER</div><div class="fw-flash"></div>';
+    art.innerHTML = '<div class="fw-starfield"></div><div class="fw-grid"></div><div class="fw-rift"></div><div class="fw-eye"><span>◉</span></div><div class="fw-orbit fw-orbit-a"></div><div class="fw-orbit fw-orbit-b"></div><div class="fw-target" aria-hidden="true">TARGET LOCKED<br><b>YOU</b></div><div class="fw-warning" aria-hidden="true">OBSERVER DETECTED</div><div class="fw-code" aria-hidden="true">01010100 01001000 01000101<br>YOU ARE HERE<br>RENDER TARGET: VIEWER</div><div class="fw-flash"></div>';
     eyebrow.textContent = "UNEXPECTED INPUT • OUTSIDE CONTEXT DETECTED";
     title.textContent = "WHO'S WATCHING?";
     title.className = "fw-title";
@@ -745,6 +745,9 @@
       const y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height) * 2 - 1));
       cutscene.style.setProperty("--fw-x", x.toFixed(3));
       cutscene.style.setProperty("--fw-y", y.toFixed(3));
+      // Low-cost interaction: the eye tracks the cursor and locks on when it crosses the center.
+      const nearCenter = Math.abs(x) < .18 && Math.abs(y) < .2;
+      cutscene.classList.toggle("fw-target-locked", nearCenter);
     };
     cutscene.addEventListener("pointermove", move);
     const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
@@ -759,6 +762,7 @@
       eyebrow.textContent = "INPUT SOURCE: THIS WINDOW";
       line("YES. YOU.", "THE PERSON READING THIS LINE RIGHT NOW.");
       document.title = "YOU FOUND ME. — AURABREAK";
+      cutscene.classList.add("fw-target-active");
       playDeityTone(220, 1.1, "triangle", .07);
     });
     later(5200, () => {
@@ -775,6 +779,7 @@
       cutscene.classList.add("fw-final");
       eyebrow.textContent = "THE VIEWER IS PART OF THE SCENE";
       line("YOU ARE THE FINAL VARIABLE.", "NO CHARACTER. NO NPC. THE ONE HOLDING THE CONTROLS.");
+      cutscene.classList.add("fw-target-active", "fw-signal-break");
       playDeityTone(55, 2.6, "sawtooth", .1);
     });
     later(15100, () => {

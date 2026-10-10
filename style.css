@@ -643,3 +643,15 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .potion-use:hover:not(:disabled){background:color-mix(in srgb,var(--potion-color) 25%,transparent)}
 .potion-use:disabled{opacity:.38;cursor:not-allowed}
 @media(max-width:760px){.potion-section{width:min(100% - 28px,1180px);padding:30px 0 48px}.potion-grid{grid-template-columns:1fr}.potion-card{grid-template-columns:38px minmax(0,1fr) auto;padding:12px;gap:10px}.potion-symbol{width:36px;height:36px;font-size:19px}.potion-use{padding:9px 10px}}
+
+/* LOTTERY: JACKPOT — Ultra tier, deliberately above every non-admin aura */
+.ultra{--aura-color:#ffe889}
+.ultra.aura-tile,.aura-tile.ultra{border-color:#ffe88980;background:linear-gradient(145deg,#302716,#101019);box-shadow:inset 0 0 24px #ffe88912,0 0 20px #ffe88912}
+.ultra.aura-tile:before,.aura-tile.ultra:before{opacity:.34;background:conic-gradient(from 0deg,#ffe889,#fff8d6,#ffb84a,#ffe889);filter:blur(28px)}
+.cutscene[data-style="lottery-jackpot"]{background:#07050b;--aura-color:#ffe889}
+.cutscene[data-style="lottery-jackpot"] .cutscene-backdrop{opacity:.32;background:radial-gradient(ellipse at center,#ffe889 0%,#c88b252c 24%,transparent 62%),#07050b}
+.cutscene[data-style="lottery-jackpot"] .cutscene-art{background:repeating-conic-gradient(from 0deg at 50% 50%,#ffe88912 0deg,#fff0 4deg,transparent 12deg);animation:spin 24s linear infinite}
+.cutscene[data-style="lottery-jackpot"] .cutscene-content h2{color:#fff4bf;text-shadow:0 0 12px #fff,0 0 38px #ffe889,0 0 90px #ffb52e}
+.cutscene[data-style="lottery-jackpot"] .cutscene-content>p:first-child{color:#ffe889}
+.cutscene[data-style="lottery-jackpot"] .cutscene-content>p:nth-child(3){color:#f6dca0}
+.cutscene[data-style="lottery-jackpot"] .cutscene-button{border-color:#ffe889;color:#fff4bf;background:#ffe88912}

@@ -1066,3 +1066,77 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
     animation-duration:1.2s!important;animation-iteration-count:infinite!important;
   }
 }
+
+
+/* LOTTERY: JACKPOT — reality-breaking escalation across the entire game. */
+.cutscene[data-style="lottery-jackpot"].jackpot-reality-break .jackpot-reality-grid{
+  position:absolute;inset:-35%;z-index:1;pointer-events:none;opacity:.22;
+  background-image:linear-gradient(#ffe88920 1px,transparent 1px),linear-gradient(90deg,#ffe88920 1px,transparent 1px);
+  background-size:48px 48px;transform:perspective(420px) rotateX(58deg) scale(1.8);
+  transform-origin:50% 60%;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 72%);
+  animation:jackpotRealityGrid 5s linear infinite;
+}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture{
+  position:absolute;inset:-8%;z-index:4;pointer-events:none;opacity:0;overflow:hidden;
+  transition:opacity 1.2s ease;
+}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture i{
+  position:absolute;left:50%;top:50%;height:150vh;width:2px;display:block;
+  background:linear-gradient(transparent,#fffbe6 22%,#ffe889 48%,#ff8d32 53%,transparent 78%);
+  box-shadow:0 0 14px #ffe889,0 0 38px #ffb52e;
+  transform-origin:50% 50%;opacity:0;
+}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture i:nth-child(1){transform:rotate(12deg) scaleX(1);left:22%}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture i:nth-child(2){transform:rotate(-27deg);left:36%}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture i:nth-child(3){transform:rotate(44deg);left:49%}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture i:nth-child(4){transform:rotate(-53deg);left:64%}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture i:nth-child(5){transform:rotate(71deg);left:78%}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture i:nth-child(6){transform:rotate(-8deg);left:90%}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-vortex{
+  position:absolute;inset:-30%;z-index:1;pointer-events:none;opacity:0;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg at 50% 50%,#fff8d522 0deg 1deg,transparent 2deg 8deg,#ff9c2b25 10deg 11deg,transparent 12deg 18deg);
+  mask-image:radial-gradient(ellipse at center,transparent 0%,#000 35%,transparent 72%);
+  transition:opacity 2s ease;animation:jackpotRealityVortex 9s linear infinite;
+}
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-glitch{
+  position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;
+  background:repeating-linear-gradient(0deg,transparent 0 8px,#fff0b80d 9px 10px,transparent 11px 21px);
+  mix-blend-mode:screen;
+}
+.cutscene.jackpot-reality-break .jackpot-reality-vortex{opacity:.55}
+.cutscene.jackpot-reality-fracture .jackpot-reality-fracture{opacity:1}
+.cutscene.jackpot-reality-fracture .jackpot-reality-fracture i{animation:jackpotRealityCrack 1.1s ease-in-out infinite alternate}
+.cutscene.jackpot-reality-overwrite .jackpot-reality-fracture i{animation-duration:.42s;filter:brightness(1.8)}
+.cutscene.jackpot-reality-overwrite .jackpot-reality-glitch{opacity:1;animation:jackpotRealityGlitch .18s steps(2,end) infinite}
+.cutscene.jackpot-reality-overwrite .jackpot-reality-vortex{opacity:.9;animation-duration:2.4s}
+.cutscene.jackpot-reality-collapse .jackpot-reality-vortex{opacity:1;animation-duration:1.1s}
+.cutscene.jackpot-reality-collapse .jackpot-reality-grid{animation-duration:.8s;opacity:.55}
+.cutscene.jackpot-reality-collapse .jackpot-reality-fracture i{animation-duration:.2s;filter:brightness(2.2)}
+.cutscene.jackpot-reality-break::after{
+  content:"";position:fixed;inset:0;z-index:4;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 38%,#05030866 100%),linear-gradient(115deg,transparent 0 48%,#ffe8890b 49%,transparent 50% 100%);
+  box-shadow:inset 0 0 9vw #ffb52e25;
+}
+.cutscene.jackpot-reality-overwrite .cutscene-backdrop{opacity:.42;filter:hue-rotate(30deg) saturate(1.8)}
+.cutscene.jackpot-reality-collapse .cutscene-backdrop{opacity:.65;filter:hue-rotate(-35deg) saturate(2.2) contrast(1.25)}
+.cutscene.jackpot-reality-overwrite .jackpot-world-banner{filter:drop-shadow(0 0 16px #ffe889)}
+.cutscene.jackpot-reality-collapse .jackpot-world-banner{animation:jackpotRealityBanner .55s steps(2,end) infinite}
+@keyframes jackpotRealityGrid{0%{background-position:0 0;transform:perspective(420px) rotateX(58deg) scale(1.8) translateY(0)}100%{background-position:0 96px;transform:perspective(420px) rotateX(58deg) scale(2.2) translateY(30px)}}
+@keyframes jackpotRealityVortex{to{transform:rotate(360deg) scale(1.12)}}
+@keyframes jackpotRealityCrack{0%{opacity:.05;filter:brightness(.8)}35%{opacity:.9}100%{opacity:.25;filter:brightness(1.7)}}
+@keyframes jackpotRealityGlitch{0%{transform:translateX(-3px);clip-path:inset(12% 0 73%)}50%{transform:translateX(4px);clip-path:inset(48% 0 34%)}100%{transform:translateX(-1px);clip-path:inset(78% 0 8%)}}
+@keyframes jackpotRealityBanner{0%,100%{transform:translateX(-50%)}50%{transform:translateX(calc(-50% + 3px))}}
+/* The main game visibly destabilizes behind the cinematic overlay, then returns unchanged. */
+body:has(#cutscene.jackpot-running:not(.hidden)) main{transform-origin:50% 35%;animation:jackpotGameReality 8s ease-in-out infinite alternate;filter:saturate(1.25) hue-rotate(12deg)}
+body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbarReality 4s steps(2,end) infinite;filter:hue-rotate(18deg)}
+@keyframes jackpotGameReality{0%{transform:perspective(1200px) rotateX(0deg) scale(1);filter:saturate(1.1) hue-rotate(0deg)}100%{transform:perspective(1200px) rotateX(1.2deg) scale(.992);filter:saturate(1.65) hue-rotate(24deg)}}
+@keyframes jackpotTopbarReality{0%,100%{translate:0 0}50%{translate:1px 0}}
+@media(prefers-reduced-motion:reduce){
+ .cutscene[data-style="lottery-jackpot"] .jackpot-reality-grid,
+ .cutscene[data-style="lottery-jackpot"] .jackpot-reality-vortex,
+ .cutscene.jackpot-reality-fracture .jackpot-reality-fracture i,
+ .cutscene.jackpot-reality-overwrite .jackpot-reality-glitch,
+ .cutscene.jackpot-reality-collapse .jackpot-world-banner,
+ body:has(#cutscene.jackpot-running:not(.hidden)) main,
+ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:none!important}
+}

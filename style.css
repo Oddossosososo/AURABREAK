@@ -1640,3 +1640,111 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
 @keyframes zeroStars { to{transform:rotate(360deg) scale(1.25)} }
 @keyframes zeroSpin { to{transform:rotate(360deg)} }
 @media(prefers-reduced-motion:reduce){.movie-aurabreak-zero .movie-core,.movie-aurabreak-zero .movie-starfield,.movie-aurabreak-zero .movie-volumetric{animation:none!important}}
+
+
+/* LOTTERY: WINNER — dedicated endgame cinematic revamp */
+.cutscene[data-style="lottery-winner"].winner-reveal-running .movie-scene{
+  background:
+    radial-gradient(ellipse at 50% 48%,#fff9 0,transparent 5%),
+    radial-gradient(ellipse at 50% 50%,#b45aff45 0,transparent 26%),
+    radial-gradient(ellipse at 50% 50%,#160628 0, #05020d 58%,#010106 100%);
+  animation:winnerUniverseBreath 5s ease-in-out infinite;
+}
+.cutscene[data-style="lottery-winner"].winner-reveal-running .movie-starfield{
+  opacity:.95; background-size:65px 65px,113px 113px,177px 177px;
+  animation:winnerStars 18s linear infinite;
+}
+.cutscene[data-style="lottery-winner"] .movie-horizon{
+  opacity:.75; border-radius:50%; border-top:2px solid #fff8;
+  box-shadow:0 -14px 42px #bd75ff55,0 -2px 9px #fff9;
+  transform:perspective(300px) rotateX(72deg) scale(1.7);
+}
+.cutscene[data-style="lottery-winner"] .movie-core{
+  width:clamp(110px,19vw,230px);height:clamp(110px,19vw,230px);
+  border:2px solid #fff;background:
+    radial-gradient(circle at 32% 26%,#fff 0 3%,#fff7d5 7%,#f6c9ff 15%,#a24dff 31%,#351052 56%,#07020d 74%);
+  box-shadow:0 0 22px #fff,0 0 65px #e7b9ff,0 0 145px #a044ffcc,0 0 260px #6b24ff66,inset 0 0 42px #fff9;
+  animation:winnerCoreAwaken 3.6s cubic-bezier(.2,.8,.2,1) infinite;
+}
+.cutscene[data-style="lottery-winner"] .movie-core span{
+  color:#fff8e6;font-size:clamp(42px,8vw,90px);
+  text-shadow:0 0 18px #fff,0 0 45px #e9baff,0 0 90px #a64dff;
+  animation:winnerCrown 4s ease-in-out infinite;
+}
+.cutscene[data-style="lottery-winner"] .movie-ring-a{
+  width:min(68vw,620px);height:min(68vw,620px);border:1px solid #f9eaffaa;
+  box-shadow:0 0 24px #d3a0ff88,inset 0 0 24px #ad66ff33;
+  animation:winnerRingA 12s linear infinite;
+}
+.cutscene[data-style="lottery-winner"] .movie-ring-b{
+  width:min(88vw,820px);height:min(88vw,820px);border:1px dashed #fff8;
+  box-shadow:0 0 45px #8e47ff55;animation:winnerRingB 19s linear infinite;
+}
+.cutscene[data-style="lottery-winner"] .movie-fragments{
+  inset:0;opacity:.7;
+  background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0 7deg,#d9a7ff22 7.2deg 7.5deg,transparent 8deg 15deg);
+  mask-image:radial-gradient(circle,transparent 0 12%,#000 43%,transparent 78%);
+  animation:winnerFragments 32s linear infinite;
+}
+.cutscene[data-style="lottery-winner"] .movie-volumetric{
+  inset:-35%;opacity:.8;
+  background:conic-gradient(from 0deg at 50% 50%,transparent 0 7%,#fff7 9%,#b46cff88 14%,transparent 23% 39%,#ffe9b866 46%,transparent 55% 70%,#a66aff77 78%,transparent 87%);
+  filter:blur(12px);animation:winnerVolumetric 14s linear infinite;
+}
+.cutscene[data-style="lottery-winner"] .movie-impact{
+  position:absolute;inset:0;opacity:0;pointer-events:none;
+  background:radial-gradient(circle at center,#fff 0, #f4d8ffbb 4%,#9a45ff55 17%,transparent 48%);
+}
+.cutscene[data-style="lottery-winner"] .movie-title-final{
+  color:#fff7ff!important;letter-spacing:.02em;
+  text-shadow:0 0 12px #fff,0 0 35px #e2b2ff,0 0 80px #a04aff,0 0 130px #5b19b9;
+  animation:winnerTitleReveal 1.1s cubic-bezier(.12,.8,.2,1) both;
+}
+.cutscene[data-style="lottery-winner"] .cutscene-content{max-width:1000px}
+.cutscene[data-style="lottery-winner"] .movie-subtitle{
+  color:#e9d8ff;text-shadow:0 0 18px #a85bff66;letter-spacing:.18em;
+}
+.cutscene[data-style="lottery-winner"].winner-fracture .movie-scene{filter:contrast(1.45) saturate(1.6);animation:winnerFracture .24s steps(2) infinite}
+.cutscene[data-style="lottery-winner"].winner-fracture .movie-impact{opacity:.8;animation:winnerImpact .8s ease-out both}
+.cutscene[data-style="lottery-winner"].winner-fracture .movie-ring{border-color:#fff;box-shadow:0 0 38px #fff}
+.cutscene[data-style="lottery-winner"].winner-ascend .movie-core{animation:winnerAscend 2.8s cubic-bezier(.12,.7,.12,1) both}
+.cutscene[data-style="lottery-winner"].winner-ascend .movie-volumetric{animation-duration:2.5s;opacity:1}
+.cutscene[data-style="lottery-winner"].winner-overflow .movie-scene{animation:winnerOverload 1.2s ease-out both}
+.cutscene[data-style="lottery-winner"].winner-overflow .movie-impact{opacity:1;animation:winnerImpact 1.4s ease-out both}
+.cutscene[data-style="lottery-winner"].winner-overflow .movie-core{animation:winnerFinalCore 2.6s ease-in-out infinite}
+.cutscene[data-style="lottery-winner"].winner-aftershock .movie-scene{filter:saturate(.75) brightness(.8)}
+.cutscene[data-style="lottery-winner"].winner-silence .movie-scene{filter:saturate(.35) brightness(.55)}
+.cutscene[data-style="lottery-winner"].winner-silence .movie-core{animation:none;transform:translate(-50%,-50%) scale(.82)}
+.cutscene[data-style="lottery-winner"].winner-silence .movie-volumetric{opacity:.18;animation:none}
+.cutscene[data-style="lottery-winner"].movie-finale{animation:winnerFinaleFlash 1.1s ease-out}
+@keyframes winnerUniverseBreath{0%,100%{filter:brightness(.76) saturate(1)}50%{filter:brightness(1.2) saturate(1.35)}}
+@keyframes winnerStars{from{transform:scale(1.2) rotate(0);background-position:0 0,0 0,0 0}to{transform:scale(1.2) rotate(14deg);background-position:160px 220px,-200px 140px,100px -230px}}
+@keyframes winnerCoreAwaken{0%,100%{transform:translate(-50%,-50%) scale(.72);filter:brightness(.75)}48%{transform:translate(-50%,-50%) scale(.92);filter:brightness(1.25)}70%{transform:translate(-50%,-50%) scale(.84);filter:brightness(1.05)}}
+@keyframes winnerCrown{0%,100%{transform:scale(.85) rotate(-8deg);filter:brightness(.8)}50%{transform:scale(1.12) rotate(8deg);filter:brightness(1.6)}}
+@keyframes winnerRingA{from{transform:translate(-50%,-50%) rotateX(67deg) rotate(0) scale(.8)}to{transform:translate(-50%,-50%) rotateX(67deg) rotate(360deg) scale(1.15)}}
+@keyframes winnerRingB{from{transform:translate(-50%,-50%) rotateY(65deg) rotate(360deg) scale(1.05)}to{transform:translate(-50%,-50%) rotateY(65deg) rotate(0) scale(.85)}}
+@keyframes winnerFragments{to{transform:rotate(360deg) scale(1.12)}}
+@keyframes winnerVolumetric{to{transform:rotate(360deg) scale(1.08)}}
+@keyframes winnerImpact{0%{opacity:0;transform:scale(.1)}18%{opacity:1}100%{opacity:0;transform:scale(1.8)}}
+@keyframes winnerFracture{0%,100%{transform:translate(0)}25%{transform:translate(2px,-1px)}50%{transform:translate(-2px,1px)}75%{transform:translate(1px,2px)}}
+@keyframes winnerAscend{0%{transform:translate(-50%,-50%) scale(.7);filter:brightness(.7)}55%{transform:translate(-50%,-50%) scale(1.35);filter:brightness(2.1)}100%{transform:translate(-50%,-50%) scale(.92);filter:brightness(1.25)}}
+@keyframes winnerOverload{0%{filter:brightness(1)}12%{filter:brightness(2.4)}35%{filter:brightness(.5)}58%{filter:brightness(1.9)}100%{filter:brightness(1)}}
+@keyframes winnerFinalCore{0%,100%{transform:translate(-50%,-50%) scale(.82);filter:brightness(.9)}50%{transform:translate(-50%,-50%) scale(1.04);filter:brightness(1.75)}}
+@keyframes winnerTitleReveal{from{opacity:0;transform:scale(.78);filter:blur(18px)}to{opacity:1;transform:scale(1);filter:blur(0)}}
+@keyframes winnerFinaleFlash{0%{filter:brightness(1)}20%{filter:brightness(2.2)}55%{filter:brightness(.72)}100%{filter:brightness(1)}}
+@media(max-width:600px){
+  .cutscene[data-style="lottery-winner"] .movie-core{width:112px;height:112px}
+  .cutscene[data-style="lottery-winner"] .movie-ring-a{width:78vw;height:78vw}
+  .cutscene[data-style="lottery-winner"] .movie-ring-b{width:96vw;height:96vw}
+  .cutscene[data-style="lottery-winner"] .cutscene-content{padding:20px}
+  .cutscene[data-style="lottery-winner"] .movie-title-final{font-size:clamp(30px,9vw,72px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .cutscene[data-style="lottery-winner"] .movie-scene,
+  .cutscene[data-style="lottery-winner"] .movie-starfield,
+  .cutscene[data-style="lottery-winner"] .movie-core,
+  .cutscene[data-style="lottery-winner"] .movie-core span,
+  .cutscene[data-style="lottery-winner"] .movie-ring,
+  .cutscene[data-style="lottery-winner"] .movie-fragments,
+  .cutscene[data-style="lottery-winner"] .movie-volumetric{animation:none!important}
+}

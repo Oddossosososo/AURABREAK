@@ -773,7 +773,7 @@
     subtitle.textContent = "";
     button.textContent = "SKIP CUTSCENE ↗";
     content.classList.remove("deity-reveal");
-    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break");
+    cutscene.classList.remove("deity-running","deity-impact","galactic-running","galactic-break","hacker-panic","hacker-overload");
     cutscene.classList.add("movie-running");
     const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
     const reveal = (index) => {

@@ -995,3 +995,28 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @media(prefers-reduced-motion:reduce){
   .low-performance *, .low-performance *::before, .low-performance *::after{scroll-behavior:auto!important}
 }
+
+
+/* Jackpot cutscene must keep progressing even when the OS requests reduced motion.
+   Keep the effects gentler rather than collapsing every animation to one frame. */
+@media(prefers-reduced-motion:reduce){
+  .cutscene[data-style="lottery-jackpot"] .jackpot-fallback,
+  .cutscene[data-style="lottery-jackpot"] .jackpot-ticket,
+  .cutscene[data-style="lottery-jackpot"] .jackpot-particles,
+  .cutscene[data-style="lottery-jackpot"] .jackpot-world-tour .cutscene-art,
+  .cutscene[data-style="lottery-jackpot"] .jackpot-dimension-ring,
+  .cutscene[data-style="lottery-jackpot"] .jackpot-ring-core,
+  .cutscene[data-style="lottery-jackpot"] .jackpot-side-world,
+  .cutscene[data-style="lottery-jackpot"] .jackpot-compute-burst i{
+    animation-duration:4s!important;
+    animation-iteration-count:infinite!important;
+  }
+  .cutscene[data-style="lottery-jackpot"] .jackpot-ticket{animation-name:jackpotTicketFloat!important}
+  .cutscene[data-style="lottery-jackpot"] .jackpot-particles{animation-name:jackpotParticleDrift!important}
+  .cutscene[data-style="lottery-jackpot"] .jackpot-fallback{animation-name:jackpotFallbackPulse!important}
+  .cutscene[data-style="lottery-jackpot"] .jackpot-dimension-ring{animation-name:jackpotRingOrbit!important}
+  .cutscene[data-style="lottery-jackpot"] .jackpot-ring-core{animation-name:jackpotCorePulse!important}
+  .cutscene[data-style="lottery-jackpot"] .jackpot-world-tour .cutscene-art{animation-name:jackpotWorldFlow!important}
+  .cutscene[data-style="lottery-jackpot"] .jackpot-compute-burst i{animation-name:jackpotBurstTravel!important}
+  .cutscene[data-style="lottery-jackpot"].jackpot-running .cutscene-content{animation-duration:1.2s!important;animation-iteration-count:1!important}
+}

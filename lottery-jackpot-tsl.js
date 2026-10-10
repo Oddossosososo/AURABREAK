@@ -46,13 +46,13 @@ async function start(container) {
 
   let raf = 0, disposed = false, lastFrame = 0, visible = true;
   let resizeObserver = null, intersectionObserver = null;
-  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Keep the jackpot reveal moving; reduced-motion is handled by gentler CSS effects.
   function resize() {
     if (disposed) return;
     renderer.setSize(Math.max(1, container.clientWidth), Math.max(1, container.clientHeight), false);
-    if (reducedMotion) renderer.render(scene, camera);
+    renderer.render(scene, camera);
   }
-  function shouldAnimate() { return !disposed && !reducedMotion && !document.hidden && visible && container.isConnected; }
+  function shouldAnimate() { return !disposed && !document.hidden && visible && container.isConnected; }
   function frame(ms) {
     raf = 0;
     if (!shouldAnimate()) return;
@@ -72,7 +72,7 @@ async function start(container) {
   }
   document.addEventListener("visibilitychange", onVisibility);
   resize();
-  if (reducedMotion) renderer.render(scene, camera); else sync();
+  sync();
   return function stop() {
     if (disposed) return;
     disposed = true;

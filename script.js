@@ -971,7 +971,7 @@
     const songPlayer=document.createElement("audio");
     songPlayer.className="jackpot-song-player";
     songPlayer.title="LOTTERY: JACKPOT soundtrack";
-    songPlayer.preload="none";
+    songPlayer.preload="auto";
     songPlayer.loop=true;
     songPlayer.volume=0.8;
     songPlayer.setAttribute("playsinline","");
@@ -1082,7 +1082,7 @@
     line("THE ROLL HAS STOPPED.","A GOLDEN SIGNAL IS THE ONLY THING LEFT.");
     playDeityTone(196,1.2,"sine",.04);
 
-    const worldStart=23000, blurStart=82000, snapAt=101000, collapseAt=103000;
+    const worldStart=1800, blurStart=33000, snapAt=38000, collapseAt=40500;
     const worldDuration=(blurStart-worldStart)/worlds.length;
     worlds.forEach((name,index)=>{
       later(Math.round(worldStart+index*worldDuration),()=>{

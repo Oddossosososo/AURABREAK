@@ -1501,3 +1501,57 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
   .cutscene.hacker-overload .movie-hacker,
   .cutscene.hacker-overload .hacker-big-text { animation:none!important; }
 }
+
+
+/* HACKER — legitimate roll: suspicion collapses into a once-in-history confirmation. */
+.cutscene.hacker-legit-roll .movie-hacker {
+  background:
+    radial-gradient(ellipse at 50% 48%,#eaffef24 0%,transparent 23%),
+    radial-gradient(ellipse at 50% 50%,#06431f 0%,#010604 68%);
+}
+.cutscene.hacker-legit-roll .movie-hacker .movie-core {
+  border-color:#eaffef;
+  background:radial-gradient(circle at 50% 50%,#fff 0%,#baffcf 4%,#55ff91 12%,#087a39 29%,#02140a 58%,transparent 72%);
+  box-shadow:0 0 28px #fff,0 0 90px #55ff91,0 0 180px #00ff6a66;
+  animation:hackerLegitCore 2.1s ease-in-out infinite;
+}
+.cutscene.hacker-legit-roll .movie-horizon {
+  border-color:#caffdaaa;
+  box-shadow:0 0 35px #55ff9188,inset 0 0 45px #00ff6a44;
+  animation:hackerLegitHorizon 2.6s ease-in-out infinite alternate;
+}
+.cutscene.hacker-legit-roll .movie-ring {
+  border-color:#caffda;
+  box-shadow:0 0 25px #55ff91aa,inset 0 0 25px #55ff9133;
+}
+.cutscene.hacker-legit-awakening .movie-core {
+  animation:hackerLegitAscend .9s cubic-bezier(.12,.8,.16,1) both;
+}
+.cutscene.hacker-legit-overflow .movie-hacker {
+  animation:hackerLegitWorld 1.6s ease-out both;
+}
+.cutscene.hacker-legit-overflow .movie-core {
+  border-color:#fff;
+  box-shadow:0 0 45px #fff,0 0 130px #55ff91,0 0 280px #00ff6a99;
+}
+.cutscene.hacker-legit-overflow .movie-ring {
+  animation:hackerLegitShockwave 1.15s cubic-bezier(.08,.75,.18,1) both;
+}
+.cutscene.hacker-legit-roll .hacker-big-text {
+  color:#fff!important;
+  text-shadow:0 0 14px #fff,0 0 42px #55ff91,0 0 100px #00ff6a;
+  animation:hackerLegitTitle 2.8s ease-in-out infinite;
+}
+@keyframes hackerLegitCore { 0%,100%{transform:translate(-50%,-50%) scale(.88) rotate(-8deg)} 50%{transform:translate(-50%,-50%) scale(1.12) rotate(8deg)} }
+@keyframes hackerLegitHorizon { from{opacity:.25;transform:perspective(380px) rotateX(68deg) scale(1.05)} to{opacity:1;transform:perspective(380px) rotateX(68deg) scale(1.32)} }
+@keyframes hackerLegitAscend { 0%{transform:translate(-50%,-50%) scale(.7);filter:brightness(1)} 65%{transform:translate(-50%,-50%) scale(1.42);filter:brightness(2.4)} 100%{transform:translate(-50%,-50%) scale(1.08);filter:brightness(1.35)} }
+@keyframes hackerLegitWorld { 0%{filter:brightness(1)} 18%{filter:brightness(2.8)} 100%{filter:brightness(1.25)} }
+@keyframes hackerLegitShockwave { 0%{transform:translate(-50%,-50%) scale(.25);opacity:1} 100%{transform:translate(-50%,-50%) scale(1.8);opacity:.25} }
+@keyframes hackerLegitTitle { 0%,100%{transform:scale(1);letter-spacing:-.055em} 50%{transform:scale(1.035);letter-spacing:-.035em} }
+@media(prefers-reduced-motion:reduce) {
+  .cutscene.hacker-legit-roll .movie-core,
+  .cutscene.hacker-legit-roll .movie-horizon,
+  .cutscene.hacker-legit-roll .hacker-big-text,
+  .cutscene.hacker-legit-overflow .movie-hacker,
+  .cutscene.hacker-legit-overflow .movie-ring { animation:none!important; }
+}

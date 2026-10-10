@@ -1,6 +1,6 @@
 // TSL/WebGPU shaders for LOTTERY: WINNER and PURE DEITY: UNFATHOMABLE.
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js";
-import { Fn, uv, time, vec2, vec3, vec4, float, sin, cos, length, smoothstep, abs, pow, max, exp, atan } from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.tsl.js";
+import * as THREE from "three/webgpu";
+import { Fn, uv, time, vec2, vec3, vec4, float, sin, cos, length, smoothstep, abs, pow, max, exp, atan } from "three/tsl";
 async function start(container,kind){
 if(!container||!container.isConnected)throw Error("Omnipotent art container unavailable");
 if(!("gpu" in navigator))throw Error("WebGPU unsupported");

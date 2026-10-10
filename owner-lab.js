@@ -2,7 +2,7 @@
   "use strict";
   const $ = id => document.getElementById(id);
   const SUPABASE_URL = "https://acwdieavymmvhqilllvp.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_HvQ5ZcGKmVKhkhrz9Z3Afw_S";
+  const SUPABASE_KEY = "sb_publishable_HvQ5ZcGKmVKhkhrz9Z3Afw_S6-ADCys";
   const SAVE_KEY = "aurabreak_owner_lab_definitions_v1";
   let authorized = false;
   let client = null;

@@ -1366,6 +1366,8 @@
     };
   }
 
+  let universalCutsceneStop = null;
+  let universalCutsceneToken = 0;
   function showCutscene(aura) {
     const cutscene = $("cutscene");
     const title = $("cutsceneTitle");
@@ -1427,8 +1429,27 @@
       }
       showToast("CUTSCENE FALLBACK: " + (aura.name || "UNKNOWN"));
     }
+    // A shared shader layer upgrades every named and generic cutscene.
+    universalCutsceneToken++;
+    const sceneToken = universalCutsceneToken;
+    if (universalCutsceneStop) { universalCutsceneStop(); universalCutsceneStop = null; }
+    const sceneArt = $("cutsceneArt"), sceneName = aura.name || "UNKNOWN", sceneColor = aura.color || "#9c78ff";
+    const startSceneFallback = () => {
+      if (sceneToken !== universalCutsceneToken || $("cutscene").classList.contains("hidden")) return;
+      try { if (window.AURABREAK_SCENE_FALLBACK) universalCutsceneStop = window.AURABREAK_SCENE_FALLBACK.start(sceneArt, sceneName, sceneColor); }
+      catch (err) { console.warn("Shared cutscene WebGL fallback unavailable:", err); }
+    };
+    if (window.AURABREAK_SCENE_ENGINE) {
+      Promise.resolve(window.AURABREAK_SCENE_ENGINE.start(sceneArt, sceneName, sceneColor)).then(stop => {
+        if (typeof stop !== "function") return;
+        if (sceneToken !== universalCutsceneToken || $("cutscene").classList.contains("hidden")) stop();
+        else universalCutsceneStop = stop;
+      }).catch(err => { console.warn("TSL/WebGPU unavailable; using shared WebGL shader:", err); startSceneFallback(); });
+    } else startSceneFallback();
   }
   function closeCutscene() {
+    universalCutsceneToken++;
+    if (universalCutsceneStop) { universalCutsceneStop(); universalCutsceneStop = null; }
     stopDeityCutscene();
     if (nullAbsoluteStop) { nullAbsoluteStop(); nullAbsoluteStop = null; }
     if (lotteryJackpotStop) { lotteryJackpotStop(); lotteryJackpotStop = null; }

@@ -772,13 +772,8 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-ring-stage{
   background:repeating-radial-gradient(ellipse at center,transparent 0 7%,rgba(255,205,77,.035) 7.2% 7.45%,transparent 7.7% 14%);
   background-size:100% 100%;
-  animation:jackpotTunnelDrift 1.4s linear infinite;
 }
-@keyframes jackpotTunnelDrift{
-  0%{background-position:0 0;filter:brightness(1)}
-  50%{filter:brightness(1.18)}
-  100%{background-position:0 24px;filter:brightness(1)}
-}
+
 @media(prefers-reduced-motion:reduce){
   .cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-ring-stage .jackpot-dimension-ring{
     animation:none!important;opacity:.4;transform:translate(-50%,-50%) rotateX(67deg) scale(var(--ring-scale,1.3));will-change:auto

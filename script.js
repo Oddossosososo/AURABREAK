@@ -859,42 +859,61 @@
 
   async function authorizeDev() {
     if (!auraSupabase) {
-      showToast("AUTH SERVICE DID NOT LOAD. REFRESH AND TRY AGAIN.");
+      window.alert("AURABREAK sign-in couldn't start because the Supabase client didn't load. Refresh the page and try again.");
       return false;
     }
-    let { data: sessionData } = await auraSupabase.auth.getSession();
-    if (!sessionData.session) {
-      const email = window.prompt("AURABREAK DEV SIGN-IN\\nEnter your email to receive a secure sign-in link:");
-      if (!email || !email.includes("@")) {
-        showToast("SIGN-IN CANCELLED.");
+
+    try {
+      const { data: sessionData, error: sessionError } = await auraSupabase.auth.getSession();
+      if (sessionError) throw sessionError;
+
+      if (!sessionData.session) {
+        const email = window.prompt("AURABREAK DEV SIGN-IN\\nEnter your email to receive a secure sign-in link:");
+        if (!email || !email.trim() || !email.includes("@")) {
+          showToast("SIGN-IN CANCELLED.");
+          return false;
+        }
+
+        showToast("SENDING SIGN-IN EMAIL…");
+        const { error } = await auraSupabase.auth.signInWithOtp({
+          email: email.trim(),
+          options: { emailRedirectTo: window.location.href }
+        });
+
+        if (error) {
+          console.error("AURABREAK email sign-in error:", error);
+          window.alert("AURABREAK couldn't send the sign-in email.\\n\\n" + error.message + "\\n\\nCheck the email address and try again.");
+          return false;
+        }
+
+        window.alert("SIGN-IN REQUEST SENT\\n\\nCheck your inbox and Spam/Junk folder for the AURABREAK sign-in email. It can take a few minutes.\\n\\nAfter opening the link, return to this game and press Shift+A again. If no email arrives, the email provider may need to be configured by the project owner.");
+        showToast("CHECK YOUR EMAIL + SPAM/JUNK.");
         return false;
       }
-      const { error } = await auraSupabase.auth.signInWithOtp({
-        email: email.trim(),
-        options: { emailRedirectTo: window.location.href }
-      });
+
+      showToast("CHECKING DEV ACCESS…");
+      const { data, error } = await auraSupabase.functions.invoke("dev-auth");
       if (error) {
-        showToast("SIGN-IN ERROR: " + error.message);
+        console.error("AURABREAK dev-auth error:", error);
+        window.alert("Your sign-in session was found, but DEV access couldn't be checked.\\n\\n" + (error.message || "Please refresh and try again."));
         return false;
       }
-      showToast("SIGN-IN LINK SENT. OPEN IT, RETURN HERE, THEN PRESS SHIFT+A.");
+
+      if (!data?.isDev) {
+        devAuthorized = false;
+        window.alert("You're signed in, but this account isn't approved for DEV access yet.\\n\\nYour user ID:\\n" + sessionData.session.user.id + "\\n\\nSend only this user ID to the project owner for approval. Never send your sign-in link.");
+        showToast("DEV ACCESS NOT APPROVED.");
+        return false;
+      }
+
+      devAuthorized = true;
+      showToast("DEV ACCESS VERIFIED.");
+      return true;
+    } catch (error) {
+      console.error("AURABREAK sign-in exception:", error);
+      window.alert("AURABREAK sign-in hit a problem.\\n\\n" + (error?.message || String(error)) + "\\n\\nRefresh the page and try again.");
       return false;
     }
-    const { data, error } = await auraSupabase.functions.invoke("dev-auth");
-    if (error) {
-      console.error("AURABREAK dev-auth error:", error);
-      showToast("COULD NOT VERIFY DEV ACCESS. TRY AGAIN.");
-      return false;
-    }
-    if (!data?.isDev) {
-      devAuthorized = false;
-      window.alert("Signed in, but this account is not approved for DEV access yet. Your user ID is:\\n" + sessionData.session.user.id + "\\nSend that ID to the project owner for approval.");
-      showToast("DEV ACCESS DENIED.");
-      return false;
-    }
-    devAuthorized = true;
-    showToast("SUPABASE DEV AUTHORITY VERIFIED.");
-    return true;
   }
 
   async function toggleAdmin() {

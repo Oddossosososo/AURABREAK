@@ -541,3 +541,75 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 @keyframes fwMotesDrift{from{background-position:12px 18px,63px 71px,101px 32px,24px 119px}to{background-position:12px -170px,63px 250px,360px 32px,-210px 119px}}
 @keyframes fwMotesBurst{0%{transform:scale(.7);opacity:0}25%{opacity:1}100%{transform:scale(1.5);opacity:0}}
 @media(prefers-reduced-motion:reduce){.fw-nebula,.fw-motes{animation:none!important;filter:none}}
+
+
+/* 24 new original aura palettes: distinct cinematic treatments, reusing the lightweight movie renderer. */
+.movie-thunderheart{background:radial-gradient(ellipse at 50% 45%,#123b65,#040817 48%,#01030a 85%)}
+.movie-thunderheart .movie-core{background:radial-gradient(circle,#fff 0%,#a9f6ff 8%,#32aaff 25%,#1640a0 50%,#020717 75%);box-shadow:0 0 55px #63eaff,0 0 150px #2e8fff99}
+.movie-thunderheart .movie-fragments{background:repeating-conic-gradient(from 5deg at 50% 48%,transparent 0 12deg,#72efff88 12.2deg 12.5deg,transparent 12.7deg 25deg)}
+.movie-frostbite{background:radial-gradient(ellipse at 50% 48%,#16466c,#071322 48%,#01050b 85%)}
+.movie-frostbite .movie-core{background:radial-gradient(circle,#fff 0%,#d9ffff 8%,#78e9ff 24%,#216ca5 48%,#061323 74%);box-shadow:0 0 65px #9cf6ff,0 0 160px #3dbbff66}
+.movie-frostbite .movie-ring{border-color:#c5faff;box-shadow:0 0 25px #8deaff66}
+.movie-toxic-bloom{background:radial-gradient(ellipse at 50% 48%,#25451a,#071209 45%,#020504 82%)}
+.movie-toxic-bloom .movie-core{border-radius:35% 65% 50% 50%;background:radial-gradient(circle,#efffc7,#9dff62 12%,#3caa4a 34%,#122a1b 70%);box-shadow:0 0 60px #9dff62,0 0 150px #69ff3966}
+.movie-toxic-bloom .movie-fragments{background:repeating-conic-gradient(from 0deg at 50% 48%,#aaff6e66 0 1deg,transparent 1.4deg 17deg)}
+.movie-prismatic{background:conic-gradient(from 40deg at 50% 48%,#251039,#102d4e,#10483c,#5b2d54,#251039)}
+.movie-prismatic .movie-core{background:conic-gradient(#fff,#8cfaff,#9a86ff,#ff8de1,#ffe5a2,#fff);box-shadow:0 0 60px #fff,0 0 150px #ff8de188}
+.movie-prismatic .movie-ring{border-color:#fff9;box-shadow:0 0 30px #f5aaff66}
+.movie-soulfire{background:radial-gradient(ellipse at 50% 50%,#6b241d,#200a17 45%,#02030a 83%)}
+.movie-soulfire .movie-core{background:radial-gradient(circle,#fff 0%,#fff1be 7%,#ff9d59 20%,#e84a47 42%,#36112c 70%);box-shadow:0 0 75px #ff9755,0 0 175px #f33f5766}
+.movie-soulfire .movie-volumetric{background:conic-gradient(from 0deg at 50% 48%,transparent 0 15%,#ff9c4d33 22%,transparent 35% 50%,#ff4f7d33 65%,transparent 80%)}
+.movie-chrono-break{background:repeating-radial-gradient(circle at 50% 48%,#21172c 0 20px,#8e6b3a 21px 22px,#0a0814 24px 43px)}
+.movie-chrono-break .movie-core{background:conic-gradient(#fff5d3,#c59d53,#35294b,#f4d08a,#fff5d3);box-shadow:0 0 55px #ffda8b,0 0 140px #d6a24e66}
+.movie-chrono-break .movie-ring{border-style:dotted;border-color:#ffe0a0}
+.movie-leviathan{background:radial-gradient(ellipse at 50% 55%,#075b65,#061725 42%,#01050b 82%)}
+.movie-leviathan .movie-core{background:radial-gradient(circle at 50% 35%,#dfffff,#42e4df 10%,#087d92 33%,#052335 65%,#01050b 78%);box-shadow:0 0 65px #42e4df,0 0 180px #0bc6dc55}
+.movie-leviathan .movie-horizon{border-color:#42e4df;top:53%}
+.movie-dragon-emperor{background:radial-gradient(ellipse at 50% 48%,#852816,#270815 45%,#030207 82%)}
+.movie-dragon-emperor .movie-core{border-radius:42% 58% 30% 70%;background:radial-gradient(circle,#fff5c8,#ff9d4d 13%,#e63829 38%,#4d0b19 70%);box-shadow:0 0 75px #ff684f,0 0 190px #ff3a2366}
+.movie-dragon-emperor .movie-fragments{background:repeating-conic-gradient(from 10deg at 50% 48%,#ffb56a77 0 1deg,transparent 1.5deg 14deg)}
+.movie-aurora-veil{background:linear-gradient(155deg,#061b29,#17294b 42%,#090a20 78%)}
+.movie-aurora-veil .movie-volumetric{background:conic-gradient(from 0deg at 50% 48%,transparent 0 15%,#5dffcf33 22%,transparent 32% 48%,#7f9dff44 62%,transparent 78%);filter:blur(5px)}
+.movie-aurora-veil .movie-core{background:radial-gradient(circle,#fff,#a4ffeb 9%,#4cddc8 30%,#314b99 58%,#071525 78%)}
+.movie-singularity{background:radial-gradient(circle at 50% 48%,#000 0 14%,#b7a1ff 15%,#3a245c 17%,#090711 43%,#000 80%)}
+.movie-singularity .movie-core{background:radial-gradient(circle,#000 0 35%,#241536 44%,#c7a4ff 47%,#160c2a 53%,#000 72%);box-shadow:0 0 50px #b88aff,0 0 160px #7c42db77}
+.movie-singularity .movie-horizon{border-width:3px;border-color:#d3bdff;box-shadow:0 0 50px #9c72ff}
+.movie-celestial-judgment{background:linear-gradient(#071022,#172447 44%,#080715 85%)}
+.movie-celestial-judgment .movie-volumetric{inset:-30% 20%;background:linear-gradient(90deg,transparent,#fff9 48%,#ffe7a8 50%,#fff9 52%,transparent);filter:blur(15px)}
+.movie-celestial-judgment .movie-core{background:radial-gradient(circle,#fff 0%,#fff4b5 14%,#c7a64f 35%,#34244d 70%);box-shadow:0 0 70px #fff0a7,0 0 180px #ffe08a66}
+.movie-phantom-requiem{background:radial-gradient(ellipse at 50% 50%,#2c2a59,#0c0b20 48%,#010107 85%)}
+.movie-phantom-requiem .movie-core{background:radial-gradient(circle,#fff 0%,#d3d3ff 8%,#928bdb 26%,#38305f 50%,#080717 75%);box-shadow:0 0 55px #b3a5ff,0 0 150px #928bdb66}
+.movie-phantom-requiem .movie-fragments{background:repeating-conic-gradient(from 0deg at 50% 48%,#c6bfff55 0 1deg,transparent 1.5deg 22deg)}
+.movie-eclipse-seraph{background:radial-gradient(circle at 50% 45%,#6a567c,#1b122c 44%,#030207 84%)}
+.movie-eclipse-seraph .movie-core{background:radial-gradient(circle,#fff 0%,#f5d9ff 10%,#bba3df 28%,#322443 58%,#080610 76%);box-shadow:0 0 70px #f5d9ff,0 0 180px #bca1ff66}
+.movie-eclipse-seraph .movie-ring{border-width:2px;border-color:#f5d9ffcc}
+.movie-infernal-crown{background:radial-gradient(ellipse at 50% 50%,#68101d,#210612 47%,#030207 84%)}
+.movie-infernal-crown .movie-core{background:radial-gradient(circle,#fff0b0 0%,#ff684f 12%,#bc142e 35%,#36091e 70%);box-shadow:0 0 70px #ff3d4e,0 0 185px #ff123d77}
+.movie-infernal-crown .movie-fragments{background:repeating-conic-gradient(from 0deg at 50% 48%,#ff9d6a77 0 1deg,transparent 1.4deg 13deg)}
+.movie-riftstorm{background:conic-gradient(from 45deg at 50% 48%,#061026,#075b78,#321451,#0b314a,#061026)}
+.movie-riftstorm .movie-volumetric{background:conic-gradient(from 30deg at 50% 48%,transparent 0 12%,#59f1ff44 20%,transparent 32% 52%,#a55cff44 63%,transparent 78%)}
+.movie-riftstorm .movie-core{background:radial-gradient(circle,#fff,#59f1ff 10%,#1264b6 35%,#30144e 64%,#05030d 78%);box-shadow:0 0 70px #59f1ff,0 0 170px #965cff66}
+.movie-star-eater{background:radial-gradient(circle at 50% 48%,#000 0 15%,#372019 18%,#07040a 45%,#000 80%)}
+.movie-star-eater .movie-core{background:radial-gradient(circle,#000 0 28%,#ffb66e 30%,#2b1026 40%,#000 72%);box-shadow:0 0 40px #ffb66e,0 0 130px #e56b3c66}
+.movie-omniflare{background:radial-gradient(circle at 50% 48%,#fff 0%,#fff7c7 2%,#ffb94f 9%,#a43f49 25%,#25102e 52%,#020207 82%)}
+.movie-omniflare .movie-core{background:radial-gradient(circle,#fff 0%,#fff7c7 20%,#ffcf76 42%,#ed6a4c 66%,#47112e 80%);box-shadow:0 0 80px #fff7c7,0 0 200px #ffb94f77}
+.movie-eternal-zero{background:#010208}
+.movie-eternal-zero .movie-scene{background:#010208}
+.movie-eternal-zero .movie-core{background:radial-gradient(circle,#fff 0%,#d4e5ff 4%,#52688e 13%,#070b17 37%,#000 72%);box-shadow:0 0 45px #d4e5ff66,0 0 150px #8dbaff33}
+.movie-eternal-zero .movie-ring{border-color:#d4e5ff66;opacity:.3}
+.movie-dream-error{background:repeating-radial-gradient(ellipse at 50% 48%,#19091e 0 10px,#6c236b 11px 12px,#0b1026 14px 26px);animation:movieReality 3s steps(2,end) infinite alternate}
+.movie-dream-error .movie-core{background:conic-gradient(#fff,#ff83dc,#6b7dff,#68fff1,#fff);border-radius:38% 62% 45% 55%;box-shadow:0 0 65px #ff83dc,0 0 160px #6b7dff77}
+.movie-world-engine{background:radial-gradient(circle at 50% 48%,#53401b,#131023 45%,#020207 83%)}
+.movie-world-engine .movie-core{background:conic-gradient(#fff2bf,#ffcf76,#6f4b1b,#ffe6a6,#fff2bf);border-radius:24%;box-shadow:0 0 55px #ffcf76,0 0 155px #d5a34877}
+.movie-world-engine .movie-ring{border-radius:22%;transform:translate(-50%,-50%) rotate(45deg);border-color:#ffcf76}
+.movie-godsleep{background:radial-gradient(ellipse at 50% 48%,#25204e,#090818 47%,#010106 83%)}
+.movie-godsleep .movie-core{background:radial-gradient(circle,#e9e0ff 0%,#9c8bff 8%,#433e91 28%,#100d2d 58%,#020208 78%);box-shadow:0 0 65px #9c8bff,0 0 160px #5b4dd677}
+.movie-final-horizon{background:linear-gradient(180deg,#08091b,#2a2045 48%,#020208 85%)}
+.movie-final-horizon .movie-core{background:radial-gradient(ellipse,#fff 0%,#ff9fba 8%,#a73d80 30%,#1d1537 68%);box-shadow:0 0 65px #ff9fba,0 0 160px #a73d8077}
+.movie-universe-breaker{background:radial-gradient(circle at 50% 48%,#571124,#150510 48%,#010106 83%)}
+.movie-universe-breaker .movie-core{background:radial-gradient(circle,#fff 0%,#ffb1c2 6%,#ff4d74 22%,#761335 48%,#050208 75%);box-shadow:0 0 80px #ff4d74,0 0 190px #ff254f88}
+.movie-universe-breaker .movie-fragments{background:repeating-conic-gradient(from 0deg at 50% 48%,#ffb4c855 0 1deg,transparent 1.4deg 12deg)}
+.movie-apex-infinite{background:radial-gradient(circle at 50% 48%,#fff 0%,#c8ffff 1%,#747cff 8%,#2c1b5d 27%,#05040e 64%,#000 85%)}
+.movie-apex-infinite .movie-core{background:conic-gradient(#fff,#c8ffff,#8787ff,#f5d9ff,#fff);box-shadow:0 0 90px #fff,0 0 220px #9c8bff99}
+.movie-apex-infinite .movie-ring{border-width:2px;border-color:#fff9}
+@media(prefers-reduced-motion:reduce){.movie-dream-error{animation:none!important}}

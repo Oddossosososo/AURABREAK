@@ -628,6 +628,7 @@
     });
   }
   const MOVIE_SCENES = {
+    "DUST": {slug:"dust-ascension", eyebrow:"THE FIRST PARTICLE • THE LAST THING LEFT", lines:["BEFORE THE FIRST STAR, THERE WAS DUST.","EVERY GALAXY BEGINS TO FALL INTO ORBIT.","THE UNIVERSE REASSEMBLES ITSELF AROUND ONE SPECK.","D U S T"], subtitles:["THE OLDEST MATTER IN EXISTENCE HAS AWAKENED.","NEBULAE UNRAVEL. CONSTELLATIONS TURN.","THE BEGINNING AND THE END SHARE THE SAME CORE.","PRIMORDIAL • COSMIC ORIGIN"], notes:[55,110,220,440]},
     "LOTTERY": {slug:"lottery", eyebrow:"PROBABILITY HAS LOST ITS MEANING", lines:["A TICKET WAS NEVER SUPPOSED TO EXIST.","ONE CHANCE. ONE IMPOSSIBLE MOMENT.","THE UNIVERSE DREW YOUR NUMBER.","LOTTERY"], subtitles:["A SINGLE GOLDEN SIGNAL.","THE ODDS WERE NEVER ON YOUR SIDE.","AND YET... HERE YOU ARE.","1 IN 292,201,338 • THE JACKPOT OF REALITY"], notes:[392,523.25,659.25,783.99]},
     "LOTTERY: JACKPOT": {slug:"lottery-jackpot", eyebrow:"ULTRA EVENT • RNG OVERRIDE", lines:["THE MACHINE STOPS MID-ROLL.","EVERY TICKET TURNS GOLD.","THE RNG HAS NO MORE NUMBERS.","LOTTERY: JACKPOT"], subtitles:["ROLL SEQUENCE INTERRUPTED.","ONE WINNER OUT OF IMPOSSIBLE ODDS.","THE FINAL TICKET HAS BEEN DRAWN.","THE RAREST ROLLABLE AURA • 1 IN 10^320"], notes:[196,392,587.33,987.77]},
     "LOTTERY: WINNER": {slug:"lottery-winner", eyebrow:"WORLD 2 EXCLUSIVE • OMNIPOTENT EVOLUTION", lines:["THE JACKPOT MACHINE GOES SILENT.","THE GOLDEN TICKET STARTS TO ASCEND.","THE ODDS DISPLAY OVERFLOWS REALITY.","LOTTERY: WINNER"], subtitles:["WORLD 2 HAS ACCEPTED YOUR IMPOSSIBLE ROLL.","JACKPOT WAS ONLY THE FIRST EVOLUTION.","A NUMBER TOO LARGE FOR THE OLD WORLD.","THE OMNIPOTENT WINNING TICKET • 1 IN 10^400"], notes:[110,220,440,880]},
@@ -2040,6 +2041,18 @@
   });
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && settingsPanel && !settingsPanel.classList.contains("hidden")) closeSettings();
+  });
+
+  // Public console helper: AURA.getAura("dust") opens the aura's full cinematic reveal.
+  // Names are case-insensitive; this is a preview helper and does not grant/discover the aura.
+  window.AURA = Object.freeze({
+    getAura(name) {
+      const query = String(name ?? "").trim().toLowerCase();
+      const aura = AURAS.find(item => item.name.toLowerCase() === query);
+      if (!aura) { console.warn("[AURABREAK] Aura not found:", name); return null; }
+      showCutscene(aura);
+      return { name:aura.name, odds:aura.odds, rarity:aura.rarity, color:aura.color, description:aura.description, style:aura.style };
+    }
   });
 
   renderCollection();

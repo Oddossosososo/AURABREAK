@@ -1365,3 +1365,67 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
   .movie-lottery-winner .movie-ring, .movie-unfathomable .movie-ring { width: 76vw; }
   .movie-lottery-winner .movie-ring-b, .movie-unfathomable .movie-ring-b { width: 94vw; }
 }
+
+
+/* AURABREAK cinematic finishing pass — distinct silhouettes, clearer focal depth,
+   and low-cost transform/opacity choreography across the four headline reveals. */
+.cutscene[data-style="lottery-jackpot"] .cutscene-art::before {
+  content:""; position:absolute; inset:7%; z-index:3; pointer-events:none; border:1px solid #ffe8a633;
+  clip-path:polygon(50% 0,62% 19%,84% 16%,78% 38%,100% 50%,78% 62%,84% 84%,62% 81%,50% 100%,38% 81%,16% 84%,22% 62%,0 50%,22% 38%,16% 16%,38% 19%);
+  opacity:.55; animation:abJackpotSeal 8s cubic-bezier(.2,.7,.2,1) infinite;
+}
+@keyframes abJackpotSeal { 0%,100%{transform:rotate(0) scale(.78);opacity:.18} 50%{transform:rotate(22.5deg) scale(1.08);opacity:.68} }
+.cutscene[data-style="lottery-jackpot"] .jackpot-ticket { filter:drop-shadow(0 0 22px #fff2a6); }
+.cutscene[data-style="lottery-jackpot"] .jackpot-reality-fracture { mix-blend-mode:screen; }
+
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-scene,
+.cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-scene {
+  z-index:1; background:transparent!important;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .omnipotent-shader-canvas,
+.cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .omnipotent-shader-canvas {
+  position:absolute; inset:0; z-index:0; width:100%; height:100%; display:block; pointer-events:none;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-starfield,
+.cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-starfield { mix-blend-mode:screen; }
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-lottery-winner::before {
+  content:""; position:absolute; inset:8% 12%; z-index:0; pointer-events:none;
+  background:repeating-conic-gradient(from 0deg at 50% 50%,#fff0 0deg 8deg,#ffe9a61b 8.5deg 9deg,#fff0 10deg 18deg);
+  mask-image:radial-gradient(ellipse at center,#000 0 28%,transparent 74%);
+  animation:abWinnerProbability 13s linear infinite;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-lottery-winner::after {
+  content:""; position:absolute; left:50%; top:50%; width:min(66vw,680px); aspect-ratio:1; z-index:0; pointer-events:none;
+  border:1px solid #fff1b85c; border-radius:26%; transform:translate(-50%,-50%) rotate(22.5deg) scale(.64);
+  box-shadow:0 0 55px #f5ceff22,inset 0 0 55px #ffdc6a0e;
+  animation:abWinnerSeal 5.4s cubic-bezier(.16,.8,.2,1) infinite;
+}
+@keyframes abWinnerProbability { to{transform:rotate(360deg)} }
+@keyframes abWinnerSeal { 0%,100%{transform:translate(-50%,-50%) rotate(22.5deg) scale(.64);opacity:.18} 48%{transform:translate(-50%,-50%) rotate(202.5deg) scale(1.08);opacity:.8} 70%{transform:translate(-50%,-50%) rotate(382.5deg) scale(.9);opacity:.42} }
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-lottery-winner.phase-fracture .movie-ring { filter:brightness(1.8) saturate(1.45); }
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-lottery-winner.phase-peak::after { animation-duration:1.1s; opacity:1; border-color:#fff9df; }
+
+.cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-unfathomable::before {
+  content:""; position:absolute; left:50%; top:50%; width:min(74vw,760px); aspect-ratio:1; z-index:0; pointer-events:none;
+  transform:translate(-50%,-50%) rotate(45deg); border:1px solid #c7b6ff70; clip-path:polygon(50% 0,62% 35%,100% 50%,62% 65%,50% 100%,38% 65%,0 50%,38% 35%);
+  filter:drop-shadow(0 0 16px #a58aff55); animation:abUnfathomableGlyph 9s ease-in-out infinite;
+}
+.cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-unfathomable::after {
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:repeating-radial-gradient(circle at 50% 50%,#d7c9ff12 0 1px,transparent 2px 31px);
+  mask-image:radial-gradient(circle at center,#000 0 24%,transparent 73%); animation:abUnfathomableLens 18s linear infinite;
+}
+@keyframes abUnfathomableGlyph { 0%,100%{transform:translate(-50%,-50%) rotate(45deg) scale(.7);opacity:.2} 50%{transform:translate(-50%,-50%) rotate(225deg) scale(1.1);opacity:.75} }
+@keyframes abUnfathomableLens { to{transform:rotate(-360deg) scale(1.08)} }
+
+.cutscene[data-style="the-viewer"] .fw-eye { filter:drop-shadow(0 0 28px #83ffffaa); }
+.cutscene[data-style="the-viewer"] .fw-target { backdrop-filter:blur(3px); }
+.cutscene[data-style="the-viewer"].fw-final .fw-rift { filter:brightness(2.1) saturate(1.5); }
+.cutscene[data-style="the-viewer"].fw-target-locked .fw-eye { transform:translate(-50%,-50%) scale(1.12); }
+@media(prefers-reduced-motion:reduce) {
+  .cutscene[data-style="lottery-jackpot"] .cutscene-art::before,
+  .cutscene[data-aura="LOTTERY: WINNER"] .movie-lottery-winner::before,
+  .cutscene[data-aura="LOTTERY: WINNER"] .movie-lottery-winner::after,
+  .cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-unfathomable::before,
+  .cutscene[data-aura="PURE DEITY: UNFATHOMABLE"] .movie-unfathomable::after { animation:none!important; }
+}

@@ -729,25 +729,8 @@
     cutscene.style.setProperty("--aura-color", aura.color);
     cutscene.style.setProperty("--movie-color", aura.color);
     art.innerHTML = '<div class="movie-scene movie-' + scene.slug + '"><div class="movie-starfield"></div><div class="movie-horizon"></div><div class="movie-core"><span>' + aura.symbol + '</span></div><div class="movie-ring movie-ring-a"></div><div class="movie-ring movie-ring-b"></div><div class="movie-fragments"></div><div class="movie-volumetric"></div><div class="movie-impact"></div></div>';
+    omnipotentCutsceneToken++;
     if (omnipotentCutsceneStop) { omnipotentCutsceneStop(); omnipotentCutsceneStop = null; }
-    const isOmnipotentMovie = aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE";
-    if (isOmnipotentMovie) {
-      const token = ++omnipotentCutsceneToken;
-      const kind = aura.name === "LOTTERY: WINNER" ? "lottery-winner" : "unfathomable";
-      const shaderContainer = art.querySelector(".movie-scene");
-      const startFallback = () => {
-        if (token !== omnipotentCutsceneToken || cutscene.classList.contains("hidden")) return;
-        try { if (window.AURABREAK_OMNIPOTENT) omnipotentCutsceneStop = window.AURABREAK_OMNIPOTENT.start(shaderContainer, kind); }
-        catch (err) { console.warn("Omnipotent Three.js fallback unavailable:", err); }
-      };
-      if (window.AURABREAK_OMNIPOTENT_TSL) {
-        Promise.resolve(window.AURABREAK_OMNIPOTENT_TSL.start(shaderContainer, kind)).then(stop => {
-          if (typeof stop !== "function") return;
-          if (token !== omnipotentCutsceneToken || cutscene.classList.contains("hidden")) stop();
-          else omnipotentCutsceneStop = stop;
-        }).catch(err => { console.warn("TSL/WebGPU unavailable; using Three.js GLSL:", err); startFallback(); });
-      } else startFallback();
-    } else { omnipotentCutsceneToken++; }
     eyebrow.textContent = scene.eyebrow;
     title.className = "movie-title";
     title.textContent = "";

@@ -482,3 +482,33 @@ body.transcendence-mode .status-dot{background:#8dfff4;box-shadow:0 0 12px #8dff
 @keyframes fwWarningFlash{0%,100%{opacity:.2}50%{opacity:1}}
 @media(max-width:600px){.fw-warning{right:12px;top:12px;letter-spacing:.08em}.fw-target{width:78vw}}
 @media(prefers-reduced-motion:reduce){.cutscene[data-style="the-viewer"]::after{display:none}.fw-warning,.fw-target{animation:none!important;transition:none!important}}
+
+
+/* THE VIEWER — premium, game-scale aura reveal. Built from lightweight CSS layers. */
+.cutscene[data-style="the-viewer"] .cutscene-content{z-index:12}
+.fw-aura-crown{position:absolute;left:50%;top:50%;width:min(76vw,760px);aspect-ratio:1;transform:translate(-50%,-50%) scale(.5);border-radius:50%;opacity:0;border:2px solid #aaffff;box-shadow:0 0 20px #6ffcff44,inset 0 0 30px #6ffcff22;pointer-events:none}
+.fw-aura-crown:before,.fw-aura-crown:after{content:"";position:absolute;inset:8%;border:2px solid #ff65dc99;clip-path:polygon(50% 0,61% 35%,100% 50%,61% 65%,50% 100%,39% 65%,0 50%,39% 35%);transform:rotate(0deg)}
+.fw-aura-crown:after{inset:18%;border-color:#e8ffffaa;transform:rotate(22.5deg);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.fw-sigil{position:absolute;left:50%;top:50%;z-index:3;transform:translate(-50%,-50%) scale(.25);font-size:clamp(130px,28vw,340px);line-height:1;color:#fff;text-shadow:0 0 16px white,0 0 45px #59ffff,0 0 100px #54ffff,0 0 150px #ff59db;opacity:0;pointer-events:none}
+.fw-shockwave{position:absolute;left:50%;top:50%;width:24px;height:24px;border:3px solid #eaffff;border-radius:50%;transform:translate(-50%,-50%) scale(.1);opacity:0;pointer-events:none}
+.fw-comets{position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 47%,#cfffff 49%,transparent 51%) 10% 10%/180px 100px no-repeat,linear-gradient(115deg,transparent 0 47%,#ff8be6 49%,transparent 51%) 80% 25%/230px 120px no-repeat,linear-gradient(115deg,transparent 0 47%,#baffff 49%,transparent 51%) 30% 70%/210px 110px no-repeat,linear-gradient(115deg,transparent 0 47%,#fff 49%,transparent 51%) 90% 85%/160px 90px no-repeat}
+.fw-floor{position:absolute;left:-25%;right:-25%;bottom:-55%;height:100%;opacity:0;transform:perspective(320px) rotateX(62deg);transform-origin:top center;background:repeating-linear-gradient(90deg,#6ffcff45 0 1px,transparent 1px 70px),repeating-linear-gradient(0deg,#6ffcff35 0 1px,transparent 1px 70px);mask-image:linear-gradient(to bottom,transparent,#000 30%,transparent 88%);pointer-events:none}
+.cutscene.fw-awakening .fw-aura-crown{opacity:.85;animation:fwCrownRise 3.2s ease-out both}
+.cutscene.fw-awakening .fw-floor{opacity:.6;animation:fwFloorMove 6s linear infinite}
+.cutscene.fw-power-up .fw-aura-crown{opacity:1;animation:fwCrownPower 1.4s ease-in-out infinite alternate}
+.cutscene.fw-power-up .fw-comets{opacity:.85;animation:fwCometFlash 1.1s steps(2,end) infinite}
+.cutscene.fw-power-up .fw-eye{animation:fwEyeLite 1.3s ease-in-out infinite alternate}
+.cutscene.fw-breakout .fw-aura-crown{opacity:1;animation:fwCrownBurst 2.1s cubic-bezier(.1,.8,.15,1) both}
+.cutscene.fw-breakout .fw-sigil{opacity:1;animation:fwSigilBurst 2.2s cubic-bezier(.12,.8,.2,1) both}
+.cutscene.fw-breakout .fw-shockwave{animation:fwShockwave 1.8s ease-out 2}
+.cutscene.fw-breakout .fw-comets{opacity:1;animation:fwCometFlash .32s steps(2,end) 5}
+.cutscene.fw-breakout .fw-floor{opacity:.9;animation:fwFloorMove 2.2s linear infinite}
+.cutscene.fw-breakout .fw-target{border-color:#fff}
+@keyframes fwCrownRise{0%{transform:translate(-50%,-50%) scale(.5) rotate(-18deg);opacity:0}65%{opacity:1}100%{transform:translate(-50%,-50%) scale(1) rotate(0);opacity:.85}}
+@keyframes fwCrownPower{from{transform:translate(-50%,-50%) scale(.94) rotate(-3deg)}to{transform:translate(-50%,-50%) scale(1.08) rotate(3deg)}}
+@keyframes fwCrownBurst{0%{transform:translate(-50%,-50%) scale(1) rotate(0);opacity:1}65%{transform:translate(-50%,-50%) scale(1.7) rotate(30deg);opacity:1}100%{transform:translate(-50%,-50%) scale(2.8) rotate(65deg);opacity:0}}
+@keyframes fwSigilBurst{0%{transform:translate(-50%,-50%) scale(.25) rotate(-35deg);opacity:0}35%{transform:translate(-50%,-50%) scale(1.1) rotate(0);opacity:1}75%{transform:translate(-50%,-50%) scale(1) rotate(10deg);opacity:1}100%{transform:translate(-50%,-50%) scale(1.5) rotate(25deg);opacity:0}}
+@keyframes fwShockwave{0%{transform:translate(-50%,-50%) scale(.1);opacity:.9}100%{transform:translate(-50%,-50%) scale(min(100vw,100vh)/1px);opacity:0}}
+@keyframes fwCometFlash{0%,100%{opacity:.25;background-position:10% 10%,80% 25%,30% 70%,90% 85%}50%{opacity:1;background-position:20% 20%,70% 35%,40% 60%,80% 75%}}
+@keyframes fwFloorMove{from{background-position:0 0,0 0}to{background-position:0 350px,350px 0}}
+@media(prefers-reduced-motion:reduce){.fw-aura-crown,.fw-sigil,.fw-shockwave,.fw-comets,.fw-floor{animation:none!important}}

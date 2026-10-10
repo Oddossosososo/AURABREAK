@@ -60,6 +60,78 @@
   ];
   // Remove the temporary test aura if it ever existed in an older build.
   for (let i = AURAS.length - 1; i >= 0; i--) if (AURAS[i].name === "HI") AURAS.splice(i, 1);
+  const POTION_STORAGE_KEY = "aurabreak-potions-v1";
+  const POTIONS = [
+    {name:"Luck Potion", desc:"10× luck for your next roll.", type:"luck", value:10, color:"#8effb4", symbol:"✦"},
+    {name:"God Potion", desc:"Guarantees one of the rollable gods.", type:"god", value:1, color:"#ffe59a", symbol:"♛"},
+    {name:"Super Luck Potion", desc:"25× luck for one roll.", type:"luck", value:25, color:"#9df5ff", symbol:"✧"},
+    {name:"Ultra Luck Potion", desc:"100× luck for one roll.", type:"luck", value:100, color:"#b6a0ff", symbol:"✦"},
+    {name:"Divine Luck Potion", desc:"1,000× luck for one roll.", type:"luck", value:1000, color:"#fff1b8", symbol:"☼"},
+    {name:"Celestial Luck Potion", desc:"10,000× luck for one roll.", type:"luck", value:10000, color:"#a8e8ff", symbol:"✧"},
+    {name:"Cosmic Luck Potion", desc:"1,000,000× luck for one roll.", type:"luck", value:1e6, color:"#d8a6ff", symbol:"☄"},
+    {name:"Astral Luck Potion", desc:"1,000,000,000× luck for one roll.", type:"luck", value:1e9, color:"#8bdcff", symbol:"✶"},
+    {name:"Eternal Luck Potion", desc:"1e12× luck for one roll.", type:"luck", value:1e12, color:"#fff5db", symbol:"∞"},
+    {name:"Infinite Luck Potion", desc:"Uses the highest practical luck setting for one roll.", type:"luck", value:1e100, color:"#ffffff", symbol:"∞"},
+    {name:"Fortune Elixir", desc:"50× luck for one roll.", type:"luck", value:50, color:"#a4ff9d", symbol:"♧"},
+    {name:"Fortune Tonic", desc:"250× luck for one roll.", type:"luck", value:250, color:"#d5ff9d", symbol:"♧"},
+    {name:"Fortune Draught", desc:"2,500× luck for one roll.", type:"luck", value:2500, color:"#c5ffbe", symbol:"♧"},
+    {name:"Starfall Brew", desc:"25,000× luck for one roll.", type:"luck", value:25000, color:"#9fe4ff", symbol:"☄"},
+    {name:"Nebula Nectar", desc:"100,000× luck for one roll.", type:"luck", value:1e5, color:"#c9a2ff", symbol:"✺"},
+    {name:"Aurora Tonic", desc:"500,000× luck for one roll.", type:"luck", value:5e5, color:"#9affdb", symbol:"❋"},
+    {name:"Solar Serum", desc:"5,000,000× luck for one roll.", type:"luck", value:5e6, color:"#ffd17c", symbol:"☼"},
+    {name:"Lunar Elixir", desc:"5e7× luck for one roll.", type:"luck", value:5e7, color:"#b9d5ff", symbol:"☾"},
+    {name:"Void Vial", desc:"1e10× luck for one roll.", type:"luck", value:1e10, color:"#a89bff", symbol:"◉"},
+    {name:"Rift Tonic", desc:"1e13× luck for one roll.", type:"luck", value:1e13, color:"#74f0ff", symbol:"⟁"},
+    {name:"Reality Serum", desc:"1e16× luck for one roll.", type:"luck", value:1e16, color:"#ff9ae7", symbol:"⌁"},
+    {name:"Chaos Potion", desc:"Roll 5 times internally and keep the rarest result.", type:"bestof", value:5, color:"#ff6c9f", symbol:"⌁"},
+    {name:"Chaos Elixir", desc:"Roll 10 times internally and keep the rarest result.", type:"bestof", value:10, color:"#ff4f83", symbol:"⌁"},
+    {name:"Fate Rewriter", desc:"Roll 25 times internally and keep the rarest result.", type:"bestof", value:25, color:"#ffb0d5", symbol:"⟳"},
+    {name:"Destiny Draught", desc:"Roll 50 times internally and keep the rarest result.", type:"bestof", value:50, color:"#ffc5ed", symbol:"⟳"},
+    {name:"Mythic Potion", desc:"Guarantees a rollable aura with odds of at least 1 in 1,000,000.", type:"guarantee", value:1e6, color:"#ff93b8", symbol:"✹"},
+    {name:"Divinity Potion", desc:"Guarantees a rollable aura with odds of at least 1 in 100,000,000.", type:"guarantee", value:1e8, color:"#fff0a8", symbol:"✹"},
+    {name:"Cosmic Potion", desc:"Guarantees a rollable aura with odds of at least 1 in 1 trillion.", type:"guarantee", value:1e12, color:"#a6a4ff", symbol:"✧"},
+    {name:"Transcendence Potion", desc:"Guarantees a rollable aura with odds of at least 1 in 1e18.", type:"guarantee", value:1e18, color:"#d4c3ff", symbol:"∞"},
+    {name:"Secret Seeker", desc:"Guarantees a rollable aura with odds of at least 1 in 1e24.", type:"guarantee", value:1e24, color:"#ff8ae1", symbol:"◇"},
+    {name:"Reality Breaker", desc:"Guarantees a rollable aura with odds of at least 1 in 1e30.", type:"guarantee", value:1e30, color:"#ff647b", symbol:"⟁"},
+    {name:"Apex Elixir", desc:"Guarantees a rollable aura with odds of at least 1 in 1e38.", type:"guarantee", value:1e38, color:"#ffffff", symbol:"∞"},
+    {name:"Godslayer's Bane", desc:"Guarantees a random rollable god.", type:"god", value:1, color:"#ff7b7b", symbol:"♜"},
+    {name:"Pantheon Potion", desc:"Guarantees a random rollable god.", type:"god", value:1, color:"#ffd778", symbol:"♛"},
+    {name:"Deity's Blessing", desc:"Guarantees a random rollable god.", type:"god", value:1, color:"#fff1bf", symbol:"✧"},
+    {name:"Creator's Elixir", desc:"Guarantees a random rollable god.", type:"god", value:1, color:"#ffcf76", symbol:"✹"},
+    {name:"Heaven's Draught", desc:"Guarantees a random rollable god.", type:"god", value:1, color:"#c6f2ff", symbol:"☼"},
+    {name:"Fallen Star Potion", desc:"100,000× luck for one roll.", type:"luck", value:1e5, color:"#b4a4ff", symbol:"✦"},
+    {name:"Thunderbrew", desc:"750,000× luck for one roll.", type:"luck", value:7.5e5, color:"#78d9ff", symbol:"ϟ"},
+    {name:"Frostfire Flask", desc:"7,500,000× luck for one roll.", type:"luck", value:7.5e6, color:"#b7f4ff", symbol:"❄"},
+    {name:"Prismatic Potion", desc:"5e9× luck for one roll.", type:"luck", value:5e9, color:"#ff9df2", symbol:"✧"},
+    {name:"Soulfire Serum", desc:"5e11× luck for one roll.", type:"luck", value:5e11, color:"#ff8c58", symbol:"♨"},
+    {name:"Chrono Elixir", desc:"Roll 3 times internally and keep the rarest result.", type:"bestof", value:3, color:"#ffc76a", symbol:"◷"},
+    {name:"Leviathan's Brew", desc:"Roll 7 times internally and keep the rarest result.", type:"bestof", value:7, color:"#42e4df", symbol:"♆"},
+    {name:"Dragon Emperor's Draught", desc:"Roll 12 times internally and keep the rarest result.", type:"bestof", value:12, color:"#ff684f", symbol:"♜"},
+    {name:"Aurora Veil Tonic", desc:"Roll 20 times internally and keep the rarest result.", type:"bestof", value:20, color:"#91ffdb", symbol:"❋"},
+    {name:"Singularity Solution", desc:"Guarantees a rollable aura with odds of at least 1 in 1e9.", type:"guarantee", value:1e9, color:"#bd8cff", symbol:"⦿"},
+    {name:"Judgment Juice", desc:"Guarantees a rollable aura with odds of at least 1 in 1e15.", type:"guarantee", value:1e15, color:"#fff0b0", symbol:"⚡"},
+    {name:"Phantom Requiem Potion", desc:"Guarantees a rollable aura with odds of at least 1 in 1e20.", type:"guarantee", value:1e20, color:"#b3a5ff", symbol:"♬"},
+    {name:"Eclipse Seraph Elixir", desc:"Guarantees a rollable aura with odds of at least 1 in 1e26.", type:"guarantee", value:1e26, color:"#f5d9ff", symbol:"♱"},
+    {name:"Infernal Crown Potion", desc:"Guarantees a rollable aura with odds of at least 1 in 1e32.", type:"guarantee", value:1e32, color:"#ff3d4e", symbol:"♛"},
+    {name:"World Engine Serum", desc:"Roll 100 times internally and keep the rarest result.", type:"bestof", value:100, color:"#ffcf76", symbol:"⚙"},
+    {name:"Universe Breaker Brew", desc:"Guarantees a rollable aura with odds of at least 1 in 1e36.", type:"guarantee", value:1e36, color:"#ff4d74", symbol:"✹"},
+    {name:"Apex: Infinite Potion", desc:"Roll 250 times internally and keep the rarest result.", type:"bestof", value:250, color:"#ffffff", symbol:"∞"}
+  ];
+  const DEFAULT_POTION_INVENTORY = Object.fromEntries(POTIONS.map(potion => [potion.name, 1]));
+  let potionInventory = loadPotionInventory();
+  let activePotion = null;
+  function loadPotionInventory() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(POTION_STORAGE_KEY) || "null");
+      if (saved && typeof saved === "object") {
+        return Object.fromEntries(POTIONS.map(potion => [potion.name, Math.max(0, Math.floor(Number(saved[potion.name]) || 0))]));
+      }
+    } catch {}
+    return {...DEFAULT_POTION_INVENTORY};
+  }
+  function savePotionInventory() {
+    try { localStorage.setItem(POTION_STORAGE_KEY, JSON.stringify(potionInventory)); } catch {}
+  }
   const STORAGE_KEY = "aurabreak-discoveries-v1";
   const TRANSCENDENCE_KEY = "aurabreak-transcendence-unlocked-v1";
   const ORIGINAL_GODS = ["PURE DEITY", "CHAOTIC END", "GLITCHED SCREAMS", "LORE CREATIONIST", "THE MAKER"];
@@ -114,7 +186,27 @@
       noAura: true
     };
   }
-  function chooseAura() {
+  function chooseAura(applyPotion = true) {
+    const potion = applyPotion ? activePotion : null;
+    if (applyPotion && activePotion) activePotion = null;
+    if (potion?.type === "god") {
+      const gods = AURAS.filter(a => a.god && !a.adminOnly && !a.evolutionOnly);
+      if (gods.length) return gods[Math.floor(Math.random() * gods.length)];
+    }
+    if (potion?.type === "guarantee") {
+      const threshold = BigInt(Math.max(1, Math.floor(potion.value)));
+      const eligible = AURAS.filter(a => !a.adminOnly && !a.evolutionOnly && auraOdds(a) >= threshold);
+      if (eligible.length) return eligible[Math.floor(Math.random() * eligible.length)];
+    }
+    if (potion?.type === "bestof") {
+      let best = null;
+      const attempts = Math.min(250, Math.max(2, Number(potion.value) || 2));
+      for (let i = 0; i < attempts; i++) {
+        const candidate = chooseAura(false);
+        if (!best || auraOdds(candidate) > auraOdds(best)) best = candidate;
+      }
+      return best || (phaseTwoActive ? noAuraResult() : AURAS[0]);
+    }
     if (forcedAura) {
       const selected = forcedAura;
       forcedAura = null;
@@ -125,7 +217,8 @@
       const ao = auraOdds(a), bo = auraOdds(b);
       return ao > bo ? -1 : ao < bo ? 1 : 0;
     });
-    const luck = Math.max(1, Number.isFinite(luckMultiplier) ? luckMultiplier : Number.MAX_VALUE);
+    const potionLuck = potion?.type === "luck" ? Number(potion.value) : 1;
+    const luck = Math.max(1, Number.isFinite(luckMultiplier * potionLuck) ? luckMultiplier * potionLuck : Number.MAX_VALUE);
     for (const aura of pool) {
       const odds = Number(auraOdds(aura));
       const chance = Math.min(1, luck / odds);
@@ -185,6 +278,51 @@
     $("orbCore").querySelector(".orb-glyph").style.color = aura.color;
     $("stageLabel").textContent = aura.name + " // " + aura.rarity;
   }
+  function renderPotions() {
+    const grid = $("potionGrid");
+    if (!grid) return;
+    grid.replaceChildren();
+    const count = POTIONS.reduce((sum, potion) => sum + (potionInventory[potion.name] || 0), 0);
+    const countNode = $("potionCount");
+    if (countNode) countNode.textContent = String(count);
+    const active = $("activePotionLabel");
+    if (active) active.textContent = activePotion ? "NEXT ROLL: " + activePotion.name.toUpperCase() : "NO POTION ACTIVE";
+    POTIONS.forEach(potion => {
+      const amount = potionInventory[potion.name] || 0;
+      const card = document.createElement("article");
+      card.className = "potion-card" + (activePotion?.name === potion.name ? " potion-active" : "");
+      card.style.setProperty("--potion-color", potion.color);
+      const icon = document.createElement("div");
+      icon.className = "potion-symbol";
+      icon.textContent = potion.symbol;
+      const info = document.createElement("div");
+      info.className = "potion-info";
+      const title = document.createElement("h3");
+      title.textContent = potion.name;
+      const description = document.createElement("p");
+      description.textContent = potion.desc;
+      const amountLabel = document.createElement("span");
+      amountLabel.className = "potion-amount";
+      amountLabel.textContent = "OWNED ×" + amount;
+      info.append(title, description, amountLabel);
+      const use = document.createElement("button");
+      use.type = "button";
+      use.className = "potion-use";
+      use.textContent = activePotion?.name === potion.name ? "ACTIVE" : "USE";
+      use.disabled = amount < 1 || !!activePotion || rolling;
+      use.addEventListener("click", () => {
+        if (rolling || activePotion || !(potionInventory[potion.name] > 0)) return;
+        potionInventory[potion.name]--;
+        activePotion = potion;
+        savePotionInventory();
+        renderPotions();
+        showToast(potion.name.toUpperCase() + " READY — NEXT ROLL.");
+      });
+      card.append(icon, info, use);
+      grid.append(card);
+    });
+  }
+
   function renderCollection() {
     const grid = $("auraGrid");
     grid.innerHTML = "";
@@ -1330,6 +1468,7 @@
       return;
     }
     if (verb === "help") return consoleHelp();
+    if (verb === "potions") { consoleWrite("Potion inventory: " + POTIONS.reduce((sum, potion) => sum + (potionInventory[potion.name] || 0), 0) + " total. Open the POTION VAULT on the main page to use one."); POTIONS.forEach(potion => consoleWrite(potion.name + " ×" + (potionInventory[potion.name] || 0))); return; }
     if (verb === "status") {
       consoleWrite("DEV access: verified", "success");
       consoleWrite("Auras registered: " + AURAS.length);
@@ -1431,6 +1570,7 @@
   }
 
   renderCollection();
+  renderPotions();
 
   // Backfill progression for players who discovered all five gods before Phase II existed.
   if (!transcendenceUnlocked && ORIGINAL_GODS.every(name => discovered.has(name))) {

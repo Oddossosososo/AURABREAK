@@ -16,13 +16,13 @@
   <script src="lottery-jackpot.js?v=4" defer></script>
   <script type="module" src="lottery-jackpot-tsl.js?v=2"></script>
   <script src="aura-language.js?v=2" defer></script>
-  <script src="script.js?v=29" defer></script>
+  <script src="script.js?v=30" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
   <header class="topbar">
     <a class="brand" href="#" aria-label="AURABREAK home"><span class="brand-mark">A</span><span>AURA<span class="brand-light">BREAK</span><small>ROLL BEYOND REALITY</small></span></a>
-    <nav class="nav"><a class="nav-link active" href="#roll">Roll</a><a class="nav-link" href="#collection">Collection</a><a class="nav-link" href="#potions">Potions</a><a class="nav-link" href="language-lab.html">Polyglot Lab ↗</a><a class="nav-link" href="owner-lab.html">Owner Lab ↗</a><button id="phaseToggle" class="phase-toggle" type="button" hidden>ENTER AURABREAK II ↗</button></nav>
+    <nav class="nav"><a class="nav-link active" href="#roll">Roll</a><a class="nav-link" href="#collection">Collection</a><a class="nav-link" href="#potions">Potions</a><a class="nav-link" href="language-lab.html">Polyglot Lab ↗</a><a class="nav-link" href="owner-lab.html">Owner Lab ↗</a><button id="phaseToggle" class="phase-toggle" type="button" hidden>ENTER AURABREAK II ↗</button><button id="settingsOpen" class="settings-open" type="button" aria-haspopup="dialog" aria-controls="settingsPanel">SETTINGS ⚙</button></nav>
     <div class="top-status"><span class="status-dot"></span> REALITY STABLE <span class="version">PRE-ALPHA 0.1</span></div>
   </header>
 
@@ -121,6 +121,6 @@
       <button id="adminAddAura" class="admin-action secondary-action">ADD CUSTOM AURA +</button>
     </div>
   </section>
-  <div class="toast" id="toast" role="status"></div>
+  <section class="settings-panel hidden" id="settingsPanel" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">\n    <div class="settings-window">\n      <div class="settings-header"><div><p class="settings-eyebrow">AURABREAK / PREFERENCES</p><h2 id="settingsTitle">SETTINGS</h2></div><button id="settingsClose" class="settings-close" type="button" aria-label="Close settings">×</button></div>\n      <section class="special-thanks"><p class="settings-eyebrow">SPECIAL THANKS</p><h3>🎵 Shine — Swoop</h3><p>Music by <strong>Swoop</strong>, shared through Uppbeat.</p><a href="https://uppbeat.io/c/swoop" target="_blank" rel="noopener noreferrer">Visit Swoop on Uppbeat ↗</a><p class="settings-license-note">Music credit supplied for this project. Licence code: <code>EFOURQWTNJRGPBGZ</code></p></section>\n    </div>\n  </section>\n  <div class="toast" id="toast" role="status"></div>
 </body>
 </html>

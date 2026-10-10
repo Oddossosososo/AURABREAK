@@ -73,8 +73,6 @@
     {name:"Eternal Luck Potion", desc:"1e12× luck for one roll.", type:"luck", value:1e12, color:"#fff5db", symbol:"∞"},
     {name:"Infinite Luck Potion", desc:"Uses the highest practical luck setting for one roll.", type:"luck", value:1e100, color:"#ffffff", symbol:"∞"},
     {name:"Fortune Elixir", desc:"50× luck for one roll.", type:"luck", value:50, color:"#a4ff9d", symbol:"♧"},
-    {name:"Fortune Tonic", desc:"250× luck for one roll.", type:"luck", value:250, color:"#d5ff9d", symbol:"♧"},
-    {name:"Fortune Draught", desc:"2,500× luck for one roll.", type:"luck", value:2500, color:"#c5ffbe", symbol:"♧"},
     {name:"Starfall Brew", desc:"25,000× luck for one roll.", type:"luck", value:25000, color:"#9fe4ff", symbol:"☄"},
     {name:"Nebula Nectar", desc:"100,000× luck for one roll.", type:"luck", value:1e5, color:"#c9a2ff", symbol:"✺"},
     {name:"Aurora Tonic", desc:"500,000× luck for one roll.", type:"luck", value:5e5, color:"#9affdb", symbol:"❋"},
@@ -1206,6 +1204,7 @@
     document.body.classList.add("rolling");
     $("stageLabel").textContent = "REALITY IS REARRANGING...";
     let aura = chooseAura();
+    renderPotions();
     runRollCount++;
     if (runRollCount > 5000) { runRollCount = 1; pureDeityEncounters = 0; }
     if (aura.name === "PURE DEITY") {
@@ -1446,6 +1445,7 @@
     consoleWrite("find <text>          Search aura names");
     consoleWrite("info <aura name>     Show aura details");
     consoleWrite("roll [count]         Roll once or bulk roll up to 10000 times");
+    consoleWrite("potions              List potion inventory");
     consoleWrite("luck <number>        Set the luck multiplier");
     consoleWrite("grant <aura name>    Grant an aura directly");
     consoleWrite("clear                Clear terminal output");
@@ -1533,6 +1533,7 @@
       }
       saveDiscoveries();
       renderCollection();
+      renderPotions();
       consoleWrite("Bulk roll complete: " + count.toLocaleString("en-US") + " rolls.", "success");
       consoleWrite("New discoveries: " + newDiscoveries + " | Empty rolls: " + emptyRolls);
       consoleWrite("Most frequent results:", "system");

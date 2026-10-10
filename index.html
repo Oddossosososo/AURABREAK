@@ -90,7 +90,18 @@
       <button id="adminTellTruth" class="admin-action secondary-action">TELL THE GODS THE TRUTH ↗</button>
       <p class="admin-note">Root override: instantly grant any aura, unlock the entire catalogue, or directly claim DEVELOPER. This is a client-side game gate, not secure authentication.</p>
       <div class="admin-divider"></div>
-      <div class="admin-divider"></div><p class="admin-eyebrow">ROOT TOOLS / CUSTOM AURA</p>
+      <p class="admin-eyebrow">AURA TERMINAL / COMMAND CONSOLE</p>
+      <div class="admin-console" id="adminConsole">
+        <div class="admin-console-screen" id="adminConsoleOutput" role="log" aria-live="polite"><div class="console-line system">AURABREAK TERMINAL v1.0</div><div class="console-line">Type <b>help</b> to list commands.</div></div>
+        <form class="admin-console-form" id="adminConsoleForm">
+          <label for="adminConsoleInput" class="console-prompt">AURA&gt;</label>
+          <input id="adminConsoleInput" autocomplete="off" spellcheck="false" placeholder="help" aria-label="Admin console command">
+          <button class="admin-action console-run" type="submit">RUN ↵</button>
+        </form>
+        <p class="admin-note">Command-only console. It does not execute arbitrary JavaScript.</p>
+      </div>
+      <div class="admin-divider"></div>
+      <p class="admin-eyebrow">ROOT TOOLS / CUSTOM AURA</p>
       <div class="admin-field"><label for="customAuraName">Aura name</label><input id="customAuraName" maxlength="50" placeholder="E.G. STAR EATER"></div>
       <div class="admin-field"><label for="customAuraOdds">Odds (1 in X)</label><input id="customAuraOdds" type="text" inputmode="numeric" autocomplete="off" value="1000000"></div>
       <div class="admin-field"><label for="customAuraRarity">Rarity label</label><input id="customAuraRarity" maxlength="30" placeholder="CUSTOM / DIVINE"></div>

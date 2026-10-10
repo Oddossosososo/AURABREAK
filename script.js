@@ -1307,7 +1307,7 @@
     consoleWrite("auras                List aura names");
     consoleWrite("find <text>          Search aura names");
     consoleWrite("info <aura name>     Show aura details");
-    consoleWrite("roll                 Perform a normal game roll");
+    consoleWrite("roll [count]         Roll once or bulk roll up to 10000 times");
     consoleWrite("luck <number>        Set the luck multiplier");
     consoleWrite("grant <aura name>    Grant an aura directly");
     consoleWrite("clear                Clear terminal output");
@@ -1362,8 +1362,44 @@
       return;
     }
     if (verb === "roll") {
-      consoleWrite("Running a normal game roll…", "system");
-      roll();
+      if (!argument) {
+        consoleWrite("Running a normal game roll…", "system");
+        roll();
+        return;
+      }
+      if (!/^\\d+$/.test(argument)) return consoleWrite("Usage: roll [count] — count must be a whole number from 1 to 10000.", "error");
+      const count = Number(argument);
+      if (!Number.isSafeInteger(count) || count < 1 || count > 10000) {
+        return consoleWrite("Bulk roll count must be from 1 to 10000.", "error");
+      }
+      if (rolling) return consoleWrite("A roll is already in progress. Wait for it to finish first.", "error");
+      const totals = new Map();
+      let newDiscoveries = 0;
+      let emptyRolls = 0;
+      for (let i = 0; i < count; i++) {
+        let aura = chooseAura();
+        runRollCount++;
+        if (runRollCount > 5000) { runRollCount = 1; pureDeityEncounters = 0; }
+        if (aura.name === "PURE DEITY") {
+          pureDeityEncounters++;
+          if (pureDeityEncounters === 2) aura = AURAS.find(a => a.name === "PURE DEITY:GALACTIC") || aura;
+        }
+        totals.set(aura.name, (totals.get(aura.name) || 0) + 1);
+        if (aura.noAura) {
+          emptyRolls++;
+        } else if (!discovered.has(aura.name)) {
+          discovered.add(aura.name);
+          newDiscoveries++;
+        }
+      }
+      saveDiscoveries();
+      renderCollection();
+      consoleWrite("Bulk roll complete: " + count.toLocaleString("en-US") + " rolls.", "success");
+      consoleWrite("New discoveries: " + newDiscoveries + " | Empty rolls: " + emptyRolls);
+      consoleWrite("Most frequent results:", "system");
+      [...totals.entries()].sort((a, b) => b[1] - a[1]).slice(0, 20)
+        .forEach(([name, amount]) => consoleWrite(name + " × " + amount.toLocaleString("en-US")));
+      consoleWrite("Collection: " + discovered.size + " discovered.", "success");
       return;
     }
     if (verb === "luck") {

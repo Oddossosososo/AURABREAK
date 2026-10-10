@@ -925,6 +925,42 @@
     });
   }
 
+  function startLotteryJackpotCutscene() {
+    const cutscene=$("cutscene"), art=$("cutsceneArt");
+    const content=cutscene.querySelector(".cutscene-content");
+    const eyebrow=$("cutsceneEyebrow"), title=$("cutsceneTitle"), subtitle=$("cutsceneSubtitle");
+    const button=$("closeCutscene");
+    stopDeityCutscene();
+    if(nullAbsoluteStop){nullAbsoluteStop();nullAbsoluteStop=null;}
+    if(lotteryJackpotStop){lotteryJackpotStop();lotteryJackpotStop=null;}
+    if(fourthWallCleanup){fourthWallCleanup();fourthWallCleanup=null;}
+    cutscene.dataset.style="lottery-jackpot";
+    cutscene.dataset.aura="LOTTERY: JACKPOT";
+    cutscene.style.setProperty("--aura-color","#ffe889");
+    art.innerHTML='<div class="jackpot-fallback"></div><div class="jackpot-scanlines"></div><div class="jackpot-ticket">✦</div><div class="jackpot-particles"></div>';
+    eyebrow.textContent="ULTRA CLASSIFIED • ODDS BREAKDOWN UNAVAILABLE";
+    title.className="jackpot-title"; title.textContent="THE WINNING TICKET"; title.style.color="#fff8d5";
+    subtitle.textContent="THE RNG FOUND A RESULT IT WAS NEVER EXPECTED TO RETURN.";
+    button.textContent="REVEAL JACKPOT ↗";
+    content.classList.remove("deity-reveal","movie-reveal");
+    cutscene.classList.remove("jackpot-running","jackpot-lock","jackpot-burst","jackpot-final");
+    cutscene.classList.add("jackpot-running");
+    if(window.AURABREAK_LOTTERY_JACKPOT&&window.THREE){
+      try{lotteryJackpotStop=window.AURABREAK_LOTTERY_JACKPOT.start(art);}
+      catch(err){console.warn("Jackpot shader fallback:",err);}
+    }
+    const later=(ms,fn)=>cutsceneTimers.push(setTimeout(fn,ms));
+    const line=(head,sub,cls="jackpot-title")=>{
+      title.textContent=head;title.className=cls;subtitle.textContent=sub;
+      content.classList.remove("deity-reveal");void content.offsetWidth;content.classList.add("deity-reveal");
+    };
+    playDeityTone(392,1.3,"sine",.045);
+    later(2400,()=>{cutscene.classList.add("jackpot-lock");eyebrow.textContent="TICKET VERIFIED • REALITY ODDS OVERRIDDEN";line("ONE IN 10²⁵⁰","FIFTY ORDERS OF MAGNITUDE BEYOND THE VIEWER.");playDeityTone(523.25,1.4,"triangle",.05);});
+    later(5600,()=>{line("THE VIEWER LOOKED AWAY.","THIS TIME, THE GAME DIDN'T NEED AN OBSERVER.");playDeityTone(659.25,1.5,"sine",.055);});
+    later(8800,()=>{cutscene.classList.add("jackpot-burst");line("LOTTERY: JACKPOT","THE RAREST AURA THAT CAN BE WON THROUGH NORMAL ROLLS.","jackpot-title jackpot-title-final");eyebrow.textContent="ULTRA • RAREST ROLLABLE • 1 IN 10²⁵⁰";playDeityTone(783.99,2,"sine",.06);});
+    later(12500,()=>{cutscene.classList.add("jackpot-final");button.textContent="CLAIM LOTTERY: JACKPOT ↗";});
+  }
+
   function startTheViewerCutscene() {
     const cutscene = $("cutscene"), art = $("cutsceneArt");
     const content = cutscene.querySelector(".cutscene-content");

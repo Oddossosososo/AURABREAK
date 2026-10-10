@@ -117,18 +117,37 @@
   ];
   const DEFAULT_POTION_INVENTORY = Object.fromEntries(POTIONS.map(potion => [potion.name, 1]));
   let potionInventory = loadPotionInventory();
-  let activePotion = null;
+  let activePotion = loadActivePotion();
+  const ACTIVE_POTION_STORAGE_KEY = "aurabreak-active-potion-v1";
   function loadPotionInventory() {
     try {
       const saved = JSON.parse(localStorage.getItem(POTION_STORAGE_KEY) || "null");
       if (saved && typeof saved === "object") {
-        return Object.fromEntries(POTIONS.map(potion => [potion.name, Math.max(0, Math.floor(Number(saved[potion.name]) || 0))]));
+        // Give older saves one copy of newly introduced potions, but preserve explicit zero counts.
+        return Object.fromEntries(POTIONS.map(potion => [
+          potion.name,
+          Object.prototype.hasOwnProperty.call(saved, potion.name)
+            ? Math.max(0, Math.floor(Number(saved[potion.name]) || 0))
+            : 1
+        ]));
       }
     } catch {}
     return {...DEFAULT_POTION_INVENTORY};
   }
   function savePotionInventory() {
     try { localStorage.setItem(POTION_STORAGE_KEY, JSON.stringify(potionInventory)); } catch {}
+  }
+  function loadActivePotion() {
+    try {
+      const name = localStorage.getItem(ACTIVE_POTION_STORAGE_KEY);
+      return POTIONS.find(potion => potion.name === name) || null;
+    } catch { return null; }
+  }
+  function saveActivePotion() {
+    try {
+      if (activePotion) localStorage.setItem(ACTIVE_POTION_STORAGE_KEY, activePotion.name);
+      else localStorage.removeItem(ACTIVE_POTION_STORAGE_KEY);
+    } catch {}
   }
   const STORAGE_KEY = "aurabreak-discoveries-v1";
   const TRANSCENDENCE_KEY = "aurabreak-transcendence-unlocked-v1";
@@ -186,7 +205,10 @@
   }
   function chooseAura(applyPotion = true) {
     const potion = applyPotion ? activePotion : null;
-    if (applyPotion && activePotion) activePotion = null;
+    if (applyPotion && activePotion) {
+      activePotion = null;
+      saveActivePotion();
+    }
     if (potion?.type === "god") {
       const gods = AURAS.filter(a => a.god && !a.adminOnly && !a.evolutionOnly);
       if (gods.length) return gods[Math.floor(Math.random() * gods.length)];
@@ -312,6 +334,7 @@
         if (rolling || activePotion || !(potionInventory[potion.name] > 0)) return;
         potionInventory[potion.name]--;
         activePotion = potion;
+        saveActivePotion();
         savePotionInventory();
         renderPotions();
         showToast(potion.name.toUpperCase() + " READY — NEXT ROLL.");

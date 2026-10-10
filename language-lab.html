@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080811">
+  <meta name="description" content="AURABREAK Polyglot Lab — explore programming languages, code examples, and the technology behind the anomaly.">
+  <title>POLYGLOT LAB — AURABREAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="language-lab.css?v=1">
+  <script src="language-lab.js?v=1" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="Back to AURABREAK"><span class="brand-mark">A</span><span>AURA<span class="brand-light">BREAK</span><small>POLYGLOT LAB</small></span></a>
+    <nav class="nav"><a class="nav-link" href="index.html">← Back to rolling</a><a class="nav-link active" href="#catalog">Language catalog</a></nav>
+    <div class="top-status"><span class="status-dot"></span> DEV SYSTEM ONLINE</div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> AURABREAK / ENGINEERING ARCHIVE</div>
+      <h1>ONE GAME.<br><span>MANY LANGUAGES.</span></h1>
+      <p class="hero-copy">Explore the languages that can power, extend, test, style, query, or document a game like AURABREAK.</p>
+      <div class="hero-stats"><div><strong id="languageTotal">—</strong><span>LANGUAGE ENTRIES</span></div><div><strong>8</strong><span>FEATURED CODE SAMPLES</span></div><div><strong>01</strong><span>REAL BROWSER ENGINE</span></div></div>
+    </section>
+    <section class="architecture">
+      <div class="section-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> HOW THE ENGINE WORKS</div><h2>THE <span>POLYGLOT STACK.</span></h2></div></div>
+      <div class="stack-grid">
+        <article class="stack-card"><span class="stack-index">01 / CORE</span><h3>JavaScript</h3><p>Runs rolls, aura odds, potion effects, collection state, and the interface in the browser.</p><span class="stack-tag live">ACTIVE ENGINE</span></article>
+        <article class="stack-card"><span class="stack-index">02 / PRESENTATION</span><h3>HTML + CSS</h3><p>Structure the page, accessible controls, responsive layout, neon styling, and transitions.</p><span class="stack-tag live">ACTIVE UI</span></article>
+        <article class="stack-card"><span class="stack-index">03 / VISUALS</span><h3>GLSL / WebGL</h3><p>GPU shader code can create animated cosmic backgrounds and procedural effects.</p><span class="stack-tag live">VISUAL EFFECTS</span></article>
+        <article class="stack-card"><span class="stack-index">04 / DATA</span><h3>SQL</h3><p>Can power persistent accounts, rankings, and shared inventories through a trusted backend.</p><span class="stack-tag planned">BACKEND OPTION</span></article>
+      </div>
+      <p class="reality-note"><strong>Quick reality check:</strong> a browser cannot directly run every language in the catalog. Some are frameworks, markup, query languages, hardware languages, or historical/esoteric languages. The catalog includes them all as an explorer; the active game uses the technologies shown as active above.</p>
+    </section>
+    <section class="examples" id="examples">
+      <div class="section-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> CODE LAB / SAME IDEA, DIFFERENT SYNTAX</div><h2>ROLL A <span>DISCOVERY.</span></h2></div></div>
+      <p class="section-copy">These examples demonstrate a simple “roll an aura” idea in different languages. They are learning examples, not connected to the live game engine.</p>
+      <div class="example-tabs" id="exampleTabs" role="tablist" aria-label="Choose code example"></div>
+      <div class="code-card"><div class="code-header"><span id="codeLanguage">JavaScript</span><span class="code-status">EXAMPLE / NOT EXECUTED</span><button id="copyCode" type="button">COPY CODE ↗</button></div><pre><code id="codeSample"></code></pre><p id="codeNote" class="code-note"></p></div>
+    </section>
+    <section class="catalog" id="catalog">
+      <div class="section-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> INDEX / A–Z</div><h2>LANGUAGE <span>CATALOG.</span></h2></div><div class="collection-count"><strong id="visibleCount">—</strong><span> MATCHES</span></div></div>
+      <div class="catalog-controls"><label class="search-box"><span>⌕</span><input id="languageSearch" type="search" placeholder="Search a language…" autocomplete="off" aria-label="Search languages"></label><select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option value="general">General-purpose</option><option value="web">Web, markup & styling</option><option value="data">Data & query</option><option value="systems">Systems & hardware</option><option value="functional">Functional & logic</option><option value="esoteric">Esoteric & experimental</option><option value="other">Other / specialist</option></select></div>
+      <div id="languageCatalog" class="language-grid" aria-live="polite"></div>
+      <p id="emptyState" class="empty-state" hidden>No languages match that search. Try another name or category.</p>
+    </section>
+    <footer><span class="footer-brand">AURABREAK <span>©</span></span><span>POLYGLOT LAB · LEARN, EXPLORE, BUILD</span><a href="index.html">RETURN TO THE GAME ↗</a></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -728,7 +728,7 @@
     cutscene.dataset.style = aura.style || "cosmic";
     cutscene.style.setProperty("--aura-color", aura.color);
     cutscene.style.setProperty("--movie-color", aura.color);
-    art.innerHTML = '<div class="movie-scene movie-' + scene.slug + '"><div class="movie-starfield"></div><div class="movie-horizon"></div><div class="movie-core"><span>' + aura.symbol + '</span></div><div class="movie-ring movie-ring-a"></div><div class="movie-ring movie-ring-b"></div><div class="movie-fragments"></div><div class="movie-volumetric"></div><div class="movie-impact"></div></div>';;
+    art.innerHTML = '<div class="movie-scene movie-' + scene.slug + '"><div class="movie-starfield"></div><div class="movie-horizon"></div><div class="movie-core"><span>' + aura.symbol + '</span></div><div class="movie-ring movie-ring-a"></div><div class="movie-ring movie-ring-b"></div><div class="movie-fragments"></div><div class="movie-volumetric"></div><div class="movie-impact"></div></div>';
     if (omnipotentCutsceneStop) { omnipotentCutsceneStop(); omnipotentCutsceneStop = null; }
     const isOmnipotentMovie = aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE";
     if (isOmnipotentMovie) {

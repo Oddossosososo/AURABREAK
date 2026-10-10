@@ -297,3 +297,61 @@ body.transcendence-mode .status-dot{background:#8dfff4;box-shadow:0 0 12px #8dff
 @media(prefers-reduced-motion:reduce){.orb-break-stars,.orb-break-ring,.orb-break-orb,.orb-break-cracks,.orb-break-flash,.orb-break-shards{animation-duration:30s!important}}
 
 .dev-action{border-color:#fff;background:linear-gradient(100deg,#fff,#b8b8d8);color:#100d20;box-shadow:0 0 22px #ffffff25}
+
+
+/* THE ENDING — final-boss treatment: collapsing reality, corrupted space, and fractured light. */
+.cutscene[data-style="the-ending"]{background:#020104;color:#fff;--aura-color:#ff294f;isolation:isolate}
+.cutscene[data-style="the-ending"] .cutscene-backdrop{opacity:1;background:radial-gradient(ellipse at 50% 48%,#28030b 0%,#100108 30%,#030105 66%,#000 100%);animation:endingBackdrop 3.2s steps(2,end) infinite}
+.cutscene[data-style="the-ending"] .cutscene-corner{color:#ff536b;letter-spacing:.22em}
+.ending-void{position:absolute;inset:-15%;background:radial-gradient(circle at 50% 50%,#fff 0 1px,transparent 2px),radial-gradient(circle at 20% 30%,#ff294f 0 1px,transparent 2px),radial-gradient(circle at 75% 70%,#d8d5e7 0 1px,transparent 2px);background-size:61px 73px,97px 89px,131px 107px;opacity:.5;animation:endingDrift 18s linear infinite}
+.ending-grid{position:absolute;inset:-35%;background-image:linear-gradient(#ff294f22 1px,transparent 1px),linear-gradient(90deg,#ff294f22 1px,transparent 1px);background-size:54px 54px;transform:perspective(500px) rotateX(64deg) scale(1.4);transform-origin:50% 60%;mask-image:radial-gradient(ellipse,#000 0%,transparent 68%);opacity:.32;animation:endingGrid 4s ease-in-out infinite alternate}
+.ending-eclipse{position:absolute;left:50%;top:48%;width:min(48vw,390px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#000 0 52%,#100107 57%,#ff294f 58%,#fff 58.5%,#ff294f 59%,transparent 64%);filter:drop-shadow(0 0 35px #ff294f88);animation:endingEclipse 7s ease-in-out infinite}
+.ending-ring{position:absolute;left:50%;top:48%;width:min(95vw,850px);aspect-ratio:1;border:1px solid #ff526a77;border-radius:50%;transform:translate(-50%,-50%) rotateX(67deg);box-shadow:0 0 36px #ff294f22,inset 0 0 30px #ff294f12}
+.ending-ring-a{animation:endingOrbit 11s linear infinite}
+.ending-ring-b{width:min(120vw,1050px);border-style:dashed;transform:translate(-50%,-50%) rotateX(61deg) rotate(37deg);opacity:.5;animation:endingOrbit 17s linear infinite reverse}
+.ending-fractures{position:absolute;inset:-8%;opacity:0;background:repeating-conic-gradient(from 9deg at 50% 48%,transparent 0deg 10deg,#fff9 10.2deg 10.35deg,transparent 10.7deg 22deg,#ff294fbb 22.2deg 22.4deg,transparent 22.8deg 36deg);mask-image:radial-gradient(ellipse,#000 0%,transparent 74%);animation:endingFractures 2.8s ease-in-out infinite alternate}
+.ending-glitch{position:absolute;font:800 clamp(10px,1.7vw,17px)/1.5 ui-monospace,monospace;letter-spacing:.35em;color:#ff294f99;opacity:0;white-space:nowrap;pointer-events:none}
+.ending-glitch-a{top:19%;left:6%;animation:endingGlitch 4s steps(2,end) 1.5s infinite}
+.ending-glitch-b{right:5%;bottom:18%;color:#fff8;animation:endingGlitch 3.4s steps(2,end) 2s infinite reverse}
+.ending-monolith{position:absolute;left:50%;top:48%;width:min(32vw,245px);aspect-ratio:.58;display:grid;place-items:center;transform:translate(-50%,-50%) scale(.08) rotate(18deg);background:linear-gradient(110deg,#070308,#29040d 44%,#030104 72%);border:1px solid #ff7185;clip-path:polygon(50% 0,100% 14%,87% 87%,50% 100%,13% 87%,0 14%);box-shadow:0 0 55px #ff294f88;opacity:0;animation:endingMonolith 2s cubic-bezier(.12,.8,.2,1) 3.2s forwards}
+.ending-monolith:before{content:"";position:absolute;inset:9%;border:1px solid #fff6;clip-path:polygon(50% 0,100% 14%,87% 87%,50% 100%,13% 87%,0 14%)}
+.ending-monolith span{font-size:clamp(75px,15vw,155px);color:#fff;text-shadow:0 0 12px #fff,0 0 35px #ff294f,0 0 85px #ff294f;animation:endingSigil 2.2s ease-in-out infinite alternate}
+.ending-shards{position:absolute;inset:0;opacity:0;background:linear-gradient(118deg,transparent 0 42%,#fff9 42.1% 42.2%,transparent 42.4% 100%),linear-gradient(65deg,transparent 0 63%,#ff294fbb 63.1% 63.25%,transparent 63.5% 100%),linear-gradient(155deg,transparent 0 28%,#fff6 28.1% 28.2%,transparent 28.4% 100%);pointer-events:none}
+.ending-whiteout{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.ending-line{font-size:clamp(27px,6.5vw,76px)!important;line-height:1!important;letter-spacing:.045em!important;color:#fff!important;text-shadow:2px 0 #ff294f, -2px 0 #9bdeff, 0 0 22px #ff294f,0 0 70px #ff294f77!important;animation:endingText .8s steps(2,end) both}
+.ending-final-title{font-size:clamp(40px,9vw,105px)!important;line-height:.94!important;letter-spacing:-.055em!important;color:#fff!important;text-shadow:2px 0 #ff294f,-2px 0 #8feaff,0 0 24px #fff,0 0 70px #ff294f,0 0 150px #ff294f99!important;animation:endingFinal 1.3s cubic-bezier(.1,.8,.2,1) both}
+.cutscene.ending-running .cutscene-content{z-index:9}
+.cutscene.ending-running .cutscene-button{opacity:.5}
+.cutscene.ending-collapse .ending-eclipse{animation:endingCollapse 1.4s cubic-bezier(.7,0,.9,.2) both}
+.cutscene.ending-collapse .ending-fractures{opacity:1;animation:endingFractures .24s steps(2,end) infinite alternate}
+.cutscene.ending-collapse .ending-grid{opacity:.8;animation-duration:.35s}
+.cutscene.ending-collapse .ending-glitch{opacity:1}
+.cutscene.ending-impact .ending-whiteout{animation:endingWhiteout 1.2s ease-out both}
+.cutscene.ending-impact .ending-shards{opacity:1;animation:endingShardFlash 1.2s steps(2,end) both}
+.cutscene.ending-impact .cutscene-content{animation:endingShock .45s ease both}
+.cutscene.ending-final .ending-monolith{opacity:1;filter:drop-shadow(0 0 60px #ff294f)}
+.cutscene.ending-final .ending-fractures{opacity:.85}
+#orbCore.the-ending-core{background:radial-gradient(circle at 35% 28%,#fff 0%,#ff294f 18%,#10030a 55%,#000 78%)!important;box-shadow:0 0 26px #fff,0 0 60px #ff294f,0 0 125px #ff294f88,inset 0 0 25px #fff9!important;animation:endingCorePulse 2.3s ease-in-out infinite alternate}
+#orbCore.the-ending-core .orb-glyph{color:#fff!important;text-shadow:0 0 12px #fff,0 0 35px #ff294f,0 0 70px #ff294f!important}
+.the-ending-result .empty-symbol{background:radial-gradient(circle,#ff294f33,transparent 68%);text-shadow:0 0 22px #ff294f,0 0 55px #ff294f}
+.the-ending-result h2{color:#ff536b!important;text-shadow:0 0 25px #ff294f88,0 0 60px #ff294f44}
+.the-ending-tile{border-color:#ff294f88!important;background:linear-gradient(145deg,#19040b,#08060d 60%,#21040a)!important;box-shadow:inset 0 0 24px #ff294f12,0 0 20px #ff294f18}
+.the-ending-tile .tile-rarity,.the-ending-tile .tile-name{color:#ff7185!important;text-shadow:0 0 12px #ff294f55}
+.the-ending-tile .tile-symbol{color:#fff!important;text-shadow:0 0 12px #fff,0 0 35px #ff294f,0 0 75px #ff294f!important}
+@keyframes endingBackdrop{0%,100%{filter:brightness(.7)}50%{filter:brightness(1.25)}}
+@keyframes endingDrift{to{transform:translate3d(-3%,2%,0) rotate(2deg)}}
+@keyframes endingGrid{to{transform:perspective(500px) rotateX(67deg) scale(1.8) translateY(4%)}}
+@keyframes endingEclipse{0%,100%{transform:translate(-50%,-50%) scale(1) rotate(0)}50%{transform:translate(-50%,-50%) scale(1.09) rotate(8deg)}}
+@keyframes endingOrbit{to{rotate:360deg}}
+@keyframes endingFractures{from{opacity:.18;transform:scale(.95) rotate(-2deg)}to{opacity:.9;transform:scale(1.08) rotate(2deg)}}
+@keyframes endingGlitch{0%,88%,100%{opacity:0;transform:translateX(0)}89%{opacity:.9;transform:translateX(9px)}91%{opacity:.25;transform:translateX(-13px)}94%{opacity:.8;transform:translateX(4px)}}
+@keyframes endingMonolith{0%{opacity:0;transform:translate(-50%,-50%) scale(.08) rotate(18deg);filter:blur(12px)}65%{opacity:1;transform:translate(-50%,-50%) scale(1.12) rotate(-3deg);filter:blur(0)}100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes endingSigil{from{transform:scale(.9) rotate(-4deg);opacity:.65}to{transform:scale(1.1) rotate(4deg);opacity:1}}
+@keyframes endingText{0%{opacity:0;transform:translateX(-8px);filter:blur(5px)}20%{opacity:1;transform:translateX(3px);filter:none}28%{transform:translateX(-2px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes endingFinal{0%{opacity:0;transform:scale(.72);filter:blur(12px)}70%{opacity:1;transform:scale(1.04);filter:blur(0)}100%{opacity:1;transform:scale(1)}}
+@keyframes endingCollapse{0%{transform:translate(-50%,-50%) scale(1);opacity:1}60%{transform:translate(-50%,-50%) scale(1.5);opacity:1}100%{transform:translate(-50%,-50%) scale(.05);opacity:0}}
+@keyframes endingWhiteout{0%{opacity:0}10%{opacity:.95}30%{opacity:0}50%{opacity:.7}100%{opacity:0}}
+@keyframes endingShardFlash{0%{opacity:0;filter:blur(8px)}30%{opacity:1;filter:none}100%{opacity:0}}
+@keyframes endingShock{0%,100%{transform:translate(0,0)}20%{transform:translate(5px,-2px)}40%{transform:translate(-4px,2px)}60%{transform:translate(3px,1px)}80%{transform:translate(-2px,-1px)}}
+@keyframes endingCorePulse{from{filter:brightness(.85);transform:scale(.98)}to{filter:brightness(1.15);transform:scale(1.03)}}
+@media(prefers-reduced-motion:reduce){.ending-void,.ending-grid,.ending-eclipse,.ending-ring,.ending-monolith span,#orbCore.the-ending-core{animation-duration:40s!important}.ending-fractures,.ending-glitch{animation:none!important}}

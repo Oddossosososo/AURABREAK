@@ -845,6 +845,49 @@
     };
     reveal(0);
     phase("phase-build");
+    if (aura.name === "LOTTERY: WINNER") {
+      // A dedicated 18-second endgame reveal: silence, fracture, ascension, then the ticket.
+      cutscene.classList.add("winner-reveal-running");
+      button.textContent = "SKIP REVELATION ↗";
+      later(1700, () => {
+        phase("phase-fracture");
+        cutscene.classList.add("winner-fracture");
+        reveal(1);
+        playDeityTone(55, 2.8, "sawtooth", 0.085);
+      });
+      later(4300, () => {
+        phase("phase-ascend");
+        cutscene.classList.remove("winner-fracture");
+        cutscene.classList.add("winner-ascend");
+        reveal(2);
+        playDeityTone(82.4, 3.2, "triangle", 0.095);
+      });
+      later(7200, () => {
+        phase("phase-peak");
+        cutscene.classList.remove("winner-ascend");
+        cutscene.classList.add("winner-overflow", "movie-finale");
+        reveal(3);
+        eyebrow.textContent = "UNFATHOMABLE • WORLD 2 EXCLUSIVE";
+        playDeityTone(41.2, 4.8, "sawtooth", 0.12);
+      });
+      later(9800, () => {
+        cutscene.classList.remove("movie-finale");
+        cutscene.classList.add("winner-aftershock");
+        subtitle.textContent = "1 IN 10^1000 • THE TICKET THAT OUTGREW POSSIBILITY";
+      });
+      later(14500, () => {
+        cutscene.classList.remove("winner-aftershock");
+        cutscene.classList.add("winner-silence");
+        title.textContent = "THE UNIVERSE HAS NO DRAWING LEFT.";
+        subtitle.textContent = "ONLY THE WINNING TICKET REMAINS.";
+      });
+      later(18000, () => {
+        cutscene.classList.remove("movie-running", "winner-reveal-running", "winner-fracture", "winner-ascend", "winner-overflow", "winner-aftershock", "winner-silence");
+        sceneElement?.classList.remove("phase-settle");
+        button.textContent = "CLAIM THE WINNER ↗";
+      });
+      return;
+    }
     if (overdrive) {
       later(2100, () => { phase("phase-fracture"); reveal(1); });
       later(4300, () => { phase("phase-ascend"); reveal(2); });

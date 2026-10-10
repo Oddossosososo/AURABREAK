@@ -628,3 +628,18 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .admin-console-form input:focus{box-shadow:none}
 .admin-console-form .console-run{width:auto;min-width:66px;margin:0;padding:9px 12px;font-size:10px}
 @media(max-width:520px){.admin-console-screen{height:180px}.admin-console-form{gap:5px;padding:8px}.admin-console-form .console-run{min-width:55px;padding:9px 8px}}
+
+
+/* Potion vault */
+.potion-section{width:min(1180px,calc(100% - 40px));margin:0 auto;padding:44px 0 72px}
+.potion-intro{max-width:680px;color:var(--muted,#9a9ab3);line-height:1.7;margin:14px 0 18px}
+.active-potion-label{display:inline-flex;align-items:center;border:1px solid rgba(142,255,180,.3);border-radius:999px;padding:9px 14px;margin:0 0 20px;color:#9dffbf;background:rgba(80,255,160,.06);font:11px/1.2 "DM Mono",monospace;letter-spacing:.08em}
+.potion-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.potion-card{--potion-color:#a8a0ff;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;min-width:0;padding:15px;border:1px solid color-mix(in srgb,var(--potion-color) 25%,rgba(255,255,255,.08));border-radius:16px;background:linear-gradient(120deg,color-mix(in srgb,var(--potion-color) 7%,rgba(12,12,28,.94)),rgba(12,12,28,.88));transition:border-color .2s,transform .2s,box-shadow .2s}
+.potion-card:hover,.potion-card.potion-active{border-color:color-mix(in srgb,var(--potion-color) 70%,white);box-shadow:0 0 24px color-mix(in srgb,var(--potion-color) 12%,transparent);transform:translateY(-1px)}
+.potion-symbol{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;color:var(--potion-color);background:color-mix(in srgb,var(--potion-color) 12%,transparent);border:1px solid color-mix(in srgb,var(--potion-color) 28%,transparent);font-size:22px}
+.potion-info{min-width:0}.potion-info h3{margin:0 0 5px;font-size:14px;color:#f5f3ff}.potion-info p{margin:0 0 8px;font-size:12px;line-height:1.45;color:#a7a5c0}.potion-amount{font:10px "DM Mono",monospace;letter-spacing:.04em;color:var(--potion-color)}
+.potion-use{border:1px solid color-mix(in srgb,var(--potion-color) 50%,transparent);border-radius:10px;background:color-mix(in srgb,var(--potion-color) 12%,transparent);color:#fff;padding:10px 12px;font:11px "DM Mono",monospace;letter-spacing:.06em;cursor:pointer}
+.potion-use:hover:not(:disabled){background:color-mix(in srgb,var(--potion-color) 25%,transparent)}
+.potion-use:disabled{opacity:.38;cursor:not-allowed}
+@media(max-width:760px){.potion-section{width:min(100% - 28px,1180px);padding:30px 0 48px}.potion-grid{grid-template-columns:1fr}.potion-card{grid-template-columns:38px minmax(0,1fr) auto;padding:12px;gap:10px}.potion-symbol{width:36px;height:36px;font-size:19px}.potion-use{padding:9px 10px}}

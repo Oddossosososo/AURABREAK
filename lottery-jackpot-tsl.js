@@ -9,7 +9,7 @@ async function start(container) {
 
   const renderer = new THREE.WebGPURenderer({ alpha: true, antialias: false, powerPreference: "low-power" });
   renderer.domElement.className = "lottery-jackpot-canvas lottery-jackpot-tsl-canvas";
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 0.68));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 0.5));
   await renderer.init();
   if (!container.isConnected) { renderer.dispose(); throw new Error("Cutscene closed during WebGPU setup"); }
   container.appendChild(renderer.domElement);
@@ -56,7 +56,7 @@ async function start(container) {
   function frame(ms) {
     raf = 0;
     if (!shouldAnimate()) return;
-    if (ms - lastFrame >= 33) { lastFrame = ms; renderer.render(scene, camera); }
+    if (ms - lastFrame >= 42) { lastFrame = ms; renderer.render(scene, camera); }
     raf = requestAnimationFrame(frame);
   }
   function sync() {

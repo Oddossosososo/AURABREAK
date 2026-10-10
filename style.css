@@ -655,3 +655,8 @@ mask-image:radial-gradient(ellipse at center,#000 0%,#000 25%,transparent 69%)}
 .cutscene[data-style="lottery-jackpot"] .cutscene-content>p:first-child{color:#ffe889}
 .cutscene[data-style="lottery-jackpot"] .cutscene-content>p:nth-child(3){color:#f6dca0}
 .cutscene[data-style="lottery-jackpot"] .cutscene-button{border-color:#ffe889;color:#fff4bf;background:#ffe88912}
+
+.movie-lottery-jackpot{background:radial-gradient(ellipse at 50% 48%,#6e4d13,#201508 42%,#050409 82%)}
+.movie-lottery-jackpot .movie-core{background:conic-gradient(#fff,#fff4bf,#ffe889,#ff9f35,#fff4bf,#fff);box-shadow:0 0 85px #ffe889,0 0 190px #ffb52e99}
+.movie-lottery-jackpot .movie-ring{border-color:#ffe889;box-shadow:0 0 30px #ffcf7655}
+.movie-lottery-jackpot .movie-fragments{background:repeating-conic-gradient(from 0deg at 50% 48%,#ffe88977 0 1deg,transparent 1.5deg 12deg)}

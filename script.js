@@ -1073,8 +1073,8 @@
         }
       }
       // Full sub-bass starts immediately.
-      for(let k=0;k<224;k++){
-        const sec=16+k*beat, at=start+sec;
+      for(let k=0;k<256;k++){
+        const sec=k*beat, at=start+sec;
         const root=[43.65,36.71,41.20,38.89][Math.floor(sec/bar)%4];
         tone(at,root,.32,.38,"sine",6);
         if(sec>=0) tone(at,root*2,.24,.16,"sawtooth",5,root);

@@ -1057,7 +1057,7 @@
         void ringStage.offsetWidth;
         ringStage.classList.add("rings-arrive");
         sideWorldLabels.forEach((label,slot)=>{
-          const neighborIndex=(index+[99,1,Math.max(0,index-5),Math.min(99,index+5)][slot])%worlds.length;
+          const neighborIndex=(index+[99,1,95,5][slot])%worlds.length;
           label.textContent=worlds[neighborIndex];
         });
         sideWorlds.style.setProperty("--world-hue",String((index*37)%360)+"deg");

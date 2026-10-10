@@ -1555,3 +1555,74 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
   .cutscene.hacker-legit-overflow .movie-hacker,
   .cutscene.hacker-legit-overflow .movie-ring { animation:none!important; }
 }
+
+
+/* Twelve new aura-specific cutscene looks. Each reuses the lightweight shared scene rig. */
+.movie-neon-phoenix { background:radial-gradient(ellipse at 50% 55%,#ff6bd633,transparent 34%),linear-gradient(155deg,#17051d,#03030b 70%); }
+.movie-neon-phoenix .movie-core { background:radial-gradient(circle,#fff 0%,#ffb3ef 9%,#ff36be 28%,#7218a2 56%,transparent 72%); box-shadow:0 0 35px #ff6bd6,0 0 120px #ff36be99; animation:aurPhoenix 2s ease-in-out infinite; }
+.movie-neon-phoenix .movie-ring { border-color:#ff8de0; box-shadow:0 0 28px #ff36be88; }
+@keyframes aurPhoenix { 0%,100%{transform:translate(-50%,-50%) scale(.85) rotate(-9deg)} 50%{transform:translate(-50%,-50%) scale(1.16) rotate(9deg)} }
+
+.movie-glass-ocean { background:radial-gradient(ellipse at 50% 100%,#1cddf855,transparent 55%),linear-gradient(#061c35,#020611 75%); }
+.movie-glass-ocean .movie-horizon { border-color:#9bf8ffbb; box-shadow:0 0 30px #64f4ff; transform:perspective(400px) rotateX(68deg); }
+.movie-glass-ocean .movie-core { background:radial-gradient(circle,#fff 0%,#b7ffff 12%,#20bddd 34%,#06305c 65%,transparent 73%); box-shadow:0 0 70px #64f4ff; animation:aurOcean 3.5s ease-in-out infinite alternate; }
+@keyframes aurOcean { from{transform:translate(-50%,-50%) scale(.8)} to{transform:translate(-50%,-54%) scale(1.18)} }
+
+.movie-black-sun { background:radial-gradient(circle at 50% 50%,#ff9a381a,transparent 20%),#050308; }
+.movie-black-sun .movie-core { background:radial-gradient(circle,#020204 0%,#020204 48%,#ff8a32 53%,#ffdc8b 57%,#8a1d09 65%,transparent 73%); box-shadow:0 0 45px #ff6b1b,0 0 130px #ff4c1b66; animation:aurBlackSun 4s linear infinite; }
+.movie-black-sun .movie-ring { border-color:#ffb15d; }
+@keyframes aurBlackSun { to{transform:translate(-50%,-50%) rotate(360deg) scale(1.05)} }
+
+.movie-star-eater { background:radial-gradient(ellipse at center,#390919 0%,#08030b 48%,#010106 100%); }
+.movie-star-eater .movie-core { background:radial-gradient(circle,#ffb0c6 0%,#ff315f 14%,#6d082b 38%,#030106 68%,transparent 74%); box-shadow:0 0 45px #ff315f,0 0 150px #b5004a99; animation:aurEat 2.2s ease-in-out infinite; }
+.movie-star-eater .movie-ring { border-color:#ff4d7c; }
+@keyframes aurEat { 0%,100%{transform:translate(-50%,-50%) scale(1.1)} 50%{transform:translate(-50%,-50%) scale(.66)} }
+
+.movie-quantum-lotus { background:radial-gradient(ellipse at 50% 50%,#9d65ff2e,transparent 45%),#090416; }
+.movie-quantum-lotus .movie-core { background:conic-gradient(from 0deg,#fff,#c69bff,#ff83d5,#6de9ff,#c69bff,#fff); border-radius:42% 58% 45% 55%; box-shadow:0 0 50px #c69bff; animation:aurLotus 6s ease-in-out infinite; }
+.movie-quantum-lotus .movie-ring { border-color:#d7b7ff; }
+@keyframes aurLotus { 0%,100%{transform:translate(-50%,-50%) rotate(0) scale(.88);border-radius:42% 58% 45% 55%} 50%{transform:translate(-50%,-50%) rotate(180deg) scale(1.18);border-radius:58% 42% 55% 45%} }
+
+.movie-mirror-king { background:linear-gradient(135deg,#07101e,#1a2340 48%,#03040a); }
+.movie-mirror-king .movie-core { background:linear-gradient(135deg,#fff,#d8e7ff 22%,#657da9 48%,#f6fbff 50%,#24344e 72%,#fff); box-shadow:0 0 42px #d8e7ff99; animation:aurMirror 2.8s ease-in-out infinite alternate; }
+.movie-mirror-king .movie-ring { border-color:#d8e7ff; }
+@keyframes aurMirror { from{transform:translate(-50%,-50%) rotateY(0) scale(.82)} to{transform:translate(-50%,-50%) rotateY(180deg) scale(1.12)} }
+
+.movie-last-signal { background:radial-gradient(ellipse at 50% 50%,#65ffb722,transparent 40%),#020906; }
+.movie-last-signal .movie-core { background:radial-gradient(circle,#fff 0%,#aaffd0 10%,#65ffb7 28%,#075d39 52%,transparent 73%); box-shadow:0 0 38px #65ffb7,0 0 100px #65ffb766; animation:aurSignal 1.8s steps(2,end) infinite; }
+.movie-last-signal .movie-volumetric { opacity:.6; background:repeating-linear-gradient(0deg,transparent 0 10px,#65ffb722 11px 12px); }
+@keyframes aurSignal { 0%,80%,100%{opacity:1;filter:none} 81%{opacity:.35;filter:hue-rotate(60deg)} 83%{opacity:1} }
+
+.movie-paradox-engine { background:repeating-conic-gradient(from 0deg at 50% 50%,#ffe66d0c 0deg,#03030a 12deg,#ffe66d0c 24deg); }
+.movie-paradox-engine .movie-core { background:conic-gradient(#fff,#ffe66d,#8a6b15,#fff4a6,#2c2406,#ffe66d,#fff); box-shadow:0 0 40px #ffe66d; animation:aurParadox 1.9s linear infinite; }
+.movie-paradox-engine .movie-ring { border-color:#ffe66d; }
+@keyframes aurParadox { to{transform:translate(-50%,-50%) rotate(-360deg) scale(1.12)} }
+
+.movie-void-empress { background:radial-gradient(ellipse at 50% 45%,#5a32a744,transparent 42%),#05020c; }
+.movie-void-empress .movie-core { background:radial-gradient(circle,#e6d8ff 0%,#aa80ff 15%,#4d228e 42%,#080310 70%,transparent 74%); box-shadow:0 0 50px #aa80ff,0 0 160px #6a25ff77; animation:aurEmpress 3.2s ease-in-out infinite; }
+.movie-void-empress .movie-ring { border-color:#bda0ff; }
+@keyframes aurEmpress { 0%,100%{transform:translate(-50%,-50%) scale(.82)} 50%{transform:translate(-50%,-50%) scale(1.18)} }
+
+.movie-god-particle { background:radial-gradient(circle at 50% 50%,#fff6c72b,transparent 27%),#080704; }
+.movie-god-particle .movie-core { background:radial-gradient(circle,#fff 0%,#fff2ac 9%,#ffd34f 22%,#996018 44%,transparent 72%); box-shadow:0 0 50px #fff2ac,0 0 170px #ffd34f88; animation:aurParticle 2.6s cubic-bezier(.2,.8,.2,1) infinite; }
+.movie-god-particle .movie-fragments { background:radial-gradient(circle,#fff2ac 0 2px,transparent 3px); background-size:29px 31px; opacity:.55; animation:aurParticleDust 8s linear infinite; }
+@keyframes aurParticle { 0%,100%{transform:translate(-50%,-50%) scale(.7)} 55%{transform:translate(-50%,-50%) scale(1.35)} }
+@keyframes aurParticleDust { to{transform:rotate(360deg) scale(1.3)} }
+
+.movie-infinity-well { background:radial-gradient(ellipse at center,#163c8755,transparent 42%),#020510; }
+.movie-infinity-well .movie-core { background:radial-gradient(circle,#02040a 0 25%,#69a8ff 29%,#e0efff 32%,#2358b7 38%,#02040a 62%,transparent 72%); box-shadow:0 0 40px #69a8ff,0 0 130px #245bff77; animation:aurWell 4s linear infinite; }
+.movie-infinity-well .movie-ring { border-color:#8ac0ff; }
+@keyframes aurWell { to{transform:translate(-50%,-50%) rotate(360deg) scale(.92)} }
+
+.movie-aurabreak-ascension { background:radial-gradient(ellipse at 50% 50%,#ffffff20,transparent 34%),linear-gradient(135deg,#0c1224,#05050b 48%,#18102b); }
+.movie-aurabreak-ascension .movie-core { background:conic-gradient(#fff,#c6d7ff,#fff,#9f83ff,#fff,#7bffe0,#fff); box-shadow:0 0 65px #fff,0 0 180px #a7baffaa; animation:aurAscension 2.4s cubic-bezier(.1,.8,.1,1) infinite; }
+.movie-aurabreak-ascension .movie-ring { border-color:#fff; box-shadow:0 0 30px #b8c9ff; }
+@keyframes aurAscension { 0%,100%{transform:translate(-50%,-50%) scale(.75) rotate(0)} 50%{transform:translate(-50%,-50%) scale(1.35) rotate(180deg)} }
+
+@media(prefers-reduced-motion:reduce) {
+  .movie-neon-phoenix .movie-core,.movie-glass-ocean .movie-core,.movie-black-sun .movie-core,
+  .movie-star-eater .movie-core,.movie-quantum-lotus .movie-core,.movie-mirror-king .movie-core,
+  .movie-last-signal .movie-core,.movie-paradox-engine .movie-core,.movie-void-empress .movie-core,
+  .movie-god-particle .movie-core,.movie-infinity-well .movie-core,.movie-aurabreak-ascension .movie-core,
+  .movie-last-signal .movie-volumetric,.movie-god-particle .movie-fragments { animation:none!important; }
+}

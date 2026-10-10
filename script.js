@@ -728,7 +728,7 @@
     cutscene.dataset.style = "the-viewer";
     cutscene.dataset.aura = "THE VIEWER";
     cutscene.style.setProperty("--aura-color", "#b7fffe");
-    art.innerHTML = '<div class="fw-starfield"></div><div class="fw-grid"></div><div class="fw-rift"></div><div class="fw-eye"><span>◉</span></div><div class="fw-orbit fw-orbit-a"></div><div class="fw-orbit fw-orbit-b"></div><div class="fw-target" aria-hidden="true">TARGET LOCKED<br><b>YOU</b></div><div class="fw-warning" aria-hidden="true">OBSERVER DETECTED</div><div class="fw-code" aria-hidden="true">01010100 01001000 01000101<br>YOU ARE HERE<br>RENDER TARGET: VIEWER</div><div class="fw-flash"></div>';
+    art.innerHTML = '<div class="fw-starfield"></div><div class="fw-grid"></div><div class="fw-rift"></div><div class="fw-eye"><span>◉</span></div><div class="fw-orbit fw-orbit-a"></div><div class="fw-orbit fw-orbit-b"></div><div class="fw-target" aria-hidden="true">TARGET LOCKED<br><b>YOU</b></div><div class="fw-warning" aria-hidden="true">OBSERVER DETECTED</div><div class="fw-aura-crown" aria-hidden="true"></div><div class="fw-sigil" aria-hidden="true">◉</div><div class="fw-shockwave" aria-hidden="true"></div><div class="fw-comets" aria-hidden="true"></div><div class="fw-floor" aria-hidden="true"></div><div class="fw-code" aria-hidden="true">01010100 01001000 01000101<br>YOU ARE HERE<br>RENDER TARGET: VIEWER</div><div class="fw-flash"></div>';
     eyebrow.textContent = "UNEXPECTED INPUT • OUTSIDE CONTEXT DETECTED";
     title.textContent = "WHO'S WATCHING?";
     title.className = "fw-title";
@@ -758,7 +758,7 @@
     };
     playDeityTone(62, 1.8, "sine", .06);
     later(2400, () => {
-      cutscene.classList.add("fw-address");
+      cutscene.classList.add("fw-address", "fw-awakening");
       eyebrow.textContent = "INPUT SOURCE: THIS WINDOW";
       line("YES. YOU.", "THE PERSON READING THIS LINE RIGHT NOW.");
       document.title = "YOU FOUND ME. — AURABREAK";
@@ -766,7 +766,7 @@
       playDeityTone(220, 1.1, "triangle", .07);
     });
     later(5200, () => {
-      cutscene.classList.add("fw-glitch");
+      cutscene.classList.add("fw-glitch", "fw-power-up");
       eyebrow.textContent = "CURSOR SIGNAL ACQUIRED";
       line("MOVE YOUR CURSOR.", "I CAN FOLLOW IT INSIDE THIS GAME. NOWHERE ELSE.");
       playDeityTone(110, 1.8, "sawtooth", .07);
@@ -776,13 +776,14 @@
       playDeityTone(82, 2, "triangle", .08);
     });
     later(11200, () => {
-      cutscene.classList.add("fw-final");
+      cutscene.classList.add("fw-final", "fw-breakout");
       eyebrow.textContent = "THE VIEWER IS PART OF THE SCENE";
       line("YOU ARE THE FINAL VARIABLE.", "NO CHARACTER. NO NPC. THE ONE HOLDING THE CONTROLS.");
       cutscene.classList.add("fw-target-active", "fw-signal-break");
       playDeityTone(55, 2.6, "sawtooth", .1);
     });
     later(15100, () => {
+      cutscene.classList.add("fw-awakening", "fw-power-up", "fw-breakout");
       line("THE VIEWER", "THE RAREST THING IN AURABREAK IS YOU.", "fw-final-title");
       eyebrow.textContent = "FOURTH-WALL FAILURE • 1 IN " + (10n ** 200n).toLocaleString("en-US");
       playDeityTone(440, 2.2, "sine", .08);
@@ -791,7 +792,7 @@
       line("...STILL THERE?", "THE GAME WILL WAIT. IT ONLY RUNS WHEN YOU PLAY.", "fw-final-title");
     });
     later(22500, () => {
-      cutscene.classList.remove("fw-running");
+      cutscene.classList.remove("fw-running", "fw-power-up");
       button.textContent = "CLAIM THE VIEWER ↗";
     });
     fourthWallCleanup = () => {

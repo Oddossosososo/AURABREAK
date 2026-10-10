@@ -1286,6 +1286,114 @@
     showToast("Added custom aura: " + name);
   });
 
+  // Admin command console. Commands are parsed explicitly; arbitrary JavaScript is never executed.
+  const adminConsoleForm = $("adminConsoleForm");
+  const adminConsoleInput = $("adminConsoleInput");
+  const adminConsoleOutput = $("adminConsoleOutput");
+
+  function consoleWrite(message, kind = "") {
+    if (!adminConsoleOutput) return;
+    const line = document.createElement("div");
+    line.className = "console-line" + (kind ? " " + kind : "");
+    line.textContent = String(message);
+    adminConsoleOutput.append(line);
+    adminConsoleOutput.scrollTop = adminConsoleOutput.scrollHeight;
+  }
+
+  function consoleHelp() {
+    consoleWrite("Available commands:", "system");
+    consoleWrite("help                 Show this command list");
+    consoleWrite("status               Show game/admin status");
+    consoleWrite("auras                List aura names");
+    consoleWrite("find <text>          Search aura names");
+    consoleWrite("info <aura name>     Show aura details");
+    consoleWrite("roll                 Perform a normal game roll");
+    consoleWrite("luck <number>        Set the luck multiplier");
+    consoleWrite("grant <aura name>    Grant an aura directly");
+    consoleWrite("clear                Clear terminal output");
+  }
+
+  function runAdminCommand(rawCommand) {
+    const command = String(rawCommand || "").trim();
+    if (!command) return;
+    consoleWrite("AURA> " + command, "command");
+    if (!devAuthorized) {
+      consoleWrite("Access denied: verified DEV authorization is required.", "error");
+      return;
+    }
+    const [verbRaw, ...rest] = command.split(/\s+/);
+    const verb = verbRaw.toLowerCase();
+    const argument = rest.join(" ").trim();
+
+    if (verb === "clear") {
+      adminConsoleOutput.replaceChildren();
+      return;
+    }
+    if (verb === "help") return consoleHelp();
+    if (verb === "status") {
+      consoleWrite("DEV access: verified", "success");
+      consoleWrite("Auras registered: " + AURAS.length);
+      consoleWrite("Discovered: " + discovered.size);
+      consoleWrite("Luck multiplier: " + String(luckMultiplier));
+      consoleWrite("AURA Script runtime: " + (window.AURA?.version || "not loaded"));
+      return;
+    }
+    if (verb === "auras") {
+      consoleWrite("Aura catalogue (" + AURAS.length + "):", "system");
+      AURAS.forEach((aura, index) => consoleWrite((index + 1) + ". " + aura.name + " — " + formatOdds(aura.odds)));
+      return;
+    }
+    if (verb === "find") {
+      if (!argument) return consoleWrite("Usage: find <text>", "error");
+      const found = AURAS.filter(aura => aura.name.toLowerCase().includes(argument.toLowerCase()));
+      consoleWrite("Matches: " + found.length, "system");
+      found.forEach(aura => consoleWrite(aura.name + " — " + formatOdds(aura.odds)));
+      return;
+    }
+    if (verb === "info") {
+      if (!argument) return consoleWrite("Usage: info <aura name>", "error");
+      const aura = AURAS.find(item => item.name.toLowerCase() === argument.toLowerCase());
+      if (!aura) return consoleWrite("Aura not found: " + argument, "error");
+      consoleWrite("Name: " + aura.name, "success");
+      consoleWrite("Rarity: " + (aura.rarity || aura.tier || "—"));
+      consoleWrite("Odds: " + formatOdds(aura.odds));
+      consoleWrite("Discovered: " + (discovered.has(aura.name) ? "yes" : "no"));
+      consoleWrite("Description: " + (aura.description || "—"));
+      return;
+    }
+    if (verb === "roll") {
+      consoleWrite("Running a normal game roll…", "system");
+      roll();
+      return;
+    }
+    if (verb === "luck") {
+      if (!argument) return consoleWrite("Usage: luck <number>", "error");
+      const parsed = Number(argument);
+      if (!Number.isFinite(parsed) || parsed < 1) return consoleWrite("Luck must be a finite number of at least 1.", "error");
+      adminLuck.value = String(parsed);
+      adminLuck.dispatchEvent(new Event("input", { bubbles: true }));
+      consoleWrite("Luck multiplier set to ×" + parsed.toLocaleString("en-US"), "success");
+      return;
+    }
+    if (verb === "grant") {
+      if (!argument) return consoleWrite("Usage: grant <aura name>", "error");
+      const aura = AURAS.find(item => item.name.toLowerCase() === argument.toLowerCase());
+      if (!aura) return consoleWrite("Aura not found: " + argument, "error");
+      consoleWrite("Granting " + aura.name + "…", "success");
+      grantAuraDirect(aura);
+      return;
+    }
+    consoleWrite('Unknown command "' + verb + '". Type help to see available commands.', "error");
+  }
+
+  if (adminConsoleForm) {
+    adminConsoleForm.addEventListener("submit", event => {
+      event.preventDefault();
+      runAdminCommand(adminConsoleInput.value);
+      adminConsoleInput.value = "";
+    });
+  }
+
   renderCollection();
 
   // Backfill progression for players who discovered all five gods before Phase II existed.

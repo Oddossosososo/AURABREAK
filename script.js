@@ -990,6 +990,24 @@
     });
   }
 
+  // Prime audio directly inside the roll-button gesture so browsers allow sound
+  // when the rare aura reveal appears after the roll animation delay.
+  let primedJackpotAudioContext = null;
+  function primeJackpotAudioContext() {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    try {
+      if (!primedJackpotAudioContext || primedJackpotAudioContext.state === "closed") {
+        primedJackpotAudioContext = new AudioCtx();
+      }
+      if (primedJackpotAudioContext.state !== "running") {
+        primedJackpotAudioContext.resume().catch(() => {});
+      }
+    } catch (error) {
+      console.warn("Jackpot audio could not be primed:", error);
+    }
+  }
+
   // Original AURABREAK electronic jackpot score, synthesized in-browser (no external audio file).
   function startJackpotOriginalScore() {
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -998,7 +1016,12 @@
       return null;
     }
     let ctx;
-    try { ctx = new AudioCtx(); } catch (_) { showToast("Could not start the AURABREAK soundtrack."); return null; }
+    try {
+      ctx = primedJackpotAudioContext && primedJackpotAudioContext.state !== "closed"
+        ? primedJackpotAudioContext
+        : new AudioCtx();
+      primedJackpotAudioContext = ctx;
+    } catch (_) { showToast("Could not start the AURABREAK soundtrack."); return null; }
     const master = ctx.createGain();
     master.gain.value = 0.34;
     const limiter = ctx.createDynamicsCompressor();
@@ -1109,6 +1132,7 @@
       document.removeEventListener("keydown", unlockScore, true);
       nodes.forEach(node=>{try{node.stop();}catch(_){} try{node.disconnect();}catch(_){}});
       try{master.disconnect();limiter.disconnect();}catch(_){}
+      if (primedJackpotAudioContext === ctx) primedJackpotAudioContext = null;
       if(ctx.state!=="closed") ctx.close().catch(()=>{});
     };
   }
@@ -1670,6 +1694,7 @@
     document.body.classList.add("rolling");
     $("stageLabel").textContent = "REALITY IS REARRANGING...";
     let aura = chooseAura();
+    if (aura.name === "LOTTERY: JACKPOT") primeJackpotAudioContext();
     renderPotions();
     runRollCount++;
     if (runRollCount > 5000) { runRollCount = 1; pureDeityEncounters = 0; }

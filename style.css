@@ -1626,3 +1626,17 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
   .movie-god-particle .movie-core,.movie-infinity-well .movie-core,.movie-aurabreak-ascension .movie-core,
   .movie-last-signal .movie-volumetric,.movie-god-particle .movie-fragments { animation:none!important; }
 }
+
+
+/* AURABREAK: ZERO — finality reveal */
+.movie-aurabreak-zero { background:#000; }
+.movie-aurabreak-zero .movie-starfield { opacity:.9; background:radial-gradient(circle at 50% 50%,#fff 0 1px,transparent 2px); background-size:47px 53px; animation:zeroStars 12s linear infinite; }
+.movie-aurabreak-zero .movie-core { width:clamp(24px,5vw,58px); height:clamp(24px,5vw,58px); border-radius:50%; background:#fff; box-shadow:0 0 18px #fff,0 0 65px #dce6ff,0 0 180px #9db7ff88; animation:zeroPulse 3.2s cubic-bezier(.16,1,.3,1) infinite; }
+.movie-aurabreak-zero .movie-ring { border-color:#fff; box-shadow:0 0 22px #fff8, inset 0 0 20px #fff2; }
+.movie-aurabreak-zero .movie-horizon { border-color:#fff9; box-shadow:0 0 42px #d9e3ff; }
+.movie-aurabreak-zero .movie-volumetric { background:conic-gradient(from 0deg,transparent,#fff2,transparent,#a9c5ff22,transparent); animation:zeroSpin 16s linear infinite; }
+.movie-aurabreak-zero .movie-impact { background:radial-gradient(circle,#fff 0%,#fff 1%,#dbe6ff55 4%,transparent 25%); }
+@keyframes zeroPulse { 0%,100%{transform:translate(-50%,-50%) scale(.25);opacity:.72} 48%{transform:translate(-50%,-50%) scale(1.3);opacity:1} 52%{transform:translate(-50%,-50%) scale(1.55);opacity:.95} }
+@keyframes zeroStars { to{transform:rotate(360deg) scale(1.25)} }
+@keyframes zeroSpin { to{transform:rotate(360deg)} }
+@media(prefers-reduced-motion:reduce){.movie-aurabreak-zero .movie-core,.movie-aurabreak-zero .movie-starfield,.movie-aurabreak-zero .movie-volumetric{animation:none!important}}

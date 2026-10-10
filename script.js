@@ -969,7 +969,7 @@
     limiter.release.value = 0.22;
     master.connect(limiter); limiter.connect(ctx.destination);
     const nodes = new Set();
-    let stopped = false, loopTimer = null;
+    let stopped = false, loopTimer = null, scheduled = false;
     const bpm = 128, beat = 60 / bpm, bar = beat * 4, cycle = 120;
     const chords = [[174.61,207.65,261.63,311.13],[138.59,174.61,207.65,277.18],[164.81,207.65,246.94,311.13],[155.56,196,233.08,293.66]];
     const arp = [349.23,415.30,523.25,622.25,523.25,415.30,311.13,415.30,698.46,622.25,523.25,830.61,783.99,622.25,523.25,415.30];
@@ -1053,10 +1053,25 @@
       });
       loopTimer=setTimeout(scheduleCycle,cycle*1000);
     }
-    ctx.resume().then(()=>{if(!stopped)scheduleCycle();}).catch(()=>showToast("Tap the cutscene once to enable its soundtrack."));
+    // Some browsers suspend audio when the reveal starts after an asynchronous roll.
+    // Resume on the next real user gesture, and only schedule the score once.
+    function beginScore() {
+      if (stopped || scheduled || ctx.state !== "running") return;
+      scheduled = true;
+      scheduleCycle();
+    }
+    function unlockScore() {
+      if (stopped || ctx.state === "closed") return;
+      ctx.resume().then(beginScore).catch(() => {});
+    }
+    document.addEventListener("pointerdown", unlockScore, true);
+    document.addEventListener("keydown", unlockScore, true);
+    ctx.resume().then(beginScore).catch(() => showToast("Tap the cutscene once to enable its soundtrack."));
     return () => {
       if(stopped) return;
       stopped=true; clearTimeout(loopTimer);
+      document.removeEventListener("pointerdown", unlockScore, true);
+      document.removeEventListener("keydown", unlockScore, true);
       nodes.forEach(node=>{try{node.stop();}catch(_){} try{node.disconnect();}catch(_){}});
       try{master.disconnect();limiter.disconnect();}catch(_){}
       if(ctx.state!=="closed") ctx.close().catch(()=>{});

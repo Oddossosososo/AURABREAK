@@ -146,7 +146,8 @@
     let lastFrame = 0;
     let visible = true;
     const reducedMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    let observer = null;
+    let resizeObserver = null;
+    let intersectionObserver = null;
 
     function resize() {
       if (disposed) return;
@@ -181,20 +182,17 @@
     function onVisibilityChange() { syncAnimation(); }
 
     if (typeof ResizeObserver !== "undefined") {
-      observer = new ResizeObserver(resize);
-      observer.observe(container);
+      resizeObserver = new ResizeObserver(resize);
+      resizeObserver.observe(container);
     } else {
       window.addEventListener("resize", resize, { passive: true });
     }
     if (typeof IntersectionObserver !== "undefined") {
-      const intersection = new IntersectionObserver(entries => {
+      intersectionObserver = new IntersectionObserver(entries => {
         visible = !!entries[0] && entries[0].isIntersecting;
         syncAnimation();
       }, { threshold: 0 });
-      intersection.observe(container);
-      observer = {
-        disconnect() { intersection.disconnect(); }
-      };
+      intersectionObserver.observe(container);
     }
     document.addEventListener("visibilitychange", onVisibilityChange);
     resize();
@@ -205,8 +203,8 @@
       if (disposed) return;
       disposed = true;
       if (raf) cancelAnimationFrame(raf);
-      if (observer) observer.disconnect();
-      else window.removeEventListener("resize", resize);
+      if (resizeObserver) resizeObserver.disconnect();
+      if (intersectionObserver) intersectionObserver.disconnect();
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", onVisibilityChange);
       geometry.dispose();

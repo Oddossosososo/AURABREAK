@@ -1153,3 +1153,21 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
 .history-item time{flex:0 0 auto;color:#79778d;font:10px "DM Mono",monospace}
 .history-empty{padding:28px 18px;text-align:center;border:1px dashed #ffffff1c;border-radius:14px;color:#88869e;font-size:13px;line-height:1.7}
 @media(max-width:600px){.history-section{width:calc(100% - 28px)}.history-item{gap:10px;padding:11px}.history-symbol{flex-basis:32px;height:32px}.history-main small{font-size:9px}.history-item time{font-size:9px}}
+
+/* WORLD 2 OMNIPOTENT CUTSCENES */
+.cutscene[data-style="lottery-winner"] .movie-scene{background:radial-gradient(ellipse at 50% 48%,#f7e9ff35,transparent 25%),radial-gradient(ellipse at 50% 50%,#7d3be933,transparent 58%),#05020d}
+.cutscene[data-style="lottery-winner"] .movie-core{border:2px solid #fff0ff;background:radial-gradient(circle at 35% 25%,#fff 0%,#fff4d2 7%,#f1baff 17%,#9a51ff 36%,#28113e 62%,#03020b 78%);box-shadow:0 0 35px #fff,0 0 95px #d5a2ff,0 0 190px #873dff99,inset 0 0 45px #fff9;animation:omniWinnerCore 2.4s ease-in-out infinite}
+.cutscene[data-style="lottery-winner"] .movie-ring{border:2px solid #f5d9ff;box-shadow:0 0 30px #b879ff99}
+.cutscene[data-style="lottery-winner"] .movie-ring-b{border-style:dotted;border-color:#fff;animation-duration:7s}
+.cutscene[data-style="lottery-winner"] .movie-volumetric{background:conic-gradient(from 0deg at 50% 48%,transparent 0 10%,#fff6 14%,#c98cff66 20%,transparent 28% 45%,#ffe9aa66 55%,transparent 68%);filter:blur(8px)}
+.cutscene[data-style="unfathomable"] .movie-scene{background:radial-gradient(ellipse at 50% 48%,#ffffff2b,transparent 18%),radial-gradient(ellipse at 50% 50%,#9a7bff30,transparent 52%),#02020a}
+.cutscene[data-style="unfathomable"] .movie-core{border:2px solid #f7f0ff;background:conic-gradient(from 0deg,#fff,#b7a2ff,#18102f,#fff,#8eeeff,#5b2eb6,#fff);box-shadow:0 0 45px #fff,0 0 125px #b4a0ff,0 0 230px #7147ff99,inset 0 0 42px #fff;animation:unfathomableCore 1.8s ease-in-out infinite}
+.cutscene[data-style="unfathomable"] .movie-ring{border-width:2px;border-color:#e5dcff;box-shadow:0 0 30px #a9a0ff88}
+.cutscene[data-style="unfathomable"] .movie-ring-b{border-style:dashed;animation-duration:5s}
+.cutscene[data-style="unfathomable"] .movie-volumetric{inset:-35%;background:conic-gradient(from 0deg at 50% 48%,transparent 0 8%,#ffffff55 12%,#9c7aff55 18%,transparent 27% 43%,#8cecff44 53%,transparent 67%);filter:blur(7px)}
+.cutscene[data-style="lottery-winner"] .movie-title-final,.cutscene[data-style="unfathomable"] .movie-title-final{text-shadow:0 0 18px currentColor,0 0 48px currentColor,0 0 90px #a879ff}
+.cutscene[data-style="lottery-winner"].movie-finale,.cutscene[data-style="unfathomable"].movie-finale{animation:omniScreenPulse .9s ease-out}
+@keyframes omniWinnerCore{0%,100%{transform:translate(-50%,-50%) scale(.94) rotate(0);filter:brightness(.9)}50%{transform:translate(-50%,-50%) scale(1.1) rotate(8deg);filter:brightness(1.5)}}
+@keyframes unfathomableCore{0%,100%{transform:translate(-50%,-50%) scale(.9) rotate(0);filter:brightness(.85)}50%{transform:translate(-50%,-50%) scale(1.14) rotate(180deg);filter:brightness(1.65)}}
+@keyframes omniScreenPulse{0%{filter:brightness(1)}35%{filter:brightness(1.7)}100%{filter:brightness(1)}}
+@media(prefers-reduced-motion:reduce){.cutscene[data-style="lottery-winner"] .movie-core,.cutscene[data-style="unfathomable"] .movie-core{animation:none!important}}

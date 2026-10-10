@@ -1140,3 +1140,16 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
  body:has(#cutscene.jackpot-running:not(.hidden)) main,
  body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:none!important}
 }
+
+
+/* Recent roll log: lightweight, responsive, and readable beside the existing collection UI. */
+.history-section{width:min(1120px,calc(100% - 40px));margin:0 auto 84px}
+.history-list{display:grid;gap:8px}
+.history-item{display:flex;align-items:center;gap:14px;min-width:0;padding:13px 16px;border:1px solid #ffffff12;border-radius:14px;background:linear-gradient(110deg,color-mix(in srgb,var(--history-color) 8%,#10101c),#0b0b14 72%);box-shadow:inset 3px 0 0 color-mix(in srgb,var(--history-color) 75%,transparent)}
+.history-symbol{display:grid;place-items:center;flex:0 0 38px;height:38px;border-radius:11px;background:color-mix(in srgb,var(--history-color) 13%,#10101c);color:var(--history-color);font-size:21px;text-shadow:0 0 18px color-mix(in srgb,var(--history-color) 45%,transparent)}
+.history-main{display:grid;gap:4px;min-width:0;flex:1}
+.history-main strong{overflow-wrap:anywhere;color:#f2f0ff;font-size:13px;letter-spacing:.04em}
+.history-main small{color:#8f8da7;font:10px "DM Mono",monospace;letter-spacing:.04em}
+.history-item time{flex:0 0 auto;color:#79778d;font:10px "DM Mono",monospace}
+.history-empty{padding:28px 18px;text-align:center;border:1px dashed #ffffff1c;border-radius:14px;color:#88869e;font-size:13px;line-height:1.7}
+@media(max-width:600px){.history-section{width:calc(100% - 28px)}.history-item{gap:10px;padding:11px}.history-symbol{flex-basis:32px;height:32px}.history-main small{font-size:9px}.history-item time{font-size:9px}}

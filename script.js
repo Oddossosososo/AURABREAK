@@ -712,6 +712,32 @@
       button.textContent = evolved ? "CLAIM EVOLUTION ↗" : "CLAIM DISCOVERY ↗";
     });
   }
+  function startOmnipotentCutscene(aura) {
+    // Keep the cinematic timeline and text choreography, but give both evolutions
+    // their own single-pass shader instead of stacking the generic scene renderer.
+    startAuraMovie(aura);
+    const art = $("cutsceneArt");
+    const cutscene = $("cutscene");
+    const token = ++omnipotentCutsceneToken;
+    if (omnipotentCutsceneStop) { omnipotentCutsceneStop(); omnipotentCutsceneStop = null; }
+    try {
+      const renderer = window.AURABREAK_OMNIPOTENT;
+      if (!renderer || typeof renderer.start !== "function") {
+        console.warn("[AURABREAK] Omnipotent shader unavailable; using cinematic CSS fallback.");
+        return;
+      }
+      const kind = aura.name === "LOTTERY: WINNER" ? "lottery-winner" : "unfathomable";
+      const stop = renderer.start(art, kind);
+      if (token !== omnipotentCutsceneToken || cutscene.classList.contains("hidden")) {
+        if (typeof stop === "function") stop();
+      } else if (typeof stop === "function") {
+        omnipotentCutsceneStop = stop;
+      }
+    } catch (error) {
+      console.warn("[AURABREAK] Omnipotent shader failed; CSS cinematic remains active.", error);
+    }
+  }
+
   function startAuraMovie(aura) {
     const cutscene = $("cutscene"), art = $("cutsceneArt");
     const content = cutscene.querySelector(".cutscene-content");
@@ -1412,7 +1438,7 @@
       else if (aura.name === "SHATTERCORE" || aura.name === "SHATTERCORE: REBORN") startShattercoreCutscene(aura);
       else if (aura.name === "PURE DEITY") startPureDeityCutscene();
       else if (aura.name === "PURE DEITY:GALACTIC") startGalacticCutscene();
-      else if (aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE") startAuraMovie(aura);
+      else if (aura.name === "LOTTERY: WINNER" || aura.name === "PURE DEITY: UNFATHOMABLE") startOmnipotentCutscene(aura);
       else if (aura.name === "THE FALLEN GOD") startFallenGodCutscene();
       else if (aura.name === "DEVELOPER") startDeveloperCutscene();
       else if (aura.name === "THE ENDING") startTheEndingCutscene();
@@ -1441,6 +1467,9 @@
     const sceneToken = universalCutsceneToken;
     if (universalCutsceneStop) { universalCutsceneStop(); universalCutsceneStop = null; }
     const sceneArt = $("cutsceneArt"), sceneName = aura.name || "UNKNOWN", sceneColor = aura.color || "#9c78ff";
+    // These scenes already own their renderer. Starting the shared layer as well creates
+    // two WebGL contexts, extra GPU work, and competing canvases over the same art.
+    if (["LOTTERY: JACKPOT", "LOTTERY: WINNER", "PURE DEITY: UNFATHOMABLE"].includes(sceneName)) return;
     const startSceneFallback = () => {
       if (sceneToken !== universalCutsceneToken || $("cutscene").classList.contains("hidden")) return;
       try { if (window.AURABREAK_SCENE_FALLBACK) universalCutsceneStop = window.AURABREAK_SCENE_FALLBACK.start(sceneArt, sceneName, sceneColor); }
@@ -1457,6 +1486,8 @@
   function closeCutscene() {
     universalCutsceneToken++;
     if (universalCutsceneStop) { universalCutsceneStop(); universalCutsceneStop = null; }
+    omnipotentCutsceneToken++;
+    if (omnipotentCutsceneStop) { omnipotentCutsceneStop(); omnipotentCutsceneStop = null; }
     stopDeityCutscene();
     if (nullAbsoluteStop) { nullAbsoluteStop(); nullAbsoluteStop = null; }
     if (lotteryJackpotStop) { lotteryJackpotStop(); lotteryJackpotStop = null; }

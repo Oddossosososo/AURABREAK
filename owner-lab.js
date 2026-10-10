@@ -173,6 +173,5 @@
   });
   $("authRetry").addEventListener("click", authorize);
   $("sourceEditor").value=examples.aura;
-  window.addEventListener("DOMContentLoaded", authorize);
-  if (document.readyState !== "loading") authorize();
+  authorize();
 })();

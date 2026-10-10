@@ -1028,3 +1028,41 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @keyframes jackpotRingOrbit{0%{opacity:.2;transform:translate(-50%,-50%) rotateX(67deg) rotateZ(0deg) scale(var(--ring-scale,1.3))}50%{opacity:.65}100%{opacity:.2;transform:translate(-50%,-50%) rotateX(67deg) rotateZ(180deg) scale(var(--ring-scale,1.3))}}
 @keyframes jackpotWorldFlow{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
 @keyframes jackpotBurstTravel{0%{opacity:0;transform:translate(0,0) scale(.5)}35%{opacity:1}100%{opacity:0;transform:translate(var(--burst-x),var(--burst-y)) scale(1.1)}}
+
+
+/* Visible motion on every world change, even on reduced-motion devices. */
+@keyframes jackpotWorldStepMotion{
+  0%{transform:scale(1) rotate(0deg);filter:brightness(.75) saturate(1)}
+  35%{transform:scale(1.13) rotate(.6deg);filter:brightness(1.3) saturate(1.5)}
+  100%{transform:scale(1.04) rotate(0deg);filter:brightness(1) saturate(1.2)}
+}
+.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .cutscene-art.jackpot-world-step{
+  animation:jackpotWorldStepMotion .48s cubic-bezier(.2,.7,.2,1) both!important;
+}
+.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-side-worlds{
+  animation:jackpotWorldSideDrift 7s ease-in-out infinite alternate;
+}
+@keyframes jackpotWorldSideDrift{
+  from{transform:translate3d(-1.2vw,0,0) rotate(-.4deg)}
+  to{transform:translate3d(1.2vw,-1.4vh,0) rotate(.4deg)}
+}
+.cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-dimension-ring{
+  animation:jackpotWorldGateMotion 1.2s linear infinite!important;
+  opacity:.5;
+}
+@keyframes jackpotWorldGateMotion{
+  0%{transform:translate(-50%,-50%) rotateX(67deg) rotateZ(0deg) scale(.72);opacity:.15}
+  50%{opacity:.7}
+  100%{transform:translate(-50%,-50%) rotateX(67deg) rotateZ(180deg) scale(1.25);opacity:.15}
+}
+@media(prefers-reduced-motion:reduce){
+  .cutscene[data-style="lottery-jackpot"].jackpot-world-tour .cutscene-art.jackpot-world-step{
+    animation-duration:.48s!important;animation-iteration-count:1!important;
+  }
+  .cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-side-worlds{
+    animation-duration:7s!important;animation-iteration-count:infinite!important;
+  }
+  .cutscene[data-style="lottery-jackpot"].jackpot-world-tour .jackpot-dimension-ring{
+    animation-duration:1.2s!important;animation-iteration-count:infinite!important;
+  }
+}

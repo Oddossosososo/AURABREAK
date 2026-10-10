@@ -355,3 +355,39 @@ body.transcendence-mode .status-dot{background:#8dfff4;box-shadow:0 0 12px #8dff
 @keyframes endingShock{0%,100%{transform:translate(0,0)}20%{transform:translate(5px,-2px)}40%{transform:translate(-4px,2px)}60%{transform:translate(3px,1px)}80%{transform:translate(-2px,-1px)}}
 @keyframes endingCorePulse{from{filter:brightness(.85);transform:scale(.98)}to{filter:brightness(1.15);transform:scale(1.03)}}
 @media(prefers-reduced-motion:reduce){.ending-void,.ending-grid,.ending-eclipse,.ending-ring,.ending-monolith span,#orbCore.the-ending-core{animation-duration:40s!important}.ending-fractures,.ending-glitch{animation:none!important}}
+
+
+/* NULL//ABSOLUTE — WebGL / Three.js shader cinematic */
+.cutscene[data-style="null-absolute"]{background:#020006;isolation:isolate}
+.cutscene[data-style="null-absolute"] .cutscene-backdrop{background:radial-gradient(circle at center,#170018 0%,#020006 58%,#000 100%);opacity:1}
+.cutscene[data-style="null-absolute"] .cutscene-art{position:absolute;inset:0;overflow:hidden;background:#020006}
+.null-absolute-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
+.null-absolute-fallback{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#fff 0,#ff1b78 1%,#6d073e 5%,#09000e 23%,#000 62%);animation:naFallback 4s ease-in-out infinite alternate}
+.na-scanlines,.na-vignette,.na-fracture{position:absolute;inset:0;pointer-events:none}
+.na-scanlines{z-index:2;background:repeating-linear-gradient(0deg,#ff1b780b 0 1px,transparent 1px 4px);mix-blend-mode:screen;opacity:.5}
+.na-vignette{z-index:3;background:radial-gradient(ellipse at center,transparent 15%,#000b 72%,#000 100%)}
+.na-fracture{z-index:4;opacity:.6;background:linear-gradient(113deg,transparent 47.8%,#ff1b78 48%,#fff 48.08%,transparent 48.2%),linear-gradient(24deg,transparent 62%,#ff1b78 62.12%,transparent 62.3%),linear-gradient(166deg,transparent 30%,#a0f 30.1%,transparent 30.2%);filter:drop-shadow(0 0 9px #ff1b78);animation:naFracture 5s steps(2,end) infinite}
+.cutscene.na-running .cutscene-content{z-index:8}
+.cutscene.na-collapse .na-fracture{opacity:1;transform:scale(1.08);animation-duration:.3s}
+.cutscene.na-break .na-scanlines{opacity:1;animation:naGlitch .14s steps(2,end) infinite}
+.cutscene.na-erasure .null-absolute-canvas{filter:contrast(1.7) saturate(1.8);transform:scale(1.04)}
+.cutscene.na-erasure .cutscene-art:after{content:"";position:absolute;inset:0;z-index:5;background:#fff;opacity:0;animation:naWhiteout 1.3s ease-out}
+.cutscene.na-reveal .na-fracture{opacity:.95;animation-duration:.12s}
+.cutscene[data-style="null-absolute"] .cutscene-content{text-shadow:0 0 28px #ff1b7866}
+.cutscene[data-style="null-absolute"] #cutsceneEyebrow{color:#ff75b5}
+.cutscene[data-style="null-absolute"] #cutsceneSubtitle{color:#f4d8eb}
+.na-title{font-family:var(--mono);letter-spacing:.16em;font-weight:800;font-size:clamp(1.4rem,5vw,4.5rem);text-shadow:0 0 14px #fff,0 0 40px #ff1b78;animation:naTitle 2.5s ease-in-out infinite alternate}
+.na-final-title{font-family:var(--mono);font-weight:900;font-size:clamp(1.2rem,5.6vw,5rem);letter-spacing:.05em;color:#fff!important;text-shadow:2px 0 #ff1b78,-2px 0 #00eaff,0 0 24px #ff1b78,0 0 75px #ff1b78;animation:naFinal 1.8s steps(2,end) infinite}
+#orbCore.null-absolute-core{background:radial-gradient(circle at 40% 30%,#fff 0%,#ff1b78 12%,#2c002b 38%,#000 72%)!important;box-shadow:0 0 35px #fff,0 0 75px #ff1b78,0 0 150px #ff1b7866!important;animation:naCore 1.3s ease-in-out infinite alternate}
+.null-absolute-result h2{color:#ff75b5!important;text-shadow:0 0 24px #ff1b78,0 0 65px #ff1b7866}
+.null-absolute-tile{border-color:#ff1b78!important;background:linear-gradient(145deg,#240018,#050007 58%,#160020)!important;box-shadow:inset 0 0 30px #ff1b7818,0 0 22px #ff1b7833!important}
+.null-absolute-tile .tile-rarity,.null-absolute-tile .tile-name{color:#ff75b5!important;text-shadow:0 0 12px #ff1b7866}
+.null-absolute-tile .tile-symbol{color:#fff!important;text-shadow:0 0 12px #fff,0 0 38px #ff1b78,0 0 90px #ff1b78!important}
+@keyframes naFallback{from{transform:scale(1);filter:hue-rotate(0deg)}to{transform:scale(1.12);filter:hue-rotate(35deg)}}
+@keyframes naFracture{0%,100%{clip-path:inset(0 0 0 0);transform:translate(0)}30%{clip-path:inset(8% 0 48% 0);transform:translate(3px,-2px)}60%{clip-path:inset(55% 0 9% 0);transform:translate(-4px,2px)}}
+@keyframes naGlitch{0%{transform:translateX(0)}50%{transform:translateX(5px)}100%{transform:translateX(-4px)}}
+@keyframes naWhiteout{0%{opacity:0}20%{opacity:.85}100%{opacity:0}}
+@keyframes naTitle{from{filter:brightness(.75);transform:scale(.99)}to{filter:brightness(1.5);transform:scale(1.015)}}
+@keyframes naFinal{0%,100%{transform:translateX(0);filter:brightness(1)}20%{transform:translateX(2px);filter:brightness(1.7)}40%{transform:translateX(-2px)}}
+@keyframes naCore{from{transform:scale(.96);filter:brightness(.8)}to{transform:scale(1.04);filter:brightness(1.5)}}
+@media(prefers-reduced-motion:reduce){.na-fracture,.na-title,.na-final-title,.null-absolute-fallback{animation-duration:20s!important}.na-scanlines{animation:none!important}}

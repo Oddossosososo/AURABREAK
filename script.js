@@ -120,6 +120,7 @@
     content.classList.toggle("the-ending-result", aura.name === "THE ENDING");
     content.classList.toggle("null-absolute-result", aura.name === "NULL//ABSOLUTE");
     $("orbCore").classList.toggle("the-ending-core", aura.name === "THE ENDING");
+    $("orbCore").classList.toggle("null-absolute-core", aura.name === "NULL//ABSOLUTE");
     const symbol = document.createElement("div");
     symbol.className = "empty-symbol";
     symbol.textContent = aura.symbol;

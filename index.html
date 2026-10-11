@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080811">
-  <meta name="description" content="Shut Up Leo RNG — roll beyond reality and discover auras beyond imagination.">
-  <title>SHUT UP LEO RNG — Roll Beyond Reality</title>
+  <meta name="description" content="AURABREAK — roll beyond reality and discover auras beyond imagination.">
+  <title>AURABREAK — Roll Beyond Reality</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=29">
+  <link rel="stylesheet" href="style.css?v=aurabreak-brand-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/webgpu":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.webgpu.js","three/tsl":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.tsl.js"}}</script>
   <script type="module" src="three-runtime.js?v=1"></script>
@@ -20,7 +20,7 @@
   <script type="module" src="lottery-jackpot-tsl.js?v=3"></script>
   <script src="omnipotent-cutscenes.js?v=1" defer></script>
   <script src="aura-language.js?v=2" defer></script>
-  <script src="script.js?v=64" defer></script>
+  <script src="script.js?v=aurabreak-brand-1" defer></script>
 
   <style id="soft-pink-accent">
     /* Soft pink accent requested for the main roll viewer */
@@ -53,8 +53,8 @@
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
   <header class="topbar">
-    <a class="brand" href="#" aria-label="Shut Up Leo RNG home"><span class="brand-mark">S</span><span>SHUT UP <span class="brand-light">LEO RNG</span><small>ROLL BEYOND REALITY</small></span></a>
-    <nav class="nav"><a class="nav-link active" href="#roll">Roll</a><a class="nav-link" href="#collection">Collection</a><a class="nav-link" href="#potions">Potions</a><a class="nav-link" href="language-lab.html">Polyglot Lab ↗</a><a class="nav-link" href="owner-lab.html">Owner Lab ↗</a><button id="phaseToggle" class="phase-toggle" type="button" hidden>ENTER SHUT UP LEO RNG II ↗</button><button id="settingsOpen" class="settings-open" type="button" aria-haspopup="dialog" aria-controls="settingsPanel">SETTINGS ⚙</button></nav>
+    <a class="brand" href="#" aria-label="AURABREAK home"><span class="brand-mark">A</span><span>SHUT UP <span class="brand-light">LEO RNG</span><small>ROLL BEYOND REALITY</small></span></a>
+    <nav class="nav"><a class="nav-link active" href="#roll">Roll</a><a class="nav-link" href="#collection">Collection</a><a class="nav-link" href="#potions">Potions</a><a class="nav-link" href="language-lab.html">Polyglot Lab ↗</a><a class="nav-link" href="owner-lab.html">Owner Lab ↗</a><button id="phaseToggle" class="phase-toggle" type="button" hidden>ENTER AURABREAK II ↗</button><button id="settingsOpen" class="settings-open" type="button" aria-haspopup="dialog" aria-controls="settingsPanel">SETTINGS ⚙</button></nav>
     <div class="top-status"><span class="status-dot"></span> REALITY STABLE <span class="version">VERSION 1.0</span></div>
   </header>
 
@@ -117,18 +117,18 @@
       <div class="section-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> 04 / RECENT EVENTS</div><h2 id="rollHistoryTitle">THE <span>ROLL LOG.</span></h2></div><div class="collection-count"><strong id="rollHistoryCount">0</strong><span> / 15 RECENT</span></div></div>
       <div class="history-list" id="rollHistoryList" aria-live="polite"><div class="history-empty">Your rolls will appear here.</div></div>
     </section>
-    <footer><span class="footer-brand">SHUT UP LEO RNG <span>©</span></span><span>ORIGINAL RNG EXPERIENCE · PROGRESS SAVES IN THIS BROWSER</span><span>BUILD 0001</span></footer>
+    <footer><span class="footer-brand">AURABREAK <span>©</span></span><span>ORIGINAL RNG EXPERIENCE · PROGRESS SAVES IN THIS BROWSER</span><span>BUILD 0001</span></footer>
   </main>
 
   <div class="cutscene hidden" id="cutscene" aria-hidden="true">
     <div class="cutscene-backdrop"></div><div class="cutscene-art" id="cutsceneArt"></div>
     <div class="cutscene-content"><p id="cutsceneEyebrow">REALITY DISTORTION DETECTED</p><h2 id="cutsceneTitle">UNKNOWN</h2><p id="cutsceneSubtitle">THE WORLD WILL REMEMBER.</p><button id="closeCutscene" class="cutscene-button">CLAIM DISCOVERY ↗</button></div>
-    <div class="cutscene-corner">SHUT UP LEO RNG / ANOMALY EVENT</div>
+    <div class="cutscene-corner">AURABREAK / ANOMALY EVENT</div>
   </div>
 
   <section class="admin-panel hidden" id="adminPanel" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
     <div class="admin-window">
-      <div class="admin-header"><div><p class="admin-eyebrow">SHUT UP LEO RNG / DEVELOPER TOOLS</p><h2 id="adminTitle">ADMIN PANEL</h2></div><button id="adminClose" class="admin-close" aria-label="Close admin panel">×</button></div>
+      <div class="admin-header"><div><p class="admin-eyebrow">AURABREAK / DEVELOPER TOOLS</p><h2 id="adminTitle">ADMIN PANEL</h2></div><button id="adminClose" class="admin-close" aria-label="Close admin panel">×</button></div>
       <p class="admin-note">DEV AUTHORITY ACTIVE. Press <kbd>SHIFT</kbd> + <kbd>A</kbd> to toggle. Direct grants bypass rolls and trigger the aura reveal.</p>
       <div class="admin-field"><label for="adminAuraSelect">Select aura</label><select id="adminAuraSelect"></select><button id="adminForceAura" class="admin-action">FORCE NEXT ROLL ↗</button><button id="adminGrantAura" class="admin-action secondary-action">GRANT SELECTED AURA NOW ↗</button><button id="adminGrantDeveloper" class="admin-action dev-action">GRANT DEVELOPER — ROOT OVERRIDE</button></div>
       <div class="admin-field"><label for="adminLuck">Luck multiplier <strong id="adminLuckValue">×1</strong></label><input id="adminLuck" type="text" inputmode="numeric" autocomplete="off" value="1"><small>Higher luck increases the chance of rare auras. No preset maximum.</small></div>
@@ -140,7 +140,7 @@
       <div class="admin-divider"></div>
       <p class="admin-eyebrow">AURA TERMINAL / COMMAND CONSOLE</p>
       <div class="admin-console" id="adminConsole">
-        <div class="admin-console-screen" id="adminConsoleOutput" role="log" aria-live="polite"><div class="console-line system">SHUT UP LEO RNG TERMINAL v1.0</div><div class="console-line">Type <b>help</b> to list commands.</div></div>
+        <div class="admin-console-screen" id="adminConsoleOutput" role="log" aria-live="polite"><div class="console-line system">AURABREAK TERMINAL v1.0</div><div class="console-line">Type <b>help</b> to list commands.</div></div>
         <form class="admin-console-form" id="adminConsoleForm">
           <label for="adminConsoleInput" class="console-prompt">AURA&gt;</label>
           <input id="adminConsoleInput" autocomplete="off" spellcheck="false" placeholder="help" aria-label="Admin console command">
@@ -159,7 +159,7 @@
   </section>
   <section class="settings-panel hidden" id="settingsPanel" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="settings-window">
-      <div class="settings-header"><div><p class="settings-eyebrow">SHUT UP LEO RNG / PREFERENCES</p><h2 id="settingsTitle">SETTINGS</h2></div><button id="settingsClose" class="settings-close" type="button" aria-label="Close settings">×</button></div>
+      <div class="settings-header"><div><p class="settings-eyebrow">AURABREAK / PREFERENCES</p><h2 id="settingsTitle">SETTINGS</h2></div><button id="settingsClose" class="settings-close" type="button" aria-label="Close settings">×</button></div>
       <section class="hacker-rig-setting"><p class="settings-eyebrow">EXPERIMENTAL / LOCAL TESTING</p><label class="hacker-rig-label" for="hackerRigToggle"><span><strong>HACKER RIG</strong><small>Force HACKER on your next roll, then automatically switch off. The reveal still plays as if the roll passed normally.</small></span><input id="hackerRigToggle" type="checkbox" role="switch" aria-label="Rig the next roll to HACKER"></label></section>
       <section class="special-thanks"><p class="settings-eyebrow">SPECIAL THANKS</p><h3>🎵 Shine — Swoop</h3><p>Music by <strong>Swoop</strong>, shared through Uppbeat.</p><a href="https://uppbeat.io/c/swoop" target="_blank" rel="noopener noreferrer">Visit Swoop on Uppbeat ↗</a><p class="settings-license-note">For YouTube videos, paste the track-specific Uppbeat credit into that video’s description. This on-site thank-you does not replace the required video credit.</p></section>
     </div>

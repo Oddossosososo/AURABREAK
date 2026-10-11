@@ -1788,3 +1788,83 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
 .cutscene[data-style="lottery-winner"].jackpot-final .jackpot-world-banner-final{
   border-color:#e7c8ff;box-shadow:0 0 45px #a64dff77,0 0 110px #7c28ff44;
 }
+
+
+/* SHUT UP LEO RNG — LOTTERY: WINNER rainbow ascension upgrade */
+.cutscene[data-aura="LOTTERY: WINNER"]{
+  --winner-rainbow:linear-gradient(115deg,#ff3b7a,#ff9f43,#ffe66d,#65f7a6,#55d8ff,#8b7bff,#f46bff,#ff3b7a);
+  --aura-color:#ff7cf4!important;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-scene,
+.cutscene[data-aura="LOTTERY: WINNER"] .jackpot-fallback{
+  background:
+    radial-gradient(ellipse at 50% 48%,#fff 0%,#ffffffbb 3%,transparent 17%),
+    conic-gradient(from 0deg at 50% 50%,#ff3b7a33,#ff9f4333,#ffe66d33,#65f7a633,#55d8ff44,#8b7bff44,#f46bff44,#ff3b7a33),
+    radial-gradient(ellipse at 50% 50%,#20103a 0%,#080611 66%,#020207 100%)!important;
+  animation:winnerRainbowUniverse 9s linear infinite;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-core,
+.cutscene[data-aura="LOTTERY: WINNER"] .jackpot-ring-core{
+  background:conic-gradient(from var(--winner-spin,0deg),#ff3b7a,#ff9f43,#ffe66d,#65f7a6,#55d8ff,#8b7bff,#f46bff,#ff3b7a)!important;
+  color:#fff!important;
+  border:3px solid #fff!important;
+  box-shadow:0 0 24px #fff,0 0 55px #ff4fd8,0 0 100px #54dcff,0 0 170px #a16bff,inset 0 0 30px #fff9!important;
+  animation:winnerRainbowCore 3.2s linear infinite!important;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-ring,
+.cutscene[data-aura="LOTTERY: WINNER"] .jackpot-dimension-ring,
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-horizon{
+  border-color:transparent!important;
+  background:linear-gradient(#080611,#080611) padding-box,var(--winner-rainbow) border-box!important;
+  box-shadow:0 0 22px #ff4fd888,0 0 46px #5bdcff66,inset 0 0 24px #a77bff33!important;
+  animation:winnerRainbowOrbit 8s linear infinite!important;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-title-final,
+.cutscene[data-aura="LOTTERY: WINNER"] .jackpot-title,
+.cutscene[data-aura="LOTTERY: WINNER"] .cutscene-title,
+.cutscene[data-aura="LOTTERY: WINNER"] #cutsceneTitle{
+  background:var(--winner-rainbow)!important;
+  background-size:300% 300%!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  text-shadow:0 0 18px #ff6be766,0 0 42px #69dfff55,0 0 76px #a86dff55!important;
+  animation:winnerRainbowText 4s linear infinite!important;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .movie-volumetric,
+.cutscene[data-aura="LOTTERY: WINNER"] .jackpot-reality-grid{
+  background:conic-gradient(from 0deg,#ff3b7a55,#ff9f4355,#ffe66d55,#65f7a655,#55d8ff66,#8b7bff66,#f46bff66,#ff3b7a55)!important;
+  filter:blur(5px) saturate(1.6)!important;
+  animation:winnerRainbowOrbit 12s linear infinite!important;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .jackpot-ticket{
+  color:#fff!important;
+  text-shadow:0 0 12px #fff,0 0 28px #ff4fd8,0 0 50px #58dcff,0 0 80px #a77bff!important;
+  animation:winnerRainbowTicket 1.8s ease-in-out infinite alternate!important;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .jackpot-world-banner,
+.cutscene[data-aura="LOTTERY: WINNER"] .jackpot-pantheon{
+  border-color:#c99cffaa!important;
+  box-shadow:0 0 28px #9e6dff44,0 0 54px #ff59da22!important;
+  background:linear-gradient(125deg,#ff3b7a14,#ff9f4314,#ffe66d14,#65f7a614,#55d8ff14,#8b7bff14,#f46bff14)!important;
+}
+.cutscene[data-aura="LOTTERY: WINNER"] .cutscene-content button,
+.cutscene[data-aura="LOTTERY: WINNER"] #closeCutscene{
+  border-color:#ffffffaa!important;
+  background:linear-gradient(110deg,#e83e91,#9b58f7,#398bff,#24cfa8)!important;
+  color:#fff!important;
+  box-shadow:0 0 24px #a16bff66!important;
+}
+@keyframes winnerRainbowUniverse{to{filter:hue-rotate(360deg) saturate(1.25)}}
+@keyframes winnerRainbowCore{to{filter:hue-rotate(360deg) brightness(1.2);transform:translate(-50%,-50%) rotate(360deg) scale(1.06)}}
+@keyframes winnerRainbowOrbit{to{filter:hue-rotate(360deg);transform:rotate(360deg)}}
+@keyframes winnerRainbowText{to{background-position:300% 50%}}
+@keyframes winnerRainbowTicket{from{transform:scale(.92) rotate(-8deg)}to{transform:scale(1.12) rotate(8deg)}}
+@media(prefers-reduced-motion:reduce){
+ .cutscene[data-aura="LOTTERY: WINNER"] .movie-scene,
+ .cutscene[data-aura="LOTTERY: WINNER"] .movie-core,
+ .cutscene[data-aura="LOTTERY: WINNER"] .movie-ring,
+ .cutscene[data-aura="LOTTERY: WINNER"] .jackpot-ticket,
+ .cutscene[data-aura="LOTTERY: WINNER"] .jackpot-volumetric{animation:none!important}
+}

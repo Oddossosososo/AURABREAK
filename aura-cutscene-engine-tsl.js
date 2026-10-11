@@ -9,7 +9,7 @@ const renderer=new THREE.WebGPURenderer({alpha:true,antialias:false,powerPrefere
 renderer.domElement.className="aurabreak-scene-canvas aurabreak-scene-tsl";renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,.55));await renderer.init();
 if(!container.isConnected){renderer.dispose();throw Error("Cutscene closed during shader setup")}
 container.appendChild(renderer.domElement);
-const rgb=parseColor(color),key=2097883034;
+const rgb=parseColor(color);
 const auraHash=(()=>{let h=2166136261;for(const ch of String(name)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0})();
 const gold=/JACKPOT|LOTTERY|WINNER/.test(name),ice=/DEITY|UNFATHOMABLE|VIEWER|FROST|ICE|ZERO/.test(name);
 const mode=(auraHash%7),spokes=11+(auraHash%17),ringCount=64+(auraHash%38),waveRate=0.45+(auraHash%11)*0.07;

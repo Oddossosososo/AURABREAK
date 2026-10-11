@@ -1322,7 +1322,7 @@
         if(index===0){
           cutscene.classList.remove("jackpot-lock");
           cutscene.classList.add("jackpot-warp");
-          eyebrow.textContent=winnerMode ? "SHUT UP LEO RNG II • 100-REALITY OVERWRITE" : "SHUT UP LEO RNG II • 100-WORLD WARP";
+          eyebrow.textContent=winnerMode ? "AURABREAK II • 100-REALITY OVERWRITE" : "AURABREAK II • 100-WORLD WARP";
           line(winnerMode ? "THE MULTIVERSE IS OPEN." : "THE LOOPS ARE OPEN.",winnerMode ? "EVERY REALITY IS BEING PULLED INTO ONE TICKET." : "100 WORLDS. ONE CONTINUOUS DESCENT.");
           playDeityTone(523.25,1.1,"triangle",.05);
         }
@@ -1382,7 +1382,7 @@
       ringStage.classList.remove("rings-arrive");
       ringStage.classList.add("jackpot-singularity");
       sideWorlds.classList.remove("side-worlds-arrive");
-      eyebrow.textContent=winnerMode ? "UNFATHOMABLE • 1 IN 10^1000 • OMNIPOTENT LOTTERY" : phaseTwoActive ? "SHUT UP LEO RNG II EXCLUSIVE • THE PANTHEON REVEALED" : "ULTRA • RAREST ROLLABLE • 1 IN 10^320";
+      eyebrow.textContent=winnerMode ? "UNFATHOMABLE • 1 IN 10^1000 • OMNIPOTENT LOTTERY" : phaseTwoActive ? "AURABREAK II EXCLUSIVE • THE PANTHEON REVEALED" : "ULTRA • RAREST ROLLABLE • 1 IN 10^320";
       line(winnerMode ? "LOTTERY: WINNER" : "LOTTERY: JACKPOT",winnerMode ? "100 REALITIES. EVERY POSSIBILITY. ONE UNFATHOMABLE WIN." : phaseTwoActive ? "100 WORLDS. EVERY GOD. ONE IMPOSSIBLE WIN." : "100 WORLDS. EVERY LOOP. ONE IMPOSSIBLE WIN.","jackpot-title jackpot-title-final");
       button.textContent=winnerMode ? "CLAIM LOTTERY: WINNER ↗" : "CLAIM LOTTERY: JACKPOT ↗";
       banner.classList.add("jackpot-world-banner-final");
@@ -1406,7 +1406,7 @@
       if(phaseTwoActive){
         const pantheon=document.createElement("div");
         pantheon.className="jackpot-pantheon";
-        pantheon.setAttribute("aria-label","Every god in Shut Up Leo RNG II");
+        pantheon.setAttribute("aria-label","Every god in AURABREAK II");
         pantheon.innerHTML='<span class="pantheon-kicker">THE COMPLETE PANTHEON</span><div class="pantheon-gods"><span>PURE DEITY</span><span>CHAOTIC END</span><span>GLITCHED SCREAMS</span><span>LORE CREATIONIST</span><span>THE MAKER</span><span>THE FALLEN GOD</span><span>DEVELOPER</span><span>PURE DEITY:GALACTIC</span></div>';
         cutscene.appendChild(pantheon);
         cutscene.classList.add("jackpot-pantheon-reveal");
@@ -1630,11 +1630,11 @@
     if (!button) return;
     button.hidden = !transcendenceUnlocked;
     button.textContent = document.body.classList.contains("transcendence-mode")
-      ? "RETURN TO SHUT UP LEO RNG I ↶"
-       : "ENTER SHUT UP LEO RNG II ↗";
+      ? "RETURN TO AURABREAK I ↶"
+       : "ENTER AURABREAK II ↗";
     button.setAttribute("aria-label", document.body.classList.contains("transcendence-mode")
-      ? "Switch back to Shut Up Leo RNG I"
-      : "Switch to Shut Up Leo RNG II");
+      ? "Switch back to AURABREAK I"
+      : "Switch to AURABREAK II");
   }
   function showWorldTwoWelcome() {
     const key = "aurabreak-world-two-welcome-v1";
@@ -1657,7 +1657,7 @@
     phaseTwoActive = true;
     try { localStorage.setItem(TRANSCENDENCE_KEY, "yes"); } catch {}
     document.body.classList.add("transcendence-mode");
-    document.title = "SHUT UP LEO RNG II: TRANSCENDENCE";
+    document.title = "AURABREAK II: TRANSCENDENCE";
     const brand = document.querySelector(".brand");
     if (brand) brand.innerHTML = '<span class="brand-mark">Ⅱ</span><span>SHUT UP <span class="brand-light">LEO RNG II</span><small>TRANSCENDENCE</small></span>';
     const heroTitle = document.querySelector(".hero h1");
@@ -1665,18 +1665,18 @@
     const heroCopy = document.querySelector(".hero-copy");
     if (heroCopy) heroCopy.innerHTML = 'The five gods were only the beginning.<br>Reality has entered its second phase.';
     const eyebrow = document.querySelector(".hero .eyebrow");
-    if (eyebrow) eyebrow.textContent = "SHUT UP LEO RNG II • TRANSCENDENCE UNLOCKED";
+    if (eyebrow) eyebrow.textContent = "AURABREAK II • TRANSCENDENCE UNLOCKED";
     const status = document.querySelector(".top-status");
-    if (status) status.innerHTML = '<span class="status-dot"></span> REALITY TRANSCENDED <span class="version">SHUT UP LEO RNG II</span>';
+    if (status) status.innerHTML = '<span class="status-dot"></span> REALITY TRANSCENDED <span class="version">AURABREAK II</span>';
     const stage = $("stageLabel");
-    if (stage) stage.textContent = "SHUT UP LEO RNG II // TRANSCENDENCE";
+    if (stage) stage.textContent = "AURABREAK II // TRANSCENDENCE";
     updatePhaseToggle();
     if (firstWorldTwoEntry) setTimeout(showWorldTwoWelcome, 120);
   }
   function activateBaseMode() {
     phaseTwoActive = false;
     document.body.classList.remove("transcendence-mode");
-    document.title = "SHUT UP LEO RNG — Roll Beyond Reality";
+    document.title = "AURABREAK — Roll Beyond Reality";
     const brand = document.querySelector(".brand");
     if (brand) brand.innerHTML = '<span class="brand-mark">S</span><span>SHUT UP <span class="brand-light">LEO RNG</span><small>ROLL BEYOND REALITY</small></span>';
     const heroTitle = document.querySelector(".hero h1");
@@ -1767,10 +1767,10 @@
     if (!transcendenceUnlocked) return;
     if (document.body.classList.contains("transcendence-mode")) {
       activateBaseMode();
-      showToast("RETURNED TO SHUT UP LEO RNG I.");
+      showToast("RETURNED TO AURABREAK I.");
     } else {
       activateTranscendenceMode();
-      showToast("SHUT UP LEO RNG II ACTIVATED.");
+      showToast("AURABREAK II ACTIVATED.");
     }
     renderCollection();
   });
@@ -1778,7 +1778,7 @@
     const cutscene = $("cutscene"), art = $("cutsceneArt"), content = cutscene.querySelector(".cutscene-content");
     stopDeityCutscene();
     cutscene.dataset.style = "transcendence";
-    cutscene.dataset.aura = "SHUT UP LEO RNG II";
+    cutscene.dataset.aura = "AURABREAK II";
     cutscene.style.setProperty("--aura-color", "#a9fff7");
     cutscene.style.setProperty("--movie-color", "#d9ffff");
     art.innerHTML = '<div class="transcendence-space"></div><div class="transcendence-fracture"></div><div class="transcendence-rings trans-ring-one"></div><div class="transcendence-rings trans-ring-two"></div><div class="transcendence-god-silhouettes"><i>✧</i><i>⟁</i><i>⌁</i><i>✥</i><i>✹</i></div><div class="transcendence-player">Ⅱ</div><div class="transcendence-flash"></div>';
@@ -1796,12 +1796,12 @@
     playDeityTone(110, 2.8, "sine", .08);
     later(2600, () => { line("THEIR BELIEFS COLLAPSE.", "EVERY GOD CLAIMED SUPREMACY. NONE SAW BEYOND IT."); playDeityTone(73.4, 3, "triangle", .09); });
     later(5500, () => { cutscene.classList.add("transcendence-break"); line("THE WORLD WAS A THRESHOLD.", "THE COLLECTION WAS A KEY."); playDeityTone(55, 3.4, "sawtooth", .08); });
-    later(8500, () => { line("SHUT UP LEO RNG II", "TRANSCENDENCE PROTOCOL ACCEPTED.", "transcendence-final"); playDeityTone(164.8, 3.5, "sine", .1); });
+    later(8500, () => { line("AURABREAK II", "TRANSCENDENCE PROTOCOL ACCEPTED.", "transcendence-final"); playDeityTone(164.8, 3.5, "sine", .1); });
     later(11800, () => { line("THE NEXT REALITY AWAITS.", "THE FALLEN GOD STILL WATCHES. SOMETHING ELSE IS AWAKE.", "transcendence-final"); });
     later(15000, () => {
       activateTranscendenceMode();
       cutscene.classList.remove("transcendence-running","transcendence-break");
-      $("closeCutscene").textContent = "ENTER SHUT UP LEO RNG II ↗";
+      $("closeCutscene").textContent = "ENTER AURABREAK II ↗";
       $("cutsceneEyebrow").textContent = "PHASE II • TRANSCENDENCE";
       line("WELCOME BEYOND.", "YOU HAVE OUTGROWN THE FIRST WORLD.", "transcendence-final");
     });

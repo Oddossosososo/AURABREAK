@@ -1896,6 +1896,8 @@
   const auraSupabase = window.supabase?.createClient(AURABREAK_SUPABASE_URL, AURABREAK_SUPABASE_KEY);
 
   async function authorizeDev() {
+    // Verify DEV access only once per page session; reuse the successful result when reopening the panel.
+    if (devAuthorized) return true;
     if (!auraSupabase) {
       window.alert("AURABREAK sign-in couldn't start because the Supabase client didn't load. Refresh the page and try again.");
       return false;

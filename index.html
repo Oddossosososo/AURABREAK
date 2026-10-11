@@ -128,9 +128,9 @@
 
   <section class="admin-panel hidden" id="adminPanel" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
     <div class="admin-window">
-      <div class="admin-header"><div><p class="admin-eyebrow">AURABREAK / DEVELOPER TOOLS</p><h2 id="adminTitle">ADMIN PANEL</h2></div><button id="adminClose" class="admin-close" aria-label="Close admin panel">×</button></div>
-      <p class="admin-note">DEV AUTHORITY ACTIVE. Press <kbd>SHIFT</kbd> + <kbd>A</kbd> to toggle. Direct grants bypass rolls and trigger the aura reveal.</p>
-      <div class="admin-field"><label for="adminAuraSelect">Select aura</label><select id="adminAuraSelect"></select><button id="adminForceAura" class="admin-action">FORCE NEXT ROLL ↗</button><button id="adminGrantAura" class="admin-action secondary-action">GRANT SELECTED AURA NOW ↗</button><button id="adminGrantDeveloper" class="admin-action dev-action">GRANT DEVELOPER — ROOT OVERRIDE</button></div>
+      <div class="admin-header"><div><p class="admin-eyebrow">AURABREAK / ROLL CONTROLS</p><h2 id="adminTitle">ROLL CONTROL PANEL</h2></div><button id="adminClose" class="admin-close" aria-label="Close panel">×</button></div>
+      <p class="admin-note" id="adminPanelNote">Choose an aura and queue it for your next roll. Press <kbd>SHIFT</kbd> + <kbd>A</kbd> to toggle.</p>
+      <div class="admin-field"><label for="adminAuraSelect">Select aura</label><select id="adminAuraSelect"></select><button id="adminForceAura" class="admin-action">FORCE NEXT ROLL ↗</button></div><div id="adminRestrictedTools"><div class="admin-field"><button id="adminGrantAura" class="admin-action secondary-action">GRANT SELECTED AURA NOW ↗</button><button id="adminGrantDeveloper" class="admin-action dev-action">GRANT DEVELOPER — ROOT OVERRIDE</button></div>
       <div class="admin-field"><label for="adminLuck">Luck multiplier <strong id="adminLuckValue">×1</strong></label><input id="adminLuck" type="text" inputmode="numeric" autocomplete="off" value="1"><small>Higher luck increases the chance of rare auras. No preset maximum.</small></div>
       <div class="admin-divider"></div>
       <p class="admin-eyebrow">DIVINE OVERRIDES</p>
@@ -155,7 +155,7 @@
       <div class="admin-field"><label for="customAuraRarity">Rarity label</label><input id="customAuraRarity" maxlength="30" placeholder="CUSTOM / DIVINE"></div>
       <div class="admin-field"><label for="customAuraColor">Aura colour</label><input id="customAuraColor" type="color" value="#b8a9ff"></div>
       <button id="adminAddAura" class="admin-action secondary-action">ADD CUSTOM AURA +</button>
-    </div>
+    </div></div>
   </section>
   <section class="settings-panel hidden" id="settingsPanel" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="settings-window">

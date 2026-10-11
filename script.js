@@ -1816,6 +1816,8 @@
     document.body.classList.add("rolling");
     $("stageLabel").textContent = "REALITY IS REARRANGING...";
     hackerRigWasForced = false;
+    // Remember whether this roll consumes a public Force Next Roll selection.
+    const wasForceRoll = !!forcedAura;
     let aura = chooseAura();
     // Optional one-shot local testing toggle: force HACKER, but run the normal reveal path.
     if (hackerRigNextRoll) {
@@ -1856,7 +1858,8 @@
         "AURABREAK: ASCENSION", "AURABREAK: ZERO", "HACKER"
       ]);
       const oddsValue = (() => { try { return BigInt(aura.odds); } catch { return 0n; } })();
-      const deservesCinematic = alwaysCinematic.has(aura.name) || oddsValue >= 1000000n;
+      // Force Next Roll always uses the aura reveal cinematic, even for common auras.
+      const deservesCinematic = wasForceRoll || alwaysCinematic.has(aura.name) || oddsValue >= 1000000n;
       if (isNoAura) {
         showToast("NOTHING MANIFESTED.");
       } else if (deservesCinematic) {

@@ -1659,7 +1659,7 @@
     document.body.classList.add("transcendence-mode");
     document.title = "AURABREAK II: TRANSCENDENCE";
     const brand = document.querySelector(".brand");
-    if (brand) brand.innerHTML = '<span class="brand-mark">Ⅱ</span><span>SHUT UP <span class="brand-light">LEO RNG II</span><small>TRANSCENDENCE</small></span>';
+    if (brand) brand.innerHTML = '<span class="brand-mark">Ⅱ</span><span>AURABREAK II<small>TRANSCENDENCE</small></span>';
     const heroTitle = document.querySelector(".hero h1");
     if (heroTitle) heroTitle.innerHTML = 'BEYOND THE<br><span>DIVINE.</span>';
     const heroCopy = document.querySelector(".hero-copy");
@@ -1678,7 +1678,7 @@
     document.body.classList.remove("transcendence-mode");
     document.title = "AURABREAK — Roll Beyond Reality";
     const brand = document.querySelector(".brand");
-    if (brand) brand.innerHTML = '<span class="brand-mark">S</span><span>SHUT UP <span class="brand-light">LEO RNG</span><small>ROLL BEYOND REALITY</small></span>';
+    if (brand) brand.innerHTML = '<span class="brand-mark">A</span><span>AURABREAK<small>ROLL BEYOND REALITY</small></span>';
     const heroTitle = document.querySelector(".hero h1");
     if (heroTitle) heroTitle.innerHTML = 'ROLL BEYOND<br><span>REALITY.</span>';
     const heroCopy = document.querySelector(".hero-copy");

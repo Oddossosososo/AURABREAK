@@ -23,7 +23,7 @@ if(!window.THREE||!container||!container.isConnected)throw Error("Shared Three.j
 container.querySelectorAll(".aurabreak-scene-canvas").forEach(n=>n.remove());
 const THREE=window.THREE,renderer=new THREE.WebGLRenderer({alpha:true,antialias:false,depth:false,stencil:false,powerPreference:"low-power"});
 renderer.domElement.className="aurabreak-scene-canvas";renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,.55));renderer.setClearColor(0,0);container.appendChild(renderer.domElement);
-const rgb=parseColor(color),mode=/JACKPOT|LOTTERY|WINNER/.test(name)?0:/DEITY|UNFATHOMABLE/.test(name)?1:/NULL|ABSOLUTE|FALLEN/.test(name)?2:/VIEWER|ENDING/.test(name)?3:/SHATTER|DEVELOPER/.test(name)?4:5;
+const rgb=parseColor(color);let hash=2166136261;for(const ch of String(name)){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619)}const mode=(hash>>>0)%12;
 const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-1,1,1,-1,0,1),uniforms={uTime:{value:0},uResolution:{value:new THREE.Vector2(1,1)},uColor:{value:new THREE.Vector3(...rgb)},uMode:{value:mode}};
 const geometry=new THREE.PlaneGeometry(2,2),material=new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms,transparent:true,depthTest:false,depthWrite:false});scene.add(new THREE.Mesh(geometry,material));
 let raf=0,disposed=false,last=0,visible=true,ro=null,io=null;

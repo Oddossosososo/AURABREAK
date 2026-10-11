@@ -1961,16 +1961,25 @@
     }
   }
 
-  async function toggleAdmin() {
+  function toggleAdmin() {
     if (!adminPanel.classList.contains("hidden")) {
       adminPanel.classList.add("hidden");
       adminPanel.setAttribute("aria-hidden", "true");
       return;
     }
-    if (!(await authorizeDev())) return;
+    refreshAdminAuraOptions();
+    const restricted = $("adminRestrictedTools");
+    const note = $("adminPanelNote");
+    const title = $("adminTitle");
+    const eyebrow = adminPanel.querySelector(".admin-eyebrow");
+    if (restricted) restricted.style.display = devAuthorized ? "" : "none";
+    if (note) note.textContent = devAuthorized
+      ? "DEV AUTHORITY ACTIVE. Force the next roll or use the developer tools below."
+      : "Public roll controls: choose an aura and queue it for your next roll. Developer tools remain locked.";
+    if (title) title.textContent = devAuthorized ? "ADMIN PANEL" : "ROLL CONTROL PANEL";
+    if (eyebrow) eyebrow.textContent = devAuthorized ? "AURABREAK / DEVELOPER TOOLS" : "AURABREAK / ROLL CONTROLS";
     adminPanel.classList.remove("hidden");
     adminPanel.setAttribute("aria-hidden", "false");
-    refreshAdminAuraOptions();
   }
   document.addEventListener("keydown", event => {
     if (event.shiftKey && event.code === "KeyA" && !event.repeat) {
@@ -2011,12 +2020,11 @@
     $("cutscene").setAttribute("aria-hidden", "false");
   });
   $("adminForceAura").addEventListener("click", () => {
-    if (!devAuthorized) return showToast("DEV AUTHORITY REQUIRED.");
     const aura = AURAS.find(item => item.name === adminAuraSelect.value);
     if (!aura) return;
     forcedAura = aura;
     $("adminForceAura").textContent = "NEXT ROLL: " + aura.name;
-    showToast("RIGGED: your next manual roll will be " + aura.name);
+    showToast("NEXT ROLL SET TO " + aura.name + ".");
   });
   adminLuck.addEventListener("input", () => {
     if (!devAuthorized) return;

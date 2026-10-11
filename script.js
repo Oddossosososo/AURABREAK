@@ -1847,11 +1847,19 @@
       saveDiscoveries();
       renderCollection();
       renderResult(aura, isNew);
-      // AURABREAK I keeps classic instant results; cinematic aura reveals belong to AURABREAK II.
-      const phaseTwoActive = document.body.classList.contains("transcendence-mode");
+      // Cinematics work in both phases, but ordinary low-rarity rolls stay quick.
+      // This avoids turning every common roll into a long interruption.
+      const alwaysCinematic = new Set([
+        "LOTTERY: JACKPOT", "LOTTERY: WINNER", "THE VIEWER", "NULL//ABSOLUTE",
+        "SHATTERCORE", "SHATTERCORE: REBORN", "PURE DEITY", "PURE DEITY:GALACTIC",
+        "PURE DEITY: UNFATHOMABLE", "THE FALLEN GOD", "DEVELOPER", "THE ENDING",
+        "AURABREAK: ASCENSION", "AURABREAK: ZERO", "HACKER"
+      ]);
+      const oddsValue = (() => { try { return BigInt(aura.odds); } catch { return 0n; } })();
+      const deservesCinematic = alwaysCinematic.has(aura.name) || oddsValue >= 1000000n;
       if (isNoAura) {
         showToast("NOTHING MANIFESTED.");
-      } else if (phaseTwoActive) {
+      } else if (deservesCinematic) {
         pendingAura = aura;
         showCutscene(aura);
       }

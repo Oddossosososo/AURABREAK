@@ -197,7 +197,13 @@
   let toastTimer;
   let runRollCount = 0;
   let pureDeityEncounters = 0;
-  let devAuthorized = false;
+  const DEV_AUTH_STORAGE_KEY = "shut-up-leo-rng-dev-approved-v1";
+  // Remember a successful DEV approval across page reloads on this browser.
+  // This is a client-side game gate, not a security boundary.
+  let devAuthorized = (() => {
+    try { return localStorage.getItem(DEV_AUTH_STORAGE_KEY) === "true"; }
+    catch { return false; }
+  })();
   let devSimplePatternCount = 0;
 
   function loadDiscoveries() {
@@ -1896,7 +1902,7 @@
   const auraSupabase = window.supabase?.createClient(AURABREAK_SUPABASE_URL, AURABREAK_SUPABASE_KEY);
 
   async function authorizeDev() {
-    // Verify DEV access only once per page session; reuse the successful result when reopening the panel.
+    // A successful DEV approval is remembered across reloads on this browser.
     if (devAuthorized) return true;
     if (!auraSupabase) {
       window.alert("AURABREAK sign-in couldn't start because the Supabase client didn't load. Refresh the page and try again.");
@@ -1943,7 +1949,9 @@
       }
 
       devAuthorized = true;
-      showToast("DEV ACCESS VERIFIED.");
+      try { localStorage.setItem(DEV_AUTH_STORAGE_KEY, "true"); }
+      catch { showToast("DEV APPROVED, BUT BROWSER STORAGE IS UNAVAILABLE."); }
+      showToast("DEV ACCESS VERIFIED — REMEMBERED ON THIS BROWSER.");
       return true;
     } catch (error) {
       console.error("AURABREAK sign-in exception:", error);

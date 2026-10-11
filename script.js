@@ -312,6 +312,12 @@
       activePotion = null;
       saveActivePotion();
     }
+    // A queued Force Next Roll takes priority over potion effects.
+    if (forcedAura && applyPotion) {
+      const selected = forcedAura;
+      forcedAura = null;
+      return selected;
+    }
     if (potion?.type === "god") {
       const gods = AURAS.filter(a => a.god && isAuraAvailable(a));
       if (gods.length) return gods[Math.floor(Math.random() * gods.length)];
@@ -329,11 +335,6 @@
         if (!best || auraOdds(candidate) > auraOdds(best)) best = candidate;
       }
       return best || (phaseTwoActive ? noAuraResult() : AURAS[0]);
-    }
-    if (forcedAura) {
-      const selected = forcedAura;
-      forcedAura = null;
-      return selected;
     }
     // Test rarest first. Phase II raises every aura above THE MAKER's original odds.
     const pool = AURAS.filter(a => isAuraAvailable(a)).sort((a, b) => {

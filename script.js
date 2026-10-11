@@ -1846,12 +1846,13 @@
       saveDiscoveries();
       renderCollection();
       renderResult(aura, isNew);
-      // Every successful manual roll gets its cutscene in both phases.
-      if (!isNoAura) {
+      // AURABREAK I keeps classic instant results; cinematic aura reveals belong to AURABREAK II.
+      const phaseTwoActive = document.body.classList.contains("transcendence-mode");
+      if (isNoAura) {
+        showToast("NOTHING MANIFESTED.");
+      } else if (phaseTwoActive) {
         pendingAura = aura;
         showCutscene(aura);
-      } else {
-        showToast("NOTHING MANIFESTED.");
       }
       if (transcendencePending && !transcendenceUnlocked && $("cutscene").classList.contains("hidden")) {
         setTimeout(() => {

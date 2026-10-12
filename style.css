@@ -1870,105 +1870,47 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
 }
 
 
-/* HANDBALL GOD custom admin identity */
-.admin-panel .admin-window{
-  border:1px solid #ff8b3d99;
-  border-radius:20px;
-  background:
-    radial-gradient(ellipse at 95% 0%,#ff8b3d20,transparent 42%),
-    radial-gradient(ellipse at 0% 100%,#a6ff4d10,transparent 40%),
-    linear-gradient(145deg,#19130f,#090a0d 72%);
-  box-shadow:0 25px 100px #000c,0 0 0 1px #ff8b3d15,0 0 60px #ff7b241f;
-}
-.admin-panel .admin-eyebrow{color:#ffad67}
-.admin-panel .admin-header h2{
-  color:#fff5e9;
-  text-shadow:0 0 22px #ff8b3d35;
-  letter-spacing:-.045em;
-}
-.admin-panel .admin-close{border-color:#ff8b3d55}
-.admin-panel .admin-close:hover{background:#ff8b3d20;border-color:#ffad67}
-.admin-panel .admin-field input:focus,
-.admin-panel .admin-field select:focus{outline:1px solid #ffad67;border-color:#ffad67}
-.admin-panel .admin-action{
-  border-color:#ffad67;
-  background:linear-gradient(105deg,#ff8b3d,#d84c24);
-  box-shadow:0 5px 22px #ff6b241b;
-}
-.admin-panel .admin-action:hover{filter:brightness(1.12)}
-.admin-panel .secondary-action{background:#ffffff08;border-color:#76503d}
-.admin-panel .dev-action{border-color:#b8ff69;background:linear-gradient(105deg,#355d27,#172a1c)}
-.admin-panel .admin-divider{background:linear-gradient(90deg,transparent,#ff8b3d55,transparent)}
-.admin-panel .admin-note{color:#b4a59b}
-@media(prefers-reduced-motion:no-preference){
-  .admin-panel .admin-window{animation:handballPanelEnter .32s cubic-bezier(.2,.8,.2,1) both}
-}
-@keyframes handballPanelEnter{
-  from{opacity:0;transform:translateY(10px) scale(.985)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
+/* HANDBALL GOD theme, scoped to his verified identity */
+body.handball-god-dev .admin-panel .admin-window{border:1px solid #ff8b3d99;border-radius:20px;background:radial-gradient(ellipse at 95% 0%,#ff8b3d20,transparent 42%),radial-gradient(ellipse at 0% 100%,#a6ff4d10,transparent 40%),linear-gradient(145deg,#19130f,#090a0d 72%);box-shadow:0 25px 100px #000c,0 0 0 1px #ff8b3d15,0 0 60px #ff7b241f}
+body.handball-god-dev .admin-panel .admin-eyebrow{color:#ffad67}
+body.handball-god-dev .admin-panel .admin-header h2{color:#fff5e9;text-shadow:0 0 22px #ff8b3d55;letter-spacing:-.045em}
+body.handball-god-dev .admin-panel .admin-close{border-color:#ff8b3d55}
+body.handball-god-dev .admin-panel .admin-close:hover{background:#ff8b3d20;border-color:#ffad67}
+body.handball-god-dev .admin-panel .admin-field input:focus,body.handball-god-dev .admin-panel .admin-field select:focus{outline:1px solid #ffad67;border-color:#ffad67}
+body.handball-god-dev .admin-panel .admin-action{border-color:#ffad67;background:linear-gradient(105deg,#ff8b3d,#d84c24);box-shadow:0 5px 22px #ff6b2433}
+body.handball-god-dev .admin-panel .secondary-action{background:#ffffff08;border-color:#76503d}
+body.handball-god-dev .admin-panel .dev-action{border-color:#b8ff69;background:linear-gradient(105deg,#355d27,#172a1c)}
+body.handball-god-dev .admin-panel .admin-divider{background:linear-gradient(90deg,transparent,#ff8b3d88,transparent)}
+body.handball-god-dev .admin-panel .admin-note{color:#b4a59b}
 
-
-/* GOD DEVELOPER custom panel: full-spectrum prismatic theme */
-#adminPanel .admin-window{
-  --prism: linear-gradient(115deg,#ff1744,#ff9100,#ffee00,#39ff14,#00e5ff,#2979ff,#d500f9,#ff1744);
-  position:relative;
-  isolation:isolate;
-  border:1px solid transparent;
-  background:
-    linear-gradient(145deg,rgba(12,9,28,.97),rgba(5,9,24,.97)) padding-box,
-    var(--prism) border-box;
-  background-size:100% 100%,300% 300%;
-  animation:godPrismShift 9s linear infinite;
-  box-shadow:0 0 22px #ff174433,0 0 42px #00e5ff2b,0 0 70px #d500f92b,inset 0 0 32px #7c4dff16;
+/* -GOD DEVELOPER-: insane, animated cosmic gold */
+body.god-developer-dev .admin-panel .admin-window{
+ position:relative;isolation:isolate;overflow:hidden;border:1px solid transparent;border-radius:24px;
+ background:linear-gradient(145deg,#100b04,#08070c 48%,#171005) padding-box,
+ conic-gradient(from 0deg,#fff7bf,#ffbd27,#fff1a1,#9b5d00,#fff9d8,#e5a400,#fff7bf) border-box;
+ box-shadow:0 28px 120px #000e,0 0 0 1px #ffdc6c44,0 0 36px #ffc40066,0 0 95px #ff9d0055,inset 0 0 55px #ffc4000c
 }
-#adminPanel .admin-window::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:inherit;
-  background:var(--prism);
-  background-size:300% 300%;
-  animation:godPrismShift 7s linear infinite;
-  filter:blur(16px);
-  opacity:.38;
-  z-index:-1;
-  pointer-events:none;
+body.god-developer-dev .admin-panel .admin-window::before{
+ content:"";position:absolute;inset:-70%;z-index:-1;pointer-events:none;
+ background:conic-gradient(from 0deg,transparent 0 26%,#ffd34a18 31%,transparent 36% 58%,#fff0a526 63%,transparent 70%);
+ animation:godDeveloperSolar 14s linear infinite
 }
-#adminPanel .admin-header{
-  border-bottom:1px solid transparent;
-  border-image:linear-gradient(90deg,#ff1744,#ff9100,#ffee00,#39ff14,#00e5ff,#2979ff,#d500f9) 1;
+body.god-developer-dev .admin-panel .admin-header h2{
+ color:#fff3b0;letter-spacing:.025em;text-shadow:0 0 8px #fff0a8,0 0 22px #ffbd27,0 0 52px #ff9d00aa;
+ animation:godDeveloperTitle 2.8s ease-in-out infinite alternate
 }
-#adminPanel .admin-eyebrow,
-#adminPanel #adminTitle{
-  background:linear-gradient(90deg,#ff5252,#ffab40,#ffff00,#69f0ae,#40c4ff,#7c4dff,#ff4081,#ff5252);
-  background-size:300% auto;
-  color:transparent;
-  -webkit-background-clip:text;
-  background-clip:text;
-  animation:godTextSpectrum 6s linear infinite;
-}
-#adminPanel .admin-action{
-  border-color:#00e5ff88;
-  background:linear-gradient(110deg,#ff17441b,#ff91001b,#ffee001b,#39ff141b,#00e5ff1b,#2979ff1b,#d500f91b);
-  background-size:300% 300%;
-  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
-}
-#adminPanel .admin-action:hover{
-  border-color:#fff;
-  transform:translateY(-2px);
-  box-shadow:0 0 14px #00e5ff55,0 0 24px #d500f944;
-}
-#adminPanel .admin-close:hover{
-  color:#fff;
-  background:linear-gradient(135deg,#ff1744,#ff9100,#ffee00,#39ff14,#00e5ff,#2979ff,#d500f9);
-}
-#adminPanel .admin-field:focus-within{
-  border-color:#00e5ff99;
-  box-shadow:0 0 0 1px #d500f944,0 0 18px #39ff1422;
-}
-@keyframes godPrismShift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-@keyframes godTextSpectrum{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-@media(prefers-reduced-motion:reduce){
-  #adminPanel .admin-window,#adminPanel .admin-window::before,#adminPanel .admin-eyebrow,#adminPanel #adminTitle{animation:none}
-}
+body.god-developer-dev .admin-panel .admin-eyebrow{color:#ffe06b;text-shadow:0 0 12px #ffb70088;letter-spacing:.18em}
+body.god-developer-dev .admin-panel .admin-note{color:#d7c99f}
+body.god-developer-dev .admin-panel .admin-divider{height:1px;background:linear-gradient(90deg,transparent,#ffe47c,#ff9d00,#fff2b0,transparent);box-shadow:0 0 12px #ffbf0055}
+body.god-developer-dev .admin-panel .admin-close{color:#fff1a8;border-color:#ffd34a88;background:#ffbd2710;box-shadow:0 0 16px #ffbd2722}
+body.god-developer-dev .admin-panel .admin-close:hover{background:#ffbd2730;border-color:#fff0a5}
+body.god-developer-dev .admin-panel .admin-field input:focus,body.god-developer-dev .admin-panel .admin-field select:focus{outline:1px solid #ffe47c;border-color:#ffe47c;box-shadow:0 0 0 3px #ffbf0020,0 0 22px #ffbf0030}
+body.god-developer-dev .admin-panel .admin-action{color:#1a1000;border:1px solid #fff0a1;background:linear-gradient(110deg,#fff0a5,#ffbd27 32%,#ffe77b 58%,#b96b00);box-shadow:0 5px 22px #ffbd2730,0 0 18px #ffbd2722,inset 0 1px #fff9d9;font-weight:900;text-shadow:0 1px #fff7ce55}
+body.god-developer-dev .admin-panel .admin-action:hover{filter:brightness(1.2) saturate(1.15);box-shadow:0 7px 32px #ffbd2766,0 0 28px #ffdc6c55;transform:translateY(-1px)}
+body.god-developer-dev .admin-panel .secondary-action{color:#ffedaa;background:linear-gradient(115deg,#4a310b,#201505);border-color:#c99319}
+body.god-developer-dev .admin-panel .dev-action{color:#fff7d6;background:linear-gradient(110deg,#715000,#2c1d00);border-color:#fff0a5;box-shadow:0 0 22px #ffbf0040}
+body.god-developer-dev .admin-panel .admin-console-screen{border-color:#d9a62d66;box-shadow:inset 0 0 22px #ffbd270c}
+body.god-developer-dev .admin-panel .console-prompt{color:#ffdf61}
+@keyframes godDeveloperSolar{to{transform:rotate(360deg)}}
+@keyframes godDeveloperTitle{from{filter:brightness(.94);text-shadow:0 0 8px #fff0a8,0 0 20px #ffbd27,0 0 38px #ff9d0077}to{filter:brightness(1.2);text-shadow:0 0 12px #fff,0 0 28px #ffdc6c,0 0 68px #ff9d00}}
+@media(prefers-reduced-motion:reduce){body.god-developer-dev .admin-panel .admin-window::before,body.god-developer-dev .admin-panel .admin-header h2{animation:none}}

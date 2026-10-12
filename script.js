@@ -1988,8 +1988,8 @@
     if (note) note.textContent = devAuthorized
       ? "DEV AUTHORITY ACTIVE. Force the next roll or use the developer tools below."
       : "Public roll controls: choose an aura and queue it for your next roll. Developer tools remain locked.";
-    if (title) title.textContent = devAuthorized ? "ADMIN PANEL" : "ROLL CONTROL PANEL";
-    if (eyebrow) eyebrow.textContent = devAuthorized ? "AURABREAK / DEVELOPER TOOLS" : "AURABREAK / ROLL CONTROLS";
+    if (title) title.textContent = devAuthorized ? "HANDBALL GOD" : "ROLL CONTROL PANEL";
+    if (eyebrow) eyebrow.textContent = devAuthorized ? "AURABREAK / HANDBALL GOD • ROOT ACCESS" : "AURABREAK / ROLL CONTROLS";
     adminPanel.classList.remove("hidden");
     adminPanel.setAttribute("aria-hidden", "false");
   }

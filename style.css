@@ -1868,3 +1868,42 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
  .cutscene[data-aura="LOTTERY: WINNER"] .jackpot-ticket,
  .cutscene[data-aura="LOTTERY: WINNER"] .jackpot-volumetric{animation:none!important}
 }
+
+
+/* HANDBALL GOD custom admin identity */
+.admin-panel .admin-window{
+  border:1px solid #ff8b3d99;
+  border-radius:20px;
+  background:
+    radial-gradient(ellipse at 95% 0%,#ff8b3d20,transparent 42%),
+    radial-gradient(ellipse at 0% 100%,#a6ff4d10,transparent 40%),
+    linear-gradient(145deg,#19130f,#090a0d 72%);
+  box-shadow:0 25px 100px #000c,0 0 0 1px #ff8b3d15,0 0 60px #ff7b241f;
+}
+.admin-panel .admin-eyebrow{color:#ffad67}
+.admin-panel .admin-header h2{
+  color:#fff5e9;
+  text-shadow:0 0 22px #ff8b3d35;
+  letter-spacing:-.045em;
+}
+.admin-panel .admin-close{border-color:#ff8b3d55}
+.admin-panel .admin-close:hover{background:#ff8b3d20;border-color:#ffad67}
+.admin-panel .admin-field input:focus,
+.admin-panel .admin-field select:focus{outline:1px solid #ffad67;border-color:#ffad67}
+.admin-panel .admin-action{
+  border-color:#ffad67;
+  background:linear-gradient(105deg,#ff8b3d,#d84c24);
+  box-shadow:0 5px 22px #ff6b241b;
+}
+.admin-panel .admin-action:hover{filter:brightness(1.12)}
+.admin-panel .secondary-action{background:#ffffff08;border-color:#76503d}
+.admin-panel .dev-action{border-color:#b8ff69;background:linear-gradient(105deg,#355d27,#172a1c)}
+.admin-panel .admin-divider{background:linear-gradient(90deg,transparent,#ff8b3d55,transparent)}
+.admin-panel .admin-note{color:#b4a59b}
+@media(prefers-reduced-motion:no-preference){
+  .admin-panel .admin-window{animation:handballPanelEnter .32s cubic-bezier(.2,.8,.2,1) both}
+}
+@keyframes handballPanelEnter{
+  from{opacity:0;transform:translateY(10px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}

@@ -197,13 +197,10 @@
   let toastTimer;
   let runRollCount = 0;
   let pureDeityEncounters = 0;
-  const DEV_AUTH_STORAGE_KEY = "shut-up-leo-rng-dev-approved-v1";
-  // Remember a successful DEV approval across page reloads on this browser.
-  // This is a client-side game gate, not a security boundary.
-  let devAuthorized = (() => {
-    try { return localStorage.getItem(DEV_AUTH_STORAGE_KEY) === "true"; }
-    catch { return false; }
-  })();
+  // Privileged UI starts locked and is enabled only after dev-auth verifies this session.
+  // Never trust a localStorage flag as proof of DEV access.
+  let devAuthorized = false;
+  let devUserId = null;
   let devSimplePatternCount = 0;
 
   function loadDiscoveries() {

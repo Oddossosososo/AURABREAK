@@ -1985,7 +1985,7 @@
     const title = $("adminTitle");
     const eyebrow = adminPanel.querySelector(".admin-eyebrow");
     const isHandballGod = devAuthorized && devUserId === "3d2c64ae-c43f-4ba4-af4d-fcfe4830d8e3";
-    const isGodDeveloper = devAuthorized && !isHandballGod;
+    const isGodDeveloper = devAuthorized && devUserId === "83beb97b-fe46-444e-94fe-892740c9c3f2";
     document.body.classList.toggle("handball-god-dev", isHandballGod);
     document.body.classList.toggle("god-developer-dev", isGodDeveloper);
     if (restricted) restricted.style.display = devAuthorized ? "" : "none";

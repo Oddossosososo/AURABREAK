@@ -1907,3 +1907,68 @@ body:has(#cutscene.jackpot-running:not(.hidden)) .topbar{animation:jackpotTopbar
   from{opacity:0;transform:translateY(10px) scale(.985)}
   to{opacity:1;transform:translateY(0) scale(1)}
 }
+
+
+/* GOD DEVELOPER custom panel: full-spectrum prismatic theme */
+#adminPanel .admin-window{
+  --prism: linear-gradient(115deg,#ff1744,#ff9100,#ffee00,#39ff14,#00e5ff,#2979ff,#d500f9,#ff1744);
+  position:relative;
+  isolation:isolate;
+  border:1px solid transparent;
+  background:
+    linear-gradient(145deg,rgba(12,9,28,.97),rgba(5,9,24,.97)) padding-box,
+    var(--prism) border-box;
+  background-size:100% 100%,300% 300%;
+  animation:godPrismShift 9s linear infinite;
+  box-shadow:0 0 22px #ff174433,0 0 42px #00e5ff2b,0 0 70px #d500f92b,inset 0 0 32px #7c4dff16;
+}
+#adminPanel .admin-window::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  background:var(--prism);
+  background-size:300% 300%;
+  animation:godPrismShift 7s linear infinite;
+  filter:blur(16px);
+  opacity:.38;
+  z-index:-1;
+  pointer-events:none;
+}
+#adminPanel .admin-header{
+  border-bottom:1px solid transparent;
+  border-image:linear-gradient(90deg,#ff1744,#ff9100,#ffee00,#39ff14,#00e5ff,#2979ff,#d500f9) 1;
+}
+#adminPanel .admin-eyebrow,
+#adminPanel #adminTitle{
+  background:linear-gradient(90deg,#ff5252,#ffab40,#ffff00,#69f0ae,#40c4ff,#7c4dff,#ff4081,#ff5252);
+  background-size:300% auto;
+  color:transparent;
+  -webkit-background-clip:text;
+  background-clip:text;
+  animation:godTextSpectrum 6s linear infinite;
+}
+#adminPanel .admin-action{
+  border-color:#00e5ff88;
+  background:linear-gradient(110deg,#ff17441b,#ff91001b,#ffee001b,#39ff141b,#00e5ff1b,#2979ff1b,#d500f91b);
+  background-size:300% 300%;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+#adminPanel .admin-action:hover{
+  border-color:#fff;
+  transform:translateY(-2px);
+  box-shadow:0 0 14px #00e5ff55,0 0 24px #d500f944;
+}
+#adminPanel .admin-close:hover{
+  color:#fff;
+  background:linear-gradient(135deg,#ff1744,#ff9100,#ffee00,#39ff14,#00e5ff,#2979ff,#d500f9);
+}
+#adminPanel .admin-field:focus-within{
+  border-color:#00e5ff99;
+  box-shadow:0 0 0 1px #d500f944,0 0 18px #39ff1422;
+}
+@keyframes godPrismShift{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@keyframes godTextSpectrum{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@media(prefers-reduced-motion:reduce){
+  #adminPanel .admin-window,#adminPanel .admin-window::before,#adminPanel .admin-eyebrow,#adminPanel #adminTitle{animation:none}
+}

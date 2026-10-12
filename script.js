@@ -1915,8 +1915,9 @@
   const auraSupabase = window.supabase?.createClient(AURABREAK_SUPABASE_URL, AURABREAK_SUPABASE_KEY);
 
   async function authorizeDev() {
-    // A successful DEV approval is remembered across reloads on this browser.
-    if (devAuthorized) return true;
+    // Always verify the current Supabase session against the server-side allowlist.
+    devAuthorized = false;
+    devUserId = null;
     if (!auraSupabase) {
       window.alert("AURABREAK sign-in couldn't start because the Supabase client didn't load. Refresh the page and try again.");
       return false;
@@ -1962,9 +1963,8 @@
       }
 
       devAuthorized = true;
-      try { localStorage.setItem(DEV_AUTH_STORAGE_KEY, "true"); }
-      catch { showToast("DEV APPROVED, BUT BROWSER STORAGE IS UNAVAILABLE."); }
-      showToast("DEV ACCESS VERIFIED — REMEMBERED ON THIS BROWSER.");
+      devUserId = data.userId || sessionData.session.user.id;
+      showToast("DEV ACCESS VERIFIED BY SERVER.");
       return true;
     } catch (error) {
       console.error("AURABREAK sign-in exception:", error);
@@ -1973,23 +1973,32 @@
     }
   }
 
-  function toggleAdmin() {
+  async function toggleAdmin() {
     if (!adminPanel.classList.contains("hidden")) {
       adminPanel.classList.add("hidden");
       adminPanel.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("handball-god-dev", "god-developer-dev");
       return;
     }
+    // Do not show privileged tools until the server confirms this session.
+    await authorizeDev();
     refreshAdminAuraOptions();
     const restricted = $("adminRestrictedTools");
     const note = $("adminPanelNote");
     const title = $("adminTitle");
     const eyebrow = adminPanel.querySelector(".admin-eyebrow");
+    const isHandballGod = devAuthorized && devUserId === "3d2c64ae-c43f-4ba4-af4d-fcfe4830d8e3";
+    const isGodDeveloper = devAuthorized && !isHandballGod;
+    document.body.classList.toggle("handball-god-dev", isHandballGod);
+    document.body.classList.toggle("god-developer-dev", isGodDeveloper);
     if (restricted) restricted.style.display = devAuthorized ? "" : "none";
     if (note) note.textContent = devAuthorized
-      ? "DEV AUTHORITY ACTIVE. Force the next roll or use the developer tools below."
+      ? "SERVER-VERIFIED DEV AUTHORITY ACTIVE. Root tools are enabled for this approved account."
       : "Public roll controls: choose an aura and queue it for your next roll. Developer tools remain locked.";
-    if (title) title.textContent = devAuthorized ? "HANDBALL GOD" : "ROLL CONTROL PANEL";
-    if (eyebrow) eyebrow.textContent = devAuthorized ? "AURABREAK / HANDBALL GOD • ROOT ACCESS" : "AURABREAK / ROLL CONTROLS";
+    if (title) title.textContent = isHandballGod ? "HANDBALL GOD" : isGodDeveloper ? "-GOD DEVELOPER-" : "ROLL CONTROL PANEL";
+    if (eyebrow) eyebrow.textContent = isHandballGod
+      ? "AURABREAK / HANDBALL GOD • ROOT ACCESS"
+      : isGodDeveloper ? "AURABREAK / -GOD DEVELOPER- • ROOT ACCESS" : "AURABREAK / ROLL CONTROLS";
     adminPanel.classList.remove("hidden");
     adminPanel.setAttribute("aria-hidden", "false");
   }

@@ -1932,11 +1932,7 @@
         const { data, error } = await auraSupabase.auth.signInAnonymously();
         if (error) {
           console.error("AURABREAK anonymous sign-in error:", error);
-          window.alert(
-            "AURABREAK couldn't create a no-email session.\\n\\n" +
-            error.message +
-            "\\n\\nThe project owner may need to enable Anonymous Sign-Ins in Supabase: Authentication → Sign In / Providers → Anonymous."
-          );
+          showToast("SIGN-IN UNAVAILABLE — PUBLIC MODE.");
           return false;
         }
         sessionData = { session: data.session };

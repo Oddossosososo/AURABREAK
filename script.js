@@ -1916,7 +1916,9 @@
     devAuthorized = false;
     devUserId = null;
     if (!auraSupabase) {
-      window.alert("AURABREAK sign-in couldn't start because the Supabase client didn't load. Refresh the page and try again.");
+      // Supabase is optional for public rolling. Keep the public controls usable
+      // while server-backed DEV authorization is unavailable.
+      showToast("SUPABASE UNAVAILABLE — PUBLIC MODE.");
       return false;
     }
 
@@ -1944,17 +1946,12 @@
       const { data, error } = await auraSupabase.functions.invoke("dev-auth");
       if (error) {
         console.error("AURABREAK dev-auth error:", error);
-        window.alert("Your session was created, but DEV access couldn't be checked.\\n\\n" + (error.message || "Please refresh and try again."));
+        showToast("DEV CHECK UNAVAILABLE — PUBLIC MODE.");
         return false;
       }
 
       if (!data?.isDev) {
         devAuthorized = false;
-        window.alert(
-          "Your AURABREAK session is ready, but DEV access hasn't been approved yet.\\n\\n" +
-          "Your user ID:\\n" + sessionData.session.user.id +
-          "\\n\\nSend only this user ID to the project owner for approval. No email or confirmation link is needed."
-        );
         showToast("DEV ACCESS NOT APPROVED.");
         return false;
       }
@@ -1965,7 +1962,7 @@
       return true;
     } catch (error) {
       console.error("AURABREAK sign-in exception:", error);
-      window.alert("AURABREAK sign-in hit a problem.\\n\\n" + (error?.message || String(error)) + "\\n\\nRefresh the page and try again.");
+      showToast("AUTH CHECK FAILED — PUBLIC MODE.");
       return false;
     }
   }

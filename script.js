@@ -2013,6 +2013,7 @@
       toggleAdmin();
     }
   });
+  $("adminOpen").addEventListener("click", toggleAdmin);
   $("adminClose").addEventListener("click", toggleAdmin);
   adminUnlockAll.addEventListener("click", () => {
     if (!devAuthorized) return showToast("DEV AUTHORITY REQUIRED.");

@@ -1434,18 +1434,29 @@
     subtitle.textContent = "THE GAME HAS NOTICED THE PERSON PLAYING IT.";
     button.textContent = "TRY TO LEAVE ↗";
     content.classList.remove("deity-reveal", "movie-reveal");
-    cutscene.classList.remove("na-running","na-collapse","na-break","na-reveal","na-erasure","fw-address","fw-glitch","fw-final");
+    cutscene.classList.remove("na-running","na-collapse","na-break","na-reveal","na-erasure","fw-address","fw-glitch","fw-final","fw-awakening","fw-power-up","fw-breakout","fw-target-active","fw-target-locked","fw-signal-break");
     cutscene.classList.add("fw-running");
     const originalTitle = document.title;
+    let pointerFrame = 0;
+    let latestPointer = null;
     const move = event => {
-      const rect = cutscene.getBoundingClientRect();
-      const x = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width) * 2 - 1));
-      const y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height) * 2 - 1));
-      cutscene.style.setProperty("--fw-x", x.toFixed(3));
-      cutscene.style.setProperty("--fw-y", y.toFixed(3));
-      // Low-cost interaction: the eye tracks the cursor and locks on when it crosses the center.
-      const nearCenter = Math.abs(x) < .18 && Math.abs(y) < .2;
-      cutscene.classList.toggle("fw-target-locked", nearCenter);
+      latestPointer = event;
+      // Coalesce high-frequency pointer events to one visual update per frame.
+      if (pointerFrame) return;
+      pointerFrame = requestAnimationFrame(() => {
+        pointerFrame = 0;
+        const point = latestPointer;
+        latestPointer = null;
+        if (!point || cutscene.classList.contains("hidden")) return;
+        const rect = cutscene.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const x = Math.max(-1, Math.min(1, ((point.clientX - rect.left) / rect.width) * 2 - 1));
+        const y = Math.max(-1, Math.min(1, ((point.clientY - rect.top) / rect.height) * 2 - 1));
+        cutscene.style.setProperty("--fw-x", x.toFixed(3));
+        cutscene.style.setProperty("--fw-y", y.toFixed(3));
+        // One lightweight target check per frame keeps cursor tracking smooth without event storms.
+        cutscene.classList.toggle("fw-target-locked", Math.abs(x) < .18 && Math.abs(y) < .2);
+      });
     };
     cutscene.addEventListener("pointermove", move);
     const later = (ms, fn) => cutsceneTimers.push(setTimeout(fn, ms));
@@ -1495,8 +1506,12 @@
     });
     fourthWallCleanup = () => {
       cutscene.removeEventListener("pointermove", move);
+      if (pointerFrame) cancelAnimationFrame(pointerFrame);
+      pointerFrame = 0;
+      latestPointer = null;
       cutscene.style.setProperty("--fw-x", "0");
       cutscene.style.setProperty("--fw-y", "0");
+      cutscene.classList.remove("fw-target-locked");
       document.title = originalTitle;
     };
   }
@@ -1569,9 +1584,9 @@
     const sceneToken = universalCutsceneToken;
     if (universalCutsceneStop) { universalCutsceneStop(); universalCutsceneStop = null; }
     const sceneArt = $("cutsceneArt"), sceneName = aura.name || "UNKNOWN", sceneColor = aura.color || "#9c78ff";
-    // These scenes already own their renderer. Starting the shared layer as well creates
-    // two WebGL contexts, extra GPU work, and competing canvases over the same art.
-    if (["LOTTERY: JACKPOT", "LOTTERY: WINNER", "PURE DEITY: UNFATHOMABLE"].includes(sceneName)) return;
+    // These scenes use dedicated cinematic compositions. Stacking the shared WebGL
+    // layer over them creates redundant GPU work and can cause competing visual layers.
+    if (["LOTTERY: JACKPOT", "LOTTERY: WINNER", "PURE DEITY: UNFATHOMABLE", "THE VIEWER"].includes(sceneName)) return;
     const startSceneFallback = () => {
       if (sceneToken !== universalCutsceneToken || $("cutscene").classList.contains("hidden")) return;
       try { if (window.AURABREAK_SCENE_FALLBACK) universalCutsceneStop = window.AURABREAK_SCENE_FALLBACK.start(sceneArt, sceneName, sceneColor); }
